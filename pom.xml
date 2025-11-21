@@ -31,7 +31,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.4</version>
                 <configuration>
-                    <mainClass>it.unisa.diem.gruppo3.biblioteca.universitaria.MainProxy</mainClass>
+                    <mainClass>it.unisa.diem.gruppo3.biblioteca.universitaria.main.MainProxy</mainClass>
                 </configuration>
                 <executions>
                     <execution>

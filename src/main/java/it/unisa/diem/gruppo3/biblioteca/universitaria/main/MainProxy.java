@@ -1,4 +1,4 @@
-package it.unisa.diem.gruppo3.biblioteca.universitaria;
+package it.unisa.diem.gruppo3.biblioteca.universitaria.main;
 
 public class MainProxy {
     public static void main(String[] args) {
