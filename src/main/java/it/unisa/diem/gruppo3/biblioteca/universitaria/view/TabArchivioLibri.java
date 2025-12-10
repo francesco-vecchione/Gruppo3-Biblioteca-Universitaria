@@ -8,13 +8,13 @@ import javafx.scene.control.Button;
  * @author gruppo 3
  */
 public class TabArchivioLibri extends TabArchivio<Libro>{
-    private Button bottoneCancella;
+    private Button btnCancella;
     
     public TabArchivioLibri(FilteredList<Libro> listaOsservabileLibri) {
         super(listaOsservabileLibri);
     }
     
-    public Button getBottoneCancella() {
-        return null;
+    public Button getBtnCancella() {
+        return btnCancella;
     }
 }

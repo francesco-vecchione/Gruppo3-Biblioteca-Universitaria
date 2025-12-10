@@ -5,7 +5,6 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelArchivio;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelPassword;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.view.GreetingStage;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.UtilityPopUp;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
 import javafx.stage.Stage;
@@ -19,12 +18,12 @@ public class AppController {
     private /*final*/ ModelArchivio<Prestito> modelPrestiti;
     private /*final*/ ModelPassword modelPassword;
     private /*final*/ ViewBiblioteca viewBiblioteca;
-    private /*final*/ UtilityPopUp<Libro> popUpLibri;
-    private /*final*/ UtilityPopUp<Utente> popUpUtenti;
-    private /*final*/ UtilityPopUp<Prestito> popUpPrestiti;
-    private /*final*/ GreetingStage stageSignUp;
-    private /*final*/ GreetingStage stageLogIn;
-    private /*final*/ GreetingStage stageReimpostaPassword;
+    private /*final*/ UtilityPopUp popUpLibri;
+    private /*final*/ UtilityPopUp popUpUtenti;
+    private /*final*/ UtilityPopUp popUpPrestiti;
+    private /*final*/ UtilityPopUp stageSignUp;
+    private /*final*/ UtilityPopUp stageLogIn;
+    private /*final*/ UtilityPopUp stageReimpostaPassword;
     
     public AppController(Stage stage) {
         
