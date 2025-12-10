@@ -10,8 +10,6 @@ import javafx.scene.control.TableView;
 /**
  * @author gruppo 3
  * @brief Questa classe astrae la Tab che visualizza i diversi dati del programma
- * @invariant
- * Il tipo di operazione non deve essere null.
  */
 
 public abstract class TabArchivio<T extends Dato> { 
@@ -54,10 +52,9 @@ public abstract class TabArchivio<T extends Dato> {
     /**
      * @brief Costruttore che imposta la FilteredList visualizza nella TableView
      * @param[in] listaOsservabile Lista visualizzata nella TableView
-     * @pre
-     * listaOsservabile passato in input non deve essere null.
      * @post
-     * L'istanza di una specializzazione di TabArchivio è creata con la lista specificata.
+     * Costruttore che imposta il layout generico della tab istanziando le 
+     * componenti
      */
     public TabArchivio(FilteredList<T> listaOsservabile) { 
         
