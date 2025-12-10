@@ -6,22 +6,29 @@ import javafx.scene.control.TextField;
 /**
  * @author gruppo 3
  */
-public class UtilityPopUpUtenti extends UtilityPopUp<Utente>{
-    private TextField fieldNome;
-    private TextField fieldCognome;
-    private TextField fieldMatricola;
-    private TextField fieldEmail;
+public class UtilityPopUpUtenti extends UtilityPopUp {
+    private TextField txfNome;
+    private TextField txfCognome;
+    private TextField txfMatricola;
+    private TextField txfEmail;
     
     public UtilityPopUpUtenti() {
         
     }
-    
-    public UtilityPopUpUtenti(Utente placeHolder) {
-        
+
+    public TextField getTxfNome() {
+        return txfNome;
     }
-    
-    @Override
-    public Utente getDatiInseriti() {
-        return null;
+
+    public TextField getTxfCognome() {
+        return txfCognome;
+    }
+
+    public TextField getTxfMatricola() {
+        return txfMatricola;
+    }
+
+    public TextField getTxfEmail() {
+        return txfEmail;
     }
 }

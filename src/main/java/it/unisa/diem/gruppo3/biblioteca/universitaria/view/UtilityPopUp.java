@@ -8,31 +8,33 @@ import javafx.stage.Stage;
 /**
  * @author gruppo 3
  */
-public abstract class UtilityPopUp<T extends Dato> {
-    private Label targhettaErrori;
-    private Button bottoneAzione;
-    private Button bottoneAnnulla;
-    private Stage stage;
-    
+public abstract class UtilityPopUp {
+    private Label lblIntestazione;
+    private Label lblMessaggioErrore;
+    private Button btnAzione;
+    private Button btnAnnulla;
+    Stage stage;
+
     public UtilityPopUp() {
-        
     }
-    
-    public Label getTarghettaErrori() {
-        return null;
+
+    public Button getBtnAzione() {
+        return btnAzione;
     }
-    
-    public Button getBottoneAzione() {
-        return null;
+
+    public Button getBtnAnnulla() {
+        return btnAnnulla;
     }
-    
-    public Button getBottoneAnnulla() {
-        return null;
-    }
-    
+
     public Stage getStage() {
-        return null;
+        return stage;
     }
-    
-    public abstract T getDatiInseriti();
+
+    public void setLblIntestazione(Label lblIntestazione) {
+        this.lblIntestazione = lblIntestazione;
+    }
+
+    public void setLblMessaggioErrore(Label lblMessaggioErrore) {
+        this.lblMessaggioErrore = lblMessaggioErrore;
+    }
 }

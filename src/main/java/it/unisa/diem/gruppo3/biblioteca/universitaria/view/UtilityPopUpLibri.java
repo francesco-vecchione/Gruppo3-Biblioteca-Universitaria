@@ -6,23 +6,34 @@ import javafx.scene.control.TextField;
 /**
  * @author gruppo 3
  */
-public class UtilityPopUpLibri extends UtilityPopUp<Libro>{
-    private TextField fieldTitolo;
-    private TextField fieldAutori;
-    private TextField fieldAnnoDiPubblicazione;
-    private TextField fieldIsbn;
-    private TextField fieldNumeroCopieDisponibili;
+public class UtilityPopUpLibri extends UtilityPopUp{
+    private TextField txfTitolo;
+    private TextField txfAutori;
+    private TextField txfAnnoPubblicazione;
+    private TextField txfIsbn;
+    private TextField txfNumCopie;
     
     public UtilityPopUpLibri() {
         
     }
-    
-    public UtilityPopUpLibri(Libro placeHolder) {
-        
+
+    public TextField getTxfTitolo() {
+        return txfTitolo;
     }
-    
-    @Override
-    public Libro getDatiInseriti() {
-        return null;
+
+    public TextField getTxfAutori() {
+        return txfAutori;
+    }
+
+    public TextField getTxfAnnoPubblicazione() {
+        return txfAnnoPubblicazione;
+    }
+
+    public TextField getTxfIsbn() {
+        return txfIsbn;
+    }
+
+    public TextField getTxfNumCopie() {
+        return txfNumCopie;
     }
 }

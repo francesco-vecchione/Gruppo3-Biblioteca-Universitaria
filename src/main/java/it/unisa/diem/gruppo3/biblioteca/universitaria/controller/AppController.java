@@ -5,7 +5,6 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelArchivio;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelPassword;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.view.GreetingStage;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.UtilityPopUp;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
 import javafx.stage.Stage;
@@ -46,42 +45,12 @@ public class AppController {
     * degli archivi dei libri, degli utenti e dei prestiti
     */
     private /*final*/ ViewBiblioteca viewBiblioteca;
-    
-    /**
-    * @brief È la view che astrae la finestra generica di pop-up che appare quando si preme
-    * un tasto nel tab dei libri
-    */
-    private /*final*/ UtilityPopUp<Libro> popUpLibri;
-    
-    /**
-    * @brief È la view che astrae la finestra generica di pop-up che appare quando si preme
-    * un tasto nel tab degli utenti
-    */
-    private /*final*/ UtilityPopUp<Utente> popUpUtenti;
-    
-    /**
-    * @brief È la view che astrae la finestra generica di pop-up che appare quando si preme
-    * un tasto nel tab dei prestiti
-    */
-    private /*final*/ UtilityPopUp<Prestito> popUpPrestiti;
-    
-    /**
-    * @brief È la view che astrae la finestra di Sign-Up visualizzata alla prima apertura
-    * del programma
-    */
-    private /*final*/ GreetingStage stageSignUp;
-    
-    /**
-    * @brief È la view che astrae la finestra di Login che viene visualizzata prima della finestra
-    * principale dopo aver fatto il Sign-Up
-    */
-    private /*final*/ GreetingStage stageLogIn;
- 
-    /**
-    * @brief È la view che astrae la finestra che permette di reimpostare la password 
-    * visualizzata prima dell'apertura della finestra principale
-    */
-    private /*final*/ GreetingStage stageReimpostaPassword;
+    private /*final*/ UtilityPopUp popUpLibri;
+    private /*final*/ UtilityPopUp popUpUtenti;
+    private /*final*/ UtilityPopUp popUpPrestiti;
+    private /*final*/ UtilityPopUp stageSignUp;
+    private /*final*/ UtilityPopUp stageLogIn;
+    private /*final*/ UtilityPopUp stageReimpostaPassword;
     
     /**
     * @brief È il costruttore di AppController, che accetta una reference di tipo Stage come parametro
