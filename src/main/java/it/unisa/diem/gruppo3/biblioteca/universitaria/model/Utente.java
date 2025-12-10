@@ -8,6 +8,11 @@ import javafx.beans.property.StringProperty;
 
 /**
     * @brief Astrae l'oggetto Utente
+    * @invariant
+    * Il campo matricola deve essere composto da sole 10 cifre
+    * @invariant
+    * Il campo email dee essere formato dal'iniziale del nome, seguita da 
+    * un punto, dal cognome, da un numero e dal dominio "@studenti.unisa.it" 
 */
 public class Utente implements Dato {
     
@@ -23,28 +28,24 @@ public class Utente implements Dato {
     
     /**
         * @brief matricola dell'utente
-        * 
-        * @invariant deve essere di un formato specifico
     */
     private StringProperty matricola;
     
     /**
         * @brief nome dell'utente
-        * 
-        * @invariant deve essere di un formato specifico
     */
     private StringProperty email;
     
     /**
         * @brief Costruttore che si occupa di inizializzare gli attributi
         * 
-        * @param[out] nome Il nome dell'utente
-        * @param[out] cognome Il cognome dell'utente
-        * @param[out] matricola La matricola dell'utente
-        * @param[out] email L'email dell'utente
+        * @param[in] nome Il nome dell'utente
+        * @param[in] cognome Il cognome dell'utente
+        * @param[in] matricola La matricola dell'utente
+        * @param[in] email L'email dell'utente
         * 
         * @post
-        *   viene creato un utente con gli attributi specificati dal bibliotecario
+        *   Viene creato un utente con gli attributi specificati dal bibliotecario
     */
     public Utente(String nome, String cognome, String matricola, String email) {
         
@@ -53,10 +54,7 @@ public class Utente implements Dato {
     /**
         * @brief get di nome
         * 
-        * @invariant
-        *   deve esistere l'oggetto Utente
-        * 
-        * @return ritorna il nome dell'utente
+        * @return Ritorna il nome dell'utente
     */
     public String getNome() {
         return null;
@@ -65,10 +63,7 @@ public class Utente implements Dato {
     /**
         * @brief get di cognome
         * 
-        * @invariant
-        *   deve esistere l'oggetto Utente
-        * 
-        * @return ritorna il cognome dell'utente
+        * @return Ritorna il cognome dell'utente
     */
     public String getCognome() {
         return null;
@@ -77,10 +72,7 @@ public class Utente implements Dato {
     /**
         * @brief get di matricola
         * 
-        * @invariant
-        *   deve esistere l'oggetto Utente
-        * 
-        * @return ritorna la matricola dell'utente
+        * @return Ritorna la matricola dell'utente
     */
     public String getMatricola() {
         return null;
@@ -89,10 +81,7 @@ public class Utente implements Dato {
     /**
         * @brief get di email
         * 
-        * @invariant
-        *   deve esistere l'oggetto Utente
-        * 
-        * @return ritorna la mail dell'utente
+        * @return Ritorna la mail dell'utente
     */
     public String getEmail() {
         return null;
@@ -101,48 +90,44 @@ public class Utente implements Dato {
     /**
         * @brief set di nome
         * 
-        * @invariant
-        *   deve esistere l'oggetto Utente
+        * @param[in] nome Il nuovo valore di nome
         * 
-        * @post assegna all'utente il nome scritto dal bibliotecario
+        * @post Assegna all'utente il nome scritto dal bibliotecario
     */
-    public void setNome() {
+    public void setNome(String nome) {
         
     }
     
     /**
         * @brief set di cognome
         * 
-        * @invariant
-        *   deve esistere l'oggetto Utente
+        * @param[in] cognome Il nuovo valore di cognome
         * 
-        * @post assegna all'utente il cognome scritto dal bibliotecario
+        * @post Assegna all'utente il cognome scritto dal bibliotecario
     */
-    public void setCognome() {
+    public void setCognome(String cognome) {
         
     }
     
     /**
         * @brief set di matricola
         * 
-        * @invariant
-        *   deve esistere l'oggetto Utente
+        * @param[in] matricola Il nuovo valore della matricola
         * 
-        * @post assegna all'utente la matricola scritta dal bibliotecario
+        * @post Assegna all'utente la matricola scritta dal bibliotecario
     */
-    public void setMatricola() {
+    public void setMatricola(String matricola) {
         
     }
     
     /**
         * @brief set di email
         * 
-        * @invariant
-        *   deve esistere l'oggetto Utente
+        * @param[in] email Il nuovo valore di email 
         * 
-        * @post assegna all'utente la mail scritta dal bibliotecario
+        * @post Assegna all'utente la mail scritta dal bibliotecario
     */
-    public void setEmail() {
+    public void setEmail(String email) {
         
     }
     
@@ -178,18 +163,10 @@ public class Utente implements Dato {
         * @brief Messo a disposizione da Dato, e verifica che un oggetto Utente è valido
         * se e solo se la matricola e la mail rispettano il loro standard
         *  
-        * @return ritorna true se i dati sono corretti, false altrimenti
+        * @return Ritorna true se i dati sono corretti, false altrimenti
     */
     @Override
     public boolean isValid() {
-        return false;
-    }
-    
-    /**
-     * sCUSATE ANCORA, MA NON CI STA :-(
-    */
-    @Override
-    public boolean isFilled() {
         return false;
     }
 
@@ -197,12 +174,9 @@ public class Utente implements Dato {
         * @brief Messo a disposizione da Object che verifica l'uguaglianza di due oggetti
         * Utente in base alla loro matricola
         * 
-        * @invariant
-        *   entrambi gli oggetti Utente devono esistere
-        * 
-        * @param[o] L'altro Utente con cui fare la comparazione
-        * 
-        * @return ritorna true se i due oggetti hanno la stessa matricola, false in caso contrario
+        * @param[in] o L'altro Utente con cui fare la comparazione
+        *      
+        * @return Ritorna true se i due oggetti hanno la stessa matricola, false in caso contrario
     */
     @Override
     public boolean equals(Object o) {
@@ -213,8 +187,13 @@ public class Utente implements Dato {
     * @brief Fornito da Comparable, permette di confrontare due oggetti utente sulla base
     * del loro nome e cognome
     * 
-    * @param[o] L'altro Utente con cui fare la comparazione
-*/
+    * @param[in] o L'altro Utente con cui fare la comparazione
+    * 
+    * @return Ritorna un valore numerico:
+    *   positivo se l'oggetto corrente è "maggiore" di o;
+    *   0 se l'oggetto corrente è "uguale" ad o;
+    *   negativo se l'oggetto corrente è "minore" di o
+    */
     @Override
     public int compareTo(Object o) {
         return -1;

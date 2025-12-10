@@ -48,16 +48,13 @@ public class Password implements ModelPassword {
         * @brief Viene fornito da ModelPassword, che si occupa di salvare l'hash della password
         * all'interno dell'archivio
         * 
-        * @invariant
-        *   la password deve essere stata impostata almeno una volta
-        * 
         * @param[in] passwordInChiaro La nuova password che verrà memorizzata in archivio e che
         *            servirà ad accedere al programma
         * 
         * @return ritorna un booleano che simboleggia la riuscita dell'operazione
         * 
         * @post
-        *   la password viene cambiata
+        *   la password viene impostata
     */
     @Override
     public boolean impostaPassword(String passwordInChiaro) {

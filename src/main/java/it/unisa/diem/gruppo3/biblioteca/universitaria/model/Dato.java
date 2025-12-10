@@ -15,10 +15,4 @@ public interface Dato extends Comparable<Object>, Serializable {
      * @return true se l'istanza è valida, false altrimenti.
      */
     boolean isValid();
-
-    /**
-     * @brief Metodo per verificare se tutti i campi obbligatori sono stati riempiti.
-     * @return true se i campi sono pieni, false altrimenti.
-     */
-    boolean isFilled();
 }

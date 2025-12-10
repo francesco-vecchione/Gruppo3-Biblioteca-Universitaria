@@ -13,11 +13,7 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.main;
 public class MainProxy {
     
     /**
-    * @brief Lancia la classe AppBibliotecaUniversitaria
-    * 
-    * @invariant
-    *   <descrizione>
-    * 
+    * @brief Lancia la classe AppBibliotecaUniversitaria 
     * @param[in] args non viene mai effettivamente usato
     */
     public static void main(String[] args) {

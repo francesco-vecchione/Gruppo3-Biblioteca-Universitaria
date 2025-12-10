@@ -178,15 +178,6 @@ public class Libro implements Dato {
     }
 
     /**
-     * @brief Verifica se tutti i campi obbligatori sono stati riempiti.
-     * @return true se i campi sono pieni, false altrimenti.
-     */
-    @Override
-    public boolean isFilled() {
-        return false; 
-    }
-
-    /**
      * @brief Contratto fornito dalla classe Object. Due oggetti Libro sono uguali se hanno isbn uguale.
      * @param[in] o L'oggetto con cui confrontare l'istanza corrente.
      * @return true se gli oggetti sono uguali, false altrimenti.

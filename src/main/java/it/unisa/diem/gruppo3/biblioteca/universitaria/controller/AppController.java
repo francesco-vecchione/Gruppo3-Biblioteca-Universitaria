@@ -21,36 +21,55 @@ import javafx.stage.Stage;
 public class AppController {
      
     /**
-    * @brief È il model che astrae il concetto di archivio libri
+    * @brief Il model che astrae il concetto di archivio libri
     */
     private /*final*/ ModelArchivio<Libro> modelLibri;
     
     /**
-    * @brief È il model che astrae il concetto di archivio utenti
+    * @brief Il model che astrae il concetto di archivio utenti
     */
     private /*final*/ ModelArchivio<Utente> modelUtenti;
     
     /**
-    * @brief È il model che astrae il concetto di archivio prestiti
+    * @brief Il model che astrae il concetto di archivio prestiti
     */
     private /*final*/ ModelArchivio<Prestito> modelPrestiti;
     
     /**
-    * @brief È il model che astrae il contenitore della password
+    * @brief Il model che astrae il contenitore della password
     */
     private /*final*/ ModelPassword modelPassword;
     
     /**
-    * @brief È la view che astrae la finestra principale della pagine dove sono presenti le tab
+    * @brief La view che astrae la finestra principale della pagine dove sono presenti le tab
     * degli archivi dei libri, degli utenti e dei prestiti
     */
     private /*final*/ ViewBiblioteca viewBiblioteca;
+    /**
+    * @brief La view che astrae la finestra di pop up generica generabile dal premere uno dei
+    * bottoni della tab dei libri
+    */ 
     private /*final*/ UtilityPopUp popUpLibri;
+    /**
+    * @brief La view che astrae la finestra di pop up generica generabile dal premere uno dei
+    * bottoni della tab degli utenti
+    */ 
     private /*final*/ UtilityPopUp popUpUtenti;
+    /**
+    * @brief La view che astrae la finestra di pop up generica generabile dal premere uno dei
+    * bottoni della tab dei prestiti
+    */ 
     private /*final*/ UtilityPopUp popUpPrestiti;
-    private /*final*/ UtilityPopUp stageSignUp;
+    /**
+    * @brief La view che astrae la finestra di log in visualizzata prima dell'apertura della
+    * finestra principale
+    */ 
     private /*final*/ UtilityPopUp stageLogIn;
-    private /*final*/ UtilityPopUp stageReimpostaPassword;
+    /**
+    * @brief La view che astrae la finestra di sign up e la finestra di recupero password; le
+    * due differenziano solo per il titolo della finestra e un'etichetta descrittiva.
+    */
+    private /*final*/ UtilityPopUp stageCreazionePassword;
     
     /**
     * @brief È il costruttore di AppController, che accetta una reference di tipo Stage come parametro
