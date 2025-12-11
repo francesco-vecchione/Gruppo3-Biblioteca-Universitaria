@@ -169,7 +169,8 @@ public class Libro implements Dato {
     }
 
     /**
-     * @brief Contratto fornito dall'interfaccia Dato. Un oggetto Libro è valido se ha un numero di copie maggiore di zero e l'isbn rispetta il formato standard.
+     * @brief Contratto fornito dall'interfaccia Dato. Un oggetto Libro è valido 
+     * se ha un numero di copie maggiore di zero e l'isbn rispetta il formato standard.
      * @return true se l'istanza è valida, false altrimenti.
      */
     @Override

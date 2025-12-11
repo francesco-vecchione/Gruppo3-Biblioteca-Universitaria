@@ -16,17 +16,11 @@ public class Prestito implements Dato {
     
     /**
         * @brief È la matricola dell'utente che ha richiesto il prestito
-        * 
-        * @pre
-        *   l'utente corrispondente alla matricola deve essere registrato nell'archivio
     */
     private /*final*/ String matricolaUtente;
     
     /**
         * @brief È l'ISBN del libro richiesto dall'utente
-        * 
-        * @pre
-        *   il libro corrispondente all'ISBN deve essere registrato nell'archivio
     */
     private /*final*/ String isbnPrestito;
     
@@ -41,16 +35,7 @@ public class Prestito implements Dato {
     private /*final*/ LocalDate dataRestituzione;
     
     /**
-        * @brief È un booleano che indica che l'utente è in ritardo nella restituzione
-        * del libro
-    */
-    private boolean inRitardo;
-    
-    /**
         * @brief È un booleano che indica lo stato del prestito
-        * 
-        * @post
-        *   indica se il prestito è "Attivo" o "Restituito"
     */
     private ObjectProperty<StatoPrestito> statoPrestito;
     
@@ -58,14 +43,19 @@ public class Prestito implements Dato {
         * @brief È il costruttore che si occupa di inizializzare gli attributi
         * 
         * @param[in] matricolaUtente Matricola dell'utente che effettua il prestito
-        * @param[in] isbn Codice univoco che identifica il libro
+        * @param[in] isbnPrestito Codice univoco che identifica il libro
         * @param[in] dataPrestito Data in cui viene registrato il prestito
         * @param[in] dataRestituzione Data in cui l'utente dovrà resituire il libro
+        *  
+        * @pre
+        *   l'utente corrispondente alla matricola deve essere registrato nell'archivio 
+        * @pre
+        *   il libro corrispondente all'ISBN deve essere registrato nell'archivio
         * 
         * @post
         *   inizializza l'oggetto prestito con i dati inseriti dal bibliotecario
     */
-    public Prestito(String matricolaUtente, String isbn, LocalDate dataPrestito, LocalDate dataRestituzione) {
+    public Prestito(String matricolaUtente, String isbnPrestito, LocalDate dataPrestito, LocalDate dataRestituzione) {
         
     }
     
@@ -117,16 +107,6 @@ public class Prestito implements Dato {
     }
     
     /**
-        * @brief Verifica che la data di restituzione del prestito non sia ancora arrivata
-        * 
-        * @return Ritorna true se la data di restituzione coincide con quella odierna, false in caso
-        * contrario
-    */
-    public boolean isInRitardo() {
-        return false;
-    }
-    
-    /**
         * @brief set di statoPrestito
         * 
         * @post
@@ -137,38 +117,16 @@ public class Prestito implements Dato {
     }
     
     /**
-        * @brief set di inRitardo
-        * 
-        * @post
-        *   indica che l'utente non ha restituito il libro nel tempo debito
-    */
-    public void setInRitardo(boolean inRitardo) {
-        
-    }
-    
-    /**
         * @brief È la property che ci fa vedere lo stato di un prestito
     */
-    public ObjectProperty<StatoPrestito> StatoPrestitoProperty() {
-        return null;
-    }
-    
-    /**
-        * @brief È la property che ci fa vedere se un prestito è in ritardo o meno
-    */
-    public BooleanProperty inRitardoProperty() {
+    public ObjectProperty<StatoPrestito> statoPrestitoProperty() {
         return null;
     }
 
     /**
         * @brief È fornito dall'interfaccia Dato, e permette di registrare correttamente un prestito
         * solo se matricolaUtente e isbnPrestito rispettano i loro standard
-        * 
-        * @pre
-        *   l'utente e il libro da inserire devono essere presenti negll'archivio
-        * 
-        * @post
-        *   permette la registrazione o meno del prestito
+        * @return ritorna true se i dati rispettano lo standard 
     */
     @Override
     public boolean isValid() {
@@ -181,7 +139,8 @@ public class Prestito implements Dato {
         * 
         * @param[in] o L'altro prestito con cui fare il confronto
         * 
-        * @return ritorna true in caso positivo, false altrimenti
+        * @return ritorna true nel caso i due oggetti hanno la stessa matricola e lo stesso isbn, 
+        * false altrimenti
     */
     @Override
     public boolean equals(Object o) {
@@ -189,13 +148,14 @@ public class Prestito implements Dato {
     }
     
     /**
-        * @brief È fornito da Comparable<T>, che permette di confrontare due oggetti 
-        * Prestito sulla base della loro dataRestituzione
+        * @brief È fornito da Comparable, che permette di confrontare due oggetti 
+        * Prestito sulla base della loro dataRestituzione, dalla data più piccola (vicina)
+        * alla più grande (lontana)
         * 
         * @param[in] o L'altro prestito con cui fare il confronto
         *
         * @return Ritorna un valore numerico:
-        *   positivo se l'oggetto corrente è "maggiore" di o;
+        *   positivo se l'oggetto corrente "maggiore" di o;
         *   0 se l'oggetto corrente è "uguale" ad o;
         *   negativo se l'oggetto corrente è "minore" di o
         */

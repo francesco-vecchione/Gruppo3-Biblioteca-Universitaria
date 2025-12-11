@@ -12,7 +12,7 @@ import javafx.beans.property.StringProperty;
     * Il campo matricola deve essere composto da sole 10 cifre
     * @invariant
     * Il campo email dee essere formato dal'iniziale del nome, seguita da 
-    * un punto, dal cognome, da un numero e dal dominio "@studenti.unisa.it" 
+    * un punto, dal cognome, opzionalmente un numero e dal dominio "@studenti.unisa.it" 
 */
 public class Utente implements Dato {
     

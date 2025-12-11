@@ -67,7 +67,7 @@ public class AppController {
     private /*final*/ UtilityPopUp stageLogIn;
     /**
     * @brief La view che astrae la finestra di sign up e la finestra di recupero password; le
-    * due differenziano solo per il titolo della finestra e un'etichetta descrittiva.
+    * due differenziano solo per il titolo della finestra e un'etichetta descrittiva
     */
     private /*final*/ UtilityPopUp stageCreazionePassword;
     
