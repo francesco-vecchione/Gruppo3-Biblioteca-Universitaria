@@ -1,8 +1,12 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 
+import it.unisa.diem.gruppo3.biblioteca.universitaria.io.CacheRecord;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.io.GestoreGenericoIO;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.io.GestoreIO;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.io.TipoOperazione;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 
 /**
  * @author Gruppo 3
@@ -40,22 +44,27 @@ public class ModelArchivio<T extends Dato> {
      * Le strutture dati (archivio, archivioFiltrato) e il gestore IO sono inizializzati.
      */
     public ModelArchivio(String pathname) {
+        io = new GestoreIO<>(pathname);
     }
 
     /**
      * @brief Richiede a GestoreIO l'archivio salvato su file; ritorna un valore booleano che indica se il caricamento dei dati è avvenuto con successo. In caso di ritorno di false, è anche possibile che il caricamento dell'archivio sia avvenuto accedendo a record contenuti nella cache (chiusura non corretta nell'esecuzione precedente).
-     * @return true se l'apertura ha avuto successo, false altrimenti.
      */
-    public boolean apriArchivio() {
-        return false;
+    public void apriArchivio() {
+        
+        archivio = io.caricaArchivio();
+        SortedList archivioOrdinato = new SortedList(archivio);
+        archivioFiltrato = new FilteredList<>(archivioOrdinato);
+        
     }
 
     /**
      * @brief Richiede a GestoreIO di salvare l'archivio in modo corretto l'archivio su file. Ritorna un valore boolean che indica se l'operazione è avvenuta con successo.
      * @return true se il salvataggio ha avuto successo, false altrimenti.
      */
-    public boolean chiudiArchivio() {
-        return false;
+    public boolean chiudiArchivio() { 
+        
+        return io.salvaArchivio(archivio);
     }
 
     /**
@@ -63,7 +72,7 @@ public class ModelArchivio<T extends Dato> {
      * @return La lista filtrata (FilteredList) dei dati.
      */
     public FilteredList<T> getArchivioFiltrato() {
-        return null;
+        return archivioFiltrato;
     }
 
     /**
@@ -74,7 +83,11 @@ public class ModelArchivio<T extends Dato> {
      * L'elemento da aggiungere non deve essere null.
      */
     public boolean aggiungiElemento(T elem) {
-        return false;
+        
+        boolean resArchivio = archivio.add(elem);
+        boolean resCache = io.salvaModificaArchivio(new CacheRecord<T>(TipoOperazione.AGGIUNTA, null, elem));
+        
+        return resArchivio && resCache;
     }
 
     /**
@@ -85,7 +98,11 @@ public class ModelArchivio<T extends Dato> {
      * L'elemento target deve esistere nell'archivio.
      */
     public boolean rimuoviElemento(T target) {
-        return false;
+        
+        boolean resArchivio = archivio.remove(target);
+        boolean resCache = io.salvaModificaArchivio(new CacheRecord<T>(TipoOperazione.CANCELLAZIONE, target, null));
+        
+        return resArchivio && resCache;
     }
 
     /**
@@ -97,6 +114,11 @@ public class ModelArchivio<T extends Dato> {
      * Target ed elem non devono essere nulli.
      */
     public boolean modificaElemento(T target, T elem) {
-        return false;
+        
+        boolean resArchivio1 = archivio.remove(target);
+        boolean resArchivio2 = archivio.add(elem);
+        boolean resCache = io.salvaModificaArchivio(new CacheRecord<T>(TipoOperazione.MODIFICA, target, elem));
+        
+        return (resArchivio1 && resArchivio2) && resCache;
     }
 }

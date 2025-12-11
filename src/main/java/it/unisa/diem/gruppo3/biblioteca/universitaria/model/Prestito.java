@@ -3,6 +3,7 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 import java.time.LocalDate;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * @author gruppo 3
@@ -17,22 +18,22 @@ public class Prestito implements Dato {
     /**
         * @brief È la matricola dell'utente che ha richiesto il prestito
     */
-    private /*final*/ String matricolaUtente;
+    private final String matricolaUtente;
     
     /**
         * @brief È l'ISBN del libro richiesto dall'utente
     */
-    private /*final*/ String isbnPrestito;
+    private final String isbnPrestito;
     
     /**
         * @brief È la data in cui viene registrato il prestito
     */
-    private /*final*/ LocalDate dataPrestito;
+    private final LocalDate dataPrestito;
     
     /**
         * @brief È la data entro cui l'utente deve restituire il libro
     */
-    private /*final*/ LocalDate dataRestituzione;
+    private final LocalDate dataRestituzione;
     
     /**
         * @brief È un booleano che indica lo stato del prestito
@@ -56,7 +57,11 @@ public class Prestito implements Dato {
         *   inizializza l'oggetto prestito con i dati inseriti dal bibliotecario
     */
     public Prestito(String matricolaUtente, String isbnPrestito, LocalDate dataPrestito, LocalDate dataRestituzione) {
-        
+        this.matricolaUtente = matricolaUtente;
+        this.isbnPrestito = isbnPrestito;
+        this.dataPrestito = dataPrestito;
+        this.dataRestituzione = dataRestituzione;
+        this.statoPrestito = new SimpleObjectProperty<>(StatoPrestito.ATTIVO);
     }
     
     /**
@@ -65,7 +70,7 @@ public class Prestito implements Dato {
         * @return Ritorna la MatricolaUtente dell'utente che ha registrato il prestito
     */
     public String getMatricolaUtente() {
-        return null;
+        return matricolaUtente;
     }
     
     /**
@@ -74,7 +79,7 @@ public class Prestito implements Dato {
         * @return Ritorna l'ISBN del libro che è stato prestato
     */
     public String getIsbnPrestito() {
-        return null;
+        return isbnPrestito;
     }
     
     /**
@@ -83,7 +88,7 @@ public class Prestito implements Dato {
         * @return Ritorna la data in cui è stato registrato il prestito
     */
     public LocalDate getDataPrestito() {
-        return null;
+        return dataPrestito;
     }
     
     /**
@@ -92,7 +97,7 @@ public class Prestito implements Dato {
         * @return Ritorna la data in cui il libro deve essere restituito
     */
     public LocalDate getDataRestituzione() {
-        return null;
+        return dataRestituzione;
     }
     
     /**
@@ -103,7 +108,7 @@ public class Prestito implements Dato {
         * con la restituzione del libro
     */
     public StatoPrestito getStatoPrestito() {
-        return null;
+        return statoPrestito.get();
     }
     
     /**
@@ -113,14 +118,15 @@ public class Prestito implements Dato {
         *   Assegna al prestito creato uno stato, "Attivo" o "Restituito"
     */
     public void setStatoPrestito(StatoPrestito statoPrestito) {
-        
+        this.statoPrestito.set(statoPrestito);
     }
     
     /**
         * @brief È la property che ci fa vedere lo stato di un prestito
+        * @return Ritorna la property wrapper di stato prestito
     */
     public ObjectProperty<StatoPrestito> statoPrestitoProperty() {
-        return null;
+        return statoPrestito;
     }
 
     /**
@@ -130,7 +136,7 @@ public class Prestito implements Dato {
     */
     @Override
     public boolean isValid() {
-        return false;
+        return dataRestituzione.isAfter(dataPrestito);
     }
 
     /**
@@ -144,7 +150,12 @@ public class Prestito implements Dato {
     */
     @Override
     public boolean equals(Object o) {
-        return false;
+        if(o == null) return false;
+        if(this == null) return true;
+        if(this.getClass() != o.getClass()) return false;
+        
+        Prestito tmp = (Prestito) o;
+        return (this.matricolaUtente.equals(tmp.getMatricolaUtente())) && (this.isbnPrestito.equals(tmp.getIsbnPrestito())) ;
     }
     
     /**
@@ -158,10 +169,15 @@ public class Prestito implements Dato {
         *   positivo se l'oggetto corrente "maggiore" di o;
         *   0 se l'oggetto corrente è "uguale" ad o;
         *   negativo se l'oggetto corrente è "minore" di o
+        * 
+        * @pre
+        * o non deve essere null e deve essere di tipo Prestito
         */
     @Override
     public int compareTo(Object o) {
-        return -1;
+        Prestito tmp = (Prestito) o;
+        
+        return dataRestituzione.compareTo(tmp.getDataRestituzione());
     }
     
     /**
@@ -171,6 +187,8 @@ public class Prestito implements Dato {
     */
     @Override
     public String toString() {
+        
+        // Da fare
         return null;
     }
 }

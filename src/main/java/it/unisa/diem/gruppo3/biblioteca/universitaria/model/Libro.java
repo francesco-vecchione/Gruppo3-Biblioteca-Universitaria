@@ -51,6 +51,11 @@ public class Libro implements Dato {
      * L'istanza è creata e tutti gli attributi sono inizializzati.
      */
     public Libro(String titolo, String autori, int annoDiPubblicazione, String isbn, int numeroCopieDisponibili) {
+        this.titolo = new SimpleStringProperty(titolo);
+        this.autori = new SimpleStringProperty(autori);
+        this.annoDiPubblicazione = new SimpleIntegerProperty(annoDiPubblicazione);
+        this.isbn = new SimpleStringProperty(isbn);
+        this.numeroCopieDisponibili = new SimpleIntegerProperty(numeroCopieDisponibili);
     }
 
     /**
@@ -58,7 +63,7 @@ public class Libro implements Dato {
      * @return Il titolo del libro.
      */
     public String getTitolo() {
-        return null;
+        return titolo.get();
     }
 
     /**
@@ -66,7 +71,7 @@ public class Libro implements Dato {
      * @return Gli autori del libro.
      */
     public String getAutori() {
-        return null; 
+        return autori.get(); 
     }
 
     /**
@@ -74,7 +79,7 @@ public class Libro implements Dato {
      * @return L'anno di pubblicazione.
      */
     public int getAnnoDiPubblicazione() {
-        return -1; 
+        return annoDiPubblicazione.get(); 
     }
 
     /**
@@ -82,7 +87,7 @@ public class Libro implements Dato {
      * @return Il codice ISBN.
      */
     public String getIsbn() {
-        return null; 
+        return isbn.get(); 
     }
 
     /**
@@ -90,7 +95,7 @@ public class Libro implements Dato {
      * @return Il numero di copie.
      */
     public int getNumeroCopieDisponibili() {
-        return -1;
+        return numeroCopieDisponibili.get();
     }
 
     /**
@@ -98,6 +103,7 @@ public class Libro implements Dato {
      * @param[in] titolo    Il nuovo titolo.
      */
     public void setTitolo(String titolo) {
+        this.titolo.set(titolo);
     }
 
     /**
@@ -105,6 +111,7 @@ public class Libro implements Dato {
      * @param[in] autori    I nuovi autori.
      */
     public void setAutori(String autori) {
+        this.autori.set(autori);
     }
 
     /**
@@ -112,6 +119,7 @@ public class Libro implements Dato {
      * @param[in] annoPubblicazione Il nuovo anno di pubblicazione.
      */
     public void setAnnoPubblicazione(int annoPubblicazione) {
+        this.annoDiPubblicazione.set(annoPubblicazione);
     }
 
     /**
@@ -119,6 +127,7 @@ public class Libro implements Dato {
      * @param[in] isbn  Il nuovo codice ISBN.
      */
     public void setIsbn(String isbn) {
+        this.isbn.set(isbn);
     }
 
     /**
@@ -126,6 +135,7 @@ public class Libro implements Dato {
      * @param[in] numeroCopieDisponibili    Il nuovo numero di copie.
      */
     public void setNumeroCopieDisponibili(int numeroCopieDisponibili) {
+        this.numeroCopieDisponibili.set(numeroCopieDisponibili);
     }
 
     /**
@@ -133,7 +143,7 @@ public class Libro implements Dato {
      * @return La StringProperty associata al titolo.
      */
     public StringProperty titoloProperty() {
-        return null; 
+        return titolo; 
     }
 
     /**
@@ -141,7 +151,7 @@ public class Libro implements Dato {
      * @return La StringProperty associata agli autori.
      */
     public StringProperty autoriProperty() {
-        return null; 
+        return autori; 
     }
 
     /**
@@ -149,7 +159,7 @@ public class Libro implements Dato {
      * @return La IntegerProperty associata all'anno.
      */
     public IntegerProperty annoPubblicazioneProperty() {
-        return null; 
+        return annoDiPubblicazione; 
     }
 
     /**
@@ -157,7 +167,7 @@ public class Libro implements Dato {
      * @return La StringProperty associata all'ISBN.
      */
     public StringProperty isbnProperty() {
-        return null; 
+        return isbn; 
     }
 
     /**
@@ -165,7 +175,7 @@ public class Libro implements Dato {
      * @return La IntegerProperty associata al numero di copie.
      */
     public IntegerProperty numeroCopieDisponibiliProperty() {
-        return null; 
+        return numeroCopieDisponibili; 
     }
 
     /**
@@ -175,7 +185,7 @@ public class Libro implements Dato {
      */
     @Override
     public boolean isValid() {
-        return false; 
+        return (numeroCopieDisponibili.get() > 0) && (isbn.get().matches("^(978|979)\\d{10}$")); 
     }
 
     /**
@@ -185,17 +195,27 @@ public class Libro implements Dato {
      */
     @Override
     public boolean equals(Object o) {
-        return false; 
+        if(o == null) return false;
+        if(this == o) return true;
+        if(this.getClass() != o.getClass()) return false;
+        
+        Libro tmp = (Libro) o; 
+        return this.getIsbn().equals(tmp.getIsbn()); 
     }
 
     /**
      * @brief Contratto fornito dall'interfaccia Comparable. Due oggetti Libro sono confrontati sulla base del titolo.
      * @param[in] o L'oggetto da confrontare.
      * @return Un intero negativo, zero o positivo a seconda dell'ordine alfabetico dei titoli.
+     * @pre 
+     * o deve essere di tipo Libro e non deve essere null
      */
     @Override
     public int compareTo(Object o) {
-        return -1; 
+        Libro tmp = (Libro) o;
+        
+        // replaceAll(" ", "") elimina gli spazi tra le parole, o meglio tutti i caratteri spazio
+        return this.getTitolo().replaceAll(" ", "").compareToIgnoreCase(tmp.getTitolo().replaceAll(" ", "")); 
     }
 
     /**
@@ -204,6 +224,8 @@ public class Libro implements Dato {
      */
     @Override
     public String toString() {
+        
+        // Da finire
         return null;
     }
 }

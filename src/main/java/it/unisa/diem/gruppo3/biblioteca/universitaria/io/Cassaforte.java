@@ -34,6 +34,17 @@ public class Cassaforte {
         this.pathname = pathname;
     }
 
+    
+    /**
+     * @brief Cripta la password attraverso la funzione di hashing
+     * @param[in] passwordInChiaro La password in chiaro che deve essere criptata
+     * @return Ritorna la password criptata
+     */
+    public int criptaPassword(String passwordInChiaro) {
+        return passwordInChiaro.hashCode();
+    }
+    
+    
     /**
      * @brief Cripta la password e la salva su file.
      * @param[in] passwordInChiaro  La password in chiaro da criptare e
@@ -43,7 +54,7 @@ public class Cassaforte {
      * La password in chiaro non deve essere null.
      */
     public boolean salvaPasswordCriptata(String passwordInChiaro) {
-        Integer hash = passwordInChiaro.hashCode();
+        Integer hash = criptaPassword(passwordInChiaro);
         
         // Il costruttore ad un solo parametro di FileOutputStream sovrascrive di base 
         //      il contenuto del file pathname

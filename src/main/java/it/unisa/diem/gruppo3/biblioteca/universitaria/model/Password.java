@@ -24,7 +24,7 @@ public class Password implements ModelPassword {
         * @param[in] pathname La stringa che contiene il percorso del file dove si trova la password
     */
     public Password(String pathname) {
-        
+        cassaforte = new Cassaforte(pathname);
     }
 
     /**
@@ -41,7 +41,7 @@ public class Password implements ModelPassword {
     */
     @Override
     public boolean verificaPassword(String passwordInChiaro) {
-        return false;
+        return cassaforte.leggiPasswordCriptata() == cassaforte.criptaPassword(passwordInChiaro);
     }
 
     /**
@@ -58,6 +58,6 @@ public class Password implements ModelPassword {
     */
     @Override
     public boolean impostaPassword(String passwordInChiaro) {
-        return false;
+        return cassaforte.salvaPasswordCriptata(passwordInChiaro);
     }
 }
