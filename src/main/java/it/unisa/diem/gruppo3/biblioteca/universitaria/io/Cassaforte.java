@@ -1,5 +1,13 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.io;
 
+import java.io.EOFException;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+
 /**
  * @author gruppo 3
  * @brief Questa classe astrae il concetto di cassaforte dove è mantenuta la password. Si occupa di salvarla criptandola su file e di restituirla.
@@ -23,6 +31,7 @@ public class Cassaforte {
      * L'istanza di Cassaforte è creata con il pathname specificato.
      */
     public Cassaforte(String pathname) {
+        this.pathname = pathname;
     }
 
     /**
@@ -34,7 +43,18 @@ public class Cassaforte {
      * La password in chiaro non deve essere null.
      */
     public boolean salvaPasswordCriptata(String passwordInChiaro) {
-        return false;
+        Integer hash = passwordInChiaro.hashCode();
+        
+        // Il costruttore ad un solo parametro di FileOutputStream sovrascrive di base 
+        //      il contenuto del file pathname
+        try (FileOutputStream fos = new FileOutputStream(pathname);
+                ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(hash);
+        } catch (IOException e) {
+            return false;
+        }
+        
+        return true;
     }
 
     /**
@@ -44,6 +64,18 @@ public class Cassaforte {
      * Il file specificato da pathname deve esistere.
      */
     public int leggiPasswordCriptata() {
-        return -1;
+        
+        Integer hash = null;
+        
+        try(FileInputStream fis = new FileInputStream(pathname);
+                ObjectInputStream ois = new ObjectInputStream(fis)) {
+            hash = (Integer) ois.readObject();
+        } catch (EOFException e) {
+            // Tutto bene, ha letto la password
+        } catch (Exception e) {
+            return -1;
+        }
+        
+        return hash;
     }
 }

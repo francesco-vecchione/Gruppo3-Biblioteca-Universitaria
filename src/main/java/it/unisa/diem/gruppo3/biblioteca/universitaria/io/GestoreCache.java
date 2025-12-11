@@ -1,6 +1,15 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.io;
 
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Dato;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -23,6 +32,14 @@ public class GestoreCache<T extends Dato> {
      * Il pathname non deve essere null.
      */
     public GestoreCache(String pathname) {
+        this.pathname = pathname;
+        
+        // Crea un nuovo file se e solo se non ne esiste uno con questo nome
+        try {
+            new File(this.pathname).createNewFile();
+        } catch(IOException e) {
+            // Non gestito
+        }
     }
 
     /**
@@ -33,7 +50,17 @@ public class GestoreCache<T extends Dato> {
      * Il record da salvare non deve essere null.
      */
     public boolean salvaSuCache(CacheRecord<T> cacheRecord) {
-        return false;
+        
+        // Il costruttore usato per FileOutputStream permette di usare lo stream in 
+        //      modalità append
+        try (FileOutputStream fos = new FileOutputStream(pathname, true);
+                ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            oos.writeObject(cacheRecord);
+        } catch (IOException e) {
+            return false;
+        }
+        
+        return true;
     }
 
     /**
@@ -43,7 +70,25 @@ public class GestoreCache<T extends Dato> {
      * La lista restituita non è mai null.
      */
     public List<CacheRecord<T>> caricaDaCache() {
-        return null;
+        
+        List<CacheRecord<T>> cacheRecords = null;
+        
+        try (FileInputStream fis = new FileInputStream(pathname);
+                ObjectInputStream ois = new ObjectInputStream(fis)) {
+            cacheRecords = new LinkedList<>();
+            
+            while(true) {
+                cacheRecords.add((CacheRecord<T>) ois.readObject());
+            }
+        } catch (EOFException e) {
+            // Tutto bene, ha concluso la lettura
+        } catch (Exception e) {
+            // Include FileNotFoundException, significa che è gestito il caso in cui
+            //      non c'è un file di cache
+            return null;
+        }
+        
+        return cacheRecords;
     }
 
     /**
@@ -51,6 +96,6 @@ public class GestoreCache<T extends Dato> {
      * @return true se l'eliminazione ha avuto successo, false altrimenti.
      */
     public boolean eliminaCache() {
-        return false;
+        return new File(pathname).delete();
     }
 }

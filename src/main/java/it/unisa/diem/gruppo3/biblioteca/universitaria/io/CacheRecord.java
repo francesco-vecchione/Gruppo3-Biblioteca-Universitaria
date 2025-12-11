@@ -14,7 +14,7 @@ public class CacheRecord<T extends Dato> implements Serializable {
     /**
      * @brief Stringa che indica il tipo di operazione svolta.
      */
-    private String tipoOperazione;
+    private TipoOperazione tipoOperazione;
 
     /**
      * @brief Elemento cancellato o modificato (null in caso di aggiunta).
@@ -38,15 +38,18 @@ public class CacheRecord<T extends Dato> implements Serializable {
      * @pre
      * Il tipo di operazione non deve essere null.
      */
-    public CacheRecord(String tipoOperazione, T target, T elem) {
+    public CacheRecord(TipoOperazione tipoOperazione, T target, T elem) {
+        this.tipoOperazione = tipoOperazione;
+        this.target = target;
+        this.elem = target;
     }
 
     /**
      * @brief Restituisce il tipo di operazione.
      * @return La stringa rappresentante l'operazione.
      */
-    public String getTipoOperazione() {
-        return null;
+    public TipoOperazione getTipoOperazione() {
+        return tipoOperazione;
     }
 
     /**
@@ -54,7 +57,7 @@ public class CacheRecord<T extends Dato> implements Serializable {
      * @return L'oggetto target (può essere null).
      */
     public T getTarget() {
-        return null;
+        return target;
     }
 
     /**
@@ -62,6 +65,6 @@ public class CacheRecord<T extends Dato> implements Serializable {
      * @return L'oggetto elem (può essere null).
      */
     public T getElem() {
-        return null;
+        return elem;
     }
 }

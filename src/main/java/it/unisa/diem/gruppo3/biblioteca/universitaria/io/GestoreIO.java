@@ -1,6 +1,15 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.io;
 
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Dato;
+import java.io.EOFException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.List;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
@@ -32,6 +41,16 @@ public class GestoreIO<T extends Dato> implements GestoreGenericoIO<T> {
      * L'istanza è creata e il gestore della cache è inizializzato.
      */
     public GestoreIO(String pathname) {
+        this.pathname = pathname;
+        
+        cache = new GestoreCache<>(this.pathname + "Cache");
+        
+        // Crea un nuovo file se e solo se non ne esiste uno con questo nome
+        try {
+            new File(this.pathname).createNewFile();
+        } catch (IOException e) {
+            // Non gestito
+        }
     }
 
     /**
@@ -43,7 +62,21 @@ public class GestoreIO<T extends Dato> implements GestoreGenericoIO<T> {
      */
     @Override
     public boolean salvaArchivio(ObservableList<T> archivio) {
-        return false;
+        
+        // Riscrive il file archivio
+        try (FileOutputStream fos = new FileOutputStream(pathname);
+                ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+            
+            for(T elem : archivio) {
+                oos.writeObject(elem);
+            } 
+        } catch (IOException e) {
+            return false;
+        }
+        
+        cache.eliminaCache();
+        
+        return true;
     }
 
     /**
@@ -54,7 +87,41 @@ public class GestoreIO<T extends Dato> implements GestoreGenericoIO<T> {
      */
     @Override
     public ObservableList<T> caricaArchivio() {
-        return null;
+        
+        ObservableList<T> archivio = FXCollections.observableArrayList();
+        
+        try (FileInputStream fis = new FileInputStream(pathname);
+                ObjectInputStream ois = new ObjectInputStream(fis)) {
+            
+            while(true) {
+                archivio.add((T) ois.readObject());
+            }
+            
+        } catch (EOFException e) {
+            // Tutto bene, ha concluso la lettura
+        } catch (Exception e) {
+            // Errore in fase di lettura
+        }
+        
+        List<CacheRecord<T>> archivioCache = cache.caricaDaCache();
+        if(archivioCache != null) {
+            for(CacheRecord<T> cr : archivioCache) {
+                switch (cr.getTipoOperazione()) {
+                    case AGGIUNTA:
+                        archivio.add(cr.getElem());
+                        break;
+                    case MODIFICA:
+                        archivio.remove(cr.getTarget());
+                        archivio.add(cr.getElem());
+                        break;
+                    case CANCELLAZIONE:
+                        archivio.remove(cr.getTarget());
+                        break;
+                }
+            }
+        }
+        
+        return archivio;
     }
 
     /**
@@ -66,6 +133,6 @@ public class GestoreIO<T extends Dato> implements GestoreGenericoIO<T> {
      */
     @Override
     public boolean salvaModificaArchivio(CacheRecord<T> cacheRecord) {
-        return false;
+        return cache.salvaSuCache(cacheRecord);
     }
 }

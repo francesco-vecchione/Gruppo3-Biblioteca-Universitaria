@@ -60,23 +60,8 @@ public class PrestitoTest {
      */
     @Test
     public void testIsValid2() {
-        Prestito prestito1 = new Prestito("0612709", "9788854175037", null, null);
-        Prestito prestito2 = new Prestito("0612709ABC", "9788854175037", null, null);
+        Prestito prestito1 = new Prestito("", "", LocalDate.of(2025, 12, 12), LocalDate.of(2025, 12, 10));
         assertFalse(prestito1.isValid());
-        assertFalse(prestito2.isValid());
-    }
-    
-    /**
-     * UTC 3.4.3 - Test of isValid method, of class Prestito.
-     */
-    @Test
-    public void testIsValid3() {
-        Prestito prestito1 = new Prestito("0612709314", "9438854175037",null, null);
-        Prestito prestito2 = new Prestito("0612709314", "97888541",null, null);
-        Prestito prestito3 = new Prestito("0612709314", "97888541AAA03",null, null);
-        assertFalse(prestito1.isValid());
-        assertFalse(prestito2.isValid());
-        assertFalse(prestito3.isValid());
     }
 
     /**

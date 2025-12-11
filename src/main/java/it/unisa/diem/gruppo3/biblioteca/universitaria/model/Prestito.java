@@ -125,7 +125,7 @@ public class Prestito implements Dato {
 
     /**
         * @brief È fornito dall'interfaccia Dato, e permette di registrare correttamente un prestito
-        * solo se matricolaUtente e isbnPrestito rispettano i loro standard
+        * solo se dataRestituzione è "maggiore" di dataPrestito
         * @return ritorna true se i dati rispettano lo standard 
     */
     @Override
