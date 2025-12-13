@@ -19,7 +19,7 @@ public class LibroTest {
     /**
      * UTC 1.1 - Test of constructor, of class Libro.
      */
-    @org.junit.jupiter.api.Test
+    @Test
     public void testLibro() {
         assertEquals("L'idiota", libro.getTitolo());
         assertEquals("Dostoevskij", libro.getAutori());
@@ -27,97 +27,9 @@ public class LibroTest {
         assertEquals("9788854175037", libro.getIsbn());
         assertEquals(1, libro.getNumeroCopieDisponibili());
     }
-    
-    /**
-     * UTC 1.2 - Test of setTitolo method, of class Libro.
-     */
-    @Test
-    public void testSetTitolo() {
-        libro.setTitolo("Delitto e castigo");
-        assertEquals("Delitto e castigo", libro.getTitolo());
-    }
 
     /**
-     * UTC 1.3 - Test of setAutori method, of class Libro.
-     */
-    @Test
-    public void testSetAutori() {
-        libro.setAutori("Turgenev");
-        assertEquals("Turgenev", libro.getAutori());
-    }
-
-    /**
-     * UTC 1.4 - Test of setAnnoPubblicazione method, of class Libro.
-     */
-    @Test
-    public void testSetAnnoPubblicazione() {
-        libro.setAnnoPubblicazione(2015);
-        assertEquals(2015, libro.getAnnoDiPubblicazione());
-    }
-
-    /**
-     * UTC 1.5 - Test of setIsbn method, of class Libro.
-     */
-    @Test
-    public void testSetIsbn() {
-        libro.setIsbn("9788855250342");
-        assertEquals("9788855250342", libro.getIsbn());
-    }
-
-    /**
-     * UTC 1.6 - Test of setNumeroCopieDisponibili method, of class Libro.
-     */
-    @Test
-    public void testSetNumeroCopieDisponibili() {
-        libro.setNumeroCopieDisponibili(3);
-        assertEquals(3, libro.getNumeroCopieDisponibili());
-    }
-
-    /**
-     * UTC 1.7 - Test of titoloProperty method, of class Libro.
-     */
-    @Test
-    public void testTitoloProperty() {
-        assertNotNull(libro.titoloProperty());
-    }
-
-    /**
-     * UTC 1.8 - Test of autoriProperty method, of class Libro.
-     */
-    @Test
-    public void testAutoriProperty() {
-        assertNotNull(libro.autoriProperty());
-    }
-
-    /**
-     * UTC 1.9 - Test of annoPubblicazioneProperty method, of class Libro.
-     */
-    @Test
-    public void testAnnoPubblicazioneProperty() {
-        assertNotNull(libro.annoPubblicazioneProperty());
-
-    }
-
-    /**
-     * UTC 1.10 - Test of isbnProperty method, of class Libro.
-     */
-    @Test
-    public void testIsbnProperty() {
-        assertNotNull(libro.isbnProperty());
-
-    }
-
-    /**
-     * UTC 1.11 - Test of numeroCopieDisponibiliProperty method, of class Libro.
-     */
-    @Test
-    public void testNumeroCopieDisponibiliProperty() {
-        assertNotNull(libro.numeroCopieDisponibiliProperty());
-
-    }
-
-    /**
-     * UTC 1.12.1 - Test of isValid method, of class Libro.
+     * UTC 1.2.1 - Test of isValid method, of class Libro.
      */
     @Test
     public void testIsValid1() {
@@ -125,7 +37,7 @@ public class LibroTest {
     }
     
     /**
-     * UTC 1.12.2 - Test of isValid method, of class Libro.
+     * UTC 1.2.2 - Test of isValid method, of class Libro.
      */
     @Test
     public void testIsValid2() {
@@ -136,7 +48,7 @@ public class LibroTest {
     }
     
     /**
-     * UTC 1.12.3 - Test of isValid method, of class Libro.
+     * UTC 1.2.3 - Test of isValid method, of class Libro.
      */
     @Test
     public void testIsValid3() {
@@ -145,7 +57,7 @@ public class LibroTest {
     }
     
     /**
-     * UTC 1.13 - Test of equals method, of class Libro.
+     * UTC 1.3 - Test of equals method, of class Libro.
      */
     @Test
     public void testEquals() {
@@ -154,7 +66,7 @@ public class LibroTest {
     }
 
     /**
-     * UTC 1.14.1 - Test of compareTo method, of class Libro.
+     * UTC 1.4.1 - Test of compareTo method, of class Libro.
      */
     @Test
     public void testCompareTo1() {
@@ -163,7 +75,7 @@ public class LibroTest {
     }
 
     /**
-     * UTC 1.14.2 - Test of compareTo method, of class Libro.
+     * UTC 1.4.2 - Test of compareTo method, of class Libro.
      */
     @Test
     public void testCompareTo2() {
@@ -172,7 +84,7 @@ public class LibroTest {
     }
     
     /**
-     * UTC 1.14.3 - Test of compareTo method, of class Libro.
+     * UTC 1.4.3 - Test of compareTo method, of class Libro.
      */
     @Test
     public void testCompareTo3() {
@@ -181,7 +93,7 @@ public class LibroTest {
     }
     
     /**
-     * UTC 1.15 Test of toString method, of class Libro.
+     * UTC 1.5 Test of toString method, of class Libro.
      */
     @Test
     public void testToString() {

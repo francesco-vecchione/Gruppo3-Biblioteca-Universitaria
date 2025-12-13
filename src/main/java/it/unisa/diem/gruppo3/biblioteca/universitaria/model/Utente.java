@@ -1,8 +1,5 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 /**
  * @author gruppo 3
  */
@@ -20,22 +17,22 @@ public class Utente implements Dato {
     /**
         * @brief nome dell'utente
     */
-    private StringProperty nome;
+    private final String nome;
     
     /**
         * @brief cognome dell'utente
     */
-    private StringProperty cognome;
+    private final String cognome;
     
     /**
         * @brief matricola dell'utente
     */
-    private StringProperty matricola;
+    private final String matricola;
     
     /**
         * @brief nome dell'utente
     */
-    private StringProperty email;
+    private final String email;
     
     /**
         * @brief Costruttore che si occupa di inizializzare gli attributi
@@ -49,10 +46,10 @@ public class Utente implements Dato {
         *   Viene creato un utente con gli attributi specificati dal bibliotecario
     */
     public Utente(String nome, String cognome, String matricola, String email) {
-        this.nome = new SimpleStringProperty(nome);
-        this.cognome = new SimpleStringProperty(cognome);
-        this.matricola = new SimpleStringProperty(matricola);
-        this.email = new SimpleStringProperty(email);
+        this.nome = nome;
+        this.cognome = cognome;
+        this.matricola = matricola;
+        this.email = email;
     }
     
     /**
@@ -61,7 +58,7 @@ public class Utente implements Dato {
         * @return Ritorna il nome dell'utente
     */
     public String getNome() {
-        return nome.get();
+        return nome;
     }
     
     /**
@@ -70,7 +67,7 @@ public class Utente implements Dato {
         * @return Ritorna il cognome dell'utente
     */
     public String getCognome() {
-        return cognome.get();
+        return cognome;
     }
     
     /**
@@ -79,7 +76,7 @@ public class Utente implements Dato {
         * @return Ritorna la matricola dell'utente
     */
     public String getMatricola() {
-        return matricola.get();
+        return matricola;
     }
     
     /**
@@ -88,82 +85,6 @@ public class Utente implements Dato {
         * @return Ritorna la mail dell'utente
     */
     public String getEmail() {
-        return email.get();
-    }
-    
-    /**
-        * @brief set di nome
-        * 
-        * @param[in] nome Il nuovo valore di nome
-        * @pre Nome non deve essere null
-        * @post Assegna all'utente il nome scritto dal bibliotecario
-    */
-    public void setNome(String nome) {
-        this.nome.set(nome);
-    }
-    
-    /**
-        * @brief set di cognome
-        * 
-        * @param[in] cognome Il nuovo valore di cognome
-        * @pre Cognome non deve essere null
-        * @post Assegna all'utente il cognome scritto dal bibliotecario
-    */
-    public void setCognome(String cognome) {
-        this.cognome.set(cognome);
-    }
-    
-    /**
-        * @brief set di matricola
-        * 
-        * @param[in] matricola Il nuovo valore della matricola
-        * @pre Matricola non deve essere null
-        * @post Assegna all'utente la matricola scritta dal bibliotecario
-    */
-    public void setMatricola(String matricola) {
-        this.matricola.set(matricola);
-    }
-    
-    /**
-        * @brief set di email
-        * 
-        * @param[in] email Il nuovo valore di email 
-        * @pre Email non deve essere null
-        * @post Assegna all'utente la mail scritta dal bibliotecario
-    */
-    public void setEmail(String email) {
-        this.email.set(email);
-    }
-    
-    /**
-        * @brief getter della property nome
-        * @return Il wrapper property per il nome
-    */
-    public StringProperty nomeProperty() {
-        return nome;
-    }
-    
-    /**
-        * @brief getter della property cognome
-        * @return Il wrapper property per il cognome
-    */
-    public StringProperty cognomeProperty() {
-        return cognome;
-    }
-    
-    /**
-        * @brief getter della property matricola
-        * @return Il wrapper property per la matricola
-    */
-    public StringProperty matricolaProperty() {
-        return matricola;
-    }
-    
-    /**
-        * @brief getter della property email
-        * @return Il wrapper property per l'email
-    */
-    public StringProperty emailProperty() {
         return email;
     }
 

@@ -1,5 +1,7 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 
+import java.io.File;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,6 +20,11 @@ public class PasswordTest {
         password.impostaPassword("ciaoMondo");
     }
 
+    @AfterEach
+    public void tearDown() {
+        new File("cassaforte").delete();
+    }
+    
     /**
      * UTC 4.1.1 - Test of verificaPassword method, of class Password.
      */

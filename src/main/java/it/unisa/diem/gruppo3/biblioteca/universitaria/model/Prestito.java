@@ -1,9 +1,6 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 
 import java.time.LocalDate;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
 
 /**
  * @author gruppo 3
@@ -38,7 +35,7 @@ public class Prestito implements Dato {
     /**
         * @brief È un booleano che indica lo stato del prestito
     */
-    private ObjectProperty<StatoPrestito> statoPrestito;
+    private final StatoPrestito statoPrestito;
     
     /**
         * @brief È il costruttore che si occupa di inizializzare gli attributi
@@ -61,7 +58,7 @@ public class Prestito implements Dato {
         this.isbnPrestito = isbnPrestito;
         this.dataPrestito = dataPrestito;
         this.dataRestituzione = dataRestituzione;
-        this.statoPrestito = new SimpleObjectProperty<>(StatoPrestito.ATTIVO);
+        this.statoPrestito = StatoPrestito.ATTIVO;
     }
     
     /**
@@ -108,24 +105,6 @@ public class Prestito implements Dato {
         * con la restituzione del libro
     */
     public StatoPrestito getStatoPrestito() {
-        return statoPrestito.get();
-    }
-    
-    /**
-        * @brief set di statoPrestito
-        * 
-        * @post
-        *   Assegna al prestito creato uno stato, "Attivo" o "Restituito"
-    */
-    public void setStatoPrestito(StatoPrestito statoPrestito) {
-        this.statoPrestito.set(statoPrestito);
-    }
-    
-    /**
-        * @brief È la property che ci fa vedere lo stato di un prestito
-        * @return Ritorna la property wrapper di stato prestito
-    */
-    public ObjectProperty<StatoPrestito> statoPrestitoProperty() {
         return statoPrestito;
     }
 
@@ -136,7 +115,7 @@ public class Prestito implements Dato {
     */
     @Override
     public boolean isValid() {
-        return dataRestituzione.isAfter(dataPrestito);
+        return getDataRestituzione().isAfter(dataPrestito);
     }
 
     /**
@@ -155,7 +134,7 @@ public class Prestito implements Dato {
         if(this.getClass() != o.getClass()) return false;
         
         Prestito tmp = (Prestito) o;
-        return (this.matricolaUtente.equals(tmp.getMatricolaUtente())) && (this.isbnPrestito.equals(tmp.getIsbnPrestito())) ;
+        return (this.getMatricolaUtente().equals(tmp.getMatricolaUtente())) && (this.getIsbnPrestito().equals(tmp.getIsbnPrestito())) ;
     }
     
     /**
@@ -177,7 +156,7 @@ public class Prestito implements Dato {
     public int compareTo(Object o) {
         Prestito tmp = (Prestito) o;
         
-        return dataRestituzione.compareTo(tmp.getDataRestituzione());
+        return getDataRestituzione().compareTo(tmp.getDataRestituzione());
     }
     
     /**

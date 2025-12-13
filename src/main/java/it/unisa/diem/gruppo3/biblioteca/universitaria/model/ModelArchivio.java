@@ -84,10 +84,10 @@ public class ModelArchivio<T extends Dato> {
      */
     public boolean aggiungiElemento(T elem) {
         
-        boolean resArchivio = archivio.add(elem);
-        boolean resCache = io.salvaModificaArchivio(new CacheRecord<T>(TipoOperazione.AGGIUNTA, null, elem));
+        if(archivio.add(elem))
+            return io.salvaModificaArchivio(new CacheRecord<>(TipoOperazione.AGGIUNTA, null, elem));
         
-        return resArchivio && resCache;
+        return false;
     }
 
     /**
@@ -99,10 +99,10 @@ public class ModelArchivio<T extends Dato> {
      */
     public boolean rimuoviElemento(T target) {
         
-        boolean resArchivio = archivio.remove(target);
-        boolean resCache = io.salvaModificaArchivio(new CacheRecord<T>(TipoOperazione.CANCELLAZIONE, target, null));
+        if(archivio.remove(target))
+            return io.salvaModificaArchivio(new CacheRecord<>(TipoOperazione.CANCELLAZIONE, target, null));
         
-        return resArchivio && resCache;
+        return false;
     }
 
     /**
@@ -114,11 +114,11 @@ public class ModelArchivio<T extends Dato> {
      * Target ed elem non devono essere nulli.
      */
     public boolean modificaElemento(T target, T elem) {
+
+        int index = archivio.indexOf(target);
+        if(index < 0) return false;
         
-        boolean resArchivio1 = archivio.remove(target);
-        boolean resArchivio2 = archivio.add(elem);
-        boolean resCache = io.salvaModificaArchivio(new CacheRecord<T>(TipoOperazione.MODIFICA, target, elem));
-        
-        return (resArchivio1 && resArchivio2) && resCache;
+        archivio.set(index, elem);
+        return io.salvaModificaArchivio(new CacheRecord<>(TipoOperazione.MODIFICA, target, elem));
     }
 }

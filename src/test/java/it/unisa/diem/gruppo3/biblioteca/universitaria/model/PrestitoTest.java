@@ -31,24 +31,7 @@ public class PrestitoTest {
     }
 
     /**
-     * UTC 3.2 - Test of setStatoPrestito method, of class Prestito.
-     */
-    @Test
-    public void testSetStatoPrestito() {
-        prestito.setStatoPrestito(StatoPrestito.RESTITUITO);
-        assertEquals(StatoPrestito.RESTITUITO, prestito.getStatoPrestito());
-    }
-
-    /**
-     * UTC 3.3 - Test of statoPrestitoProperty method, of class Prestito.
-     */
-    @Test
-    public void testStatoPrestitoProperty() {
-        assertNotNull(prestito.statoPrestitoProperty());
-    }
-
-    /**
-     * UTC 3.4.1 - Test of isValid method, of class Prestito.
+     * UTC 3.2.1 - Test of isValid method, of class Prestito.
      */
     @Test
     public void testIsValid1() {
@@ -56,7 +39,7 @@ public class PrestitoTest {
     }
     
     /**
-     * UTC 3.4.2 - Test of isValid method, of class Prestito.
+     * UTC 3.2.2 - Test of isValid method, of class Prestito.
      */
     @Test
     public void testIsValid2() {
@@ -65,7 +48,7 @@ public class PrestitoTest {
     }
 
     /**
-     * UTC 3.5.1 - Test of equals method, of class Prestito.
+     * UTC 3.3.1 - Test of equals method, of class Prestito.
      */
     @Test
     public void testEquals1() {
@@ -74,7 +57,7 @@ public class PrestitoTest {
     }
     
     /**
-     * UTC 3.5.2 - Test of equals method, of class Prestito.
+     * UTC 3.3.2 - Test of equals method, of class Prestito.
      */
     @Test
     public void testEquals2() {
@@ -83,7 +66,7 @@ public class PrestitoTest {
     }
     
     /**
-     * UTC 3.5.3 - Test of equals method, of class Prestito.
+     * UTC 3.3.3 - Test of equals method, of class Prestito.
      */
     @Test
     public void testEquals3() {
@@ -92,7 +75,7 @@ public class PrestitoTest {
     }
 
     /**
-     * UTC 3.6.1 - Test of compareTo method, of class Prestito.
+     * UTC 3.4.1 - Test of compareTo method, of class Prestito.
      */
     @Test
     public void testCompareTo1() {
@@ -101,7 +84,7 @@ public class PrestitoTest {
     }
     
     /**
-     * UTC 3.6.2 - Test of compareTo method, of class Prestito.
+     * UTC 3.4.2 - Test of compareTo method, of class Prestito.
      */
     @Test
     public void testCompareTo2() {
@@ -110,7 +93,7 @@ public class PrestitoTest {
     }
     
     /**
-     * UTC 3.6.3 - Test of compareTo method, of class Prestito.
+     * UTC 3.4.3 - Test of compareTo method, of class Prestito.
      */
     @Test
     public void testCompareTo3() {
@@ -119,7 +102,7 @@ public class PrestitoTest {
     }
 
     /**
-     * Test of toString method, of class Prestito.
+     * UTC 3.5 - Test of toString method, of class Prestito.
      */
     @Test
     public void testToString() {

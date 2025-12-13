@@ -19,7 +19,7 @@ public class Cassaforte {
     /**
      * @brief Stringa che mantiene il percorso del file dove è salvata la password.
      */
-    private String pathname;
+    private final String pathname;
 
     /**
      * @brief Costruttore che salva una copia del pathname passato in input.
@@ -36,7 +36,7 @@ public class Cassaforte {
 
     
     /**
-     * @brief Cripta la password attraverso la funzione di hashing
+     * @brief Cripta la password attraverso la funzione di hashing 
      * @param[in] passwordInChiaro La password in chiaro che deve essere criptata
      * @return Ritorna la password criptata
      */

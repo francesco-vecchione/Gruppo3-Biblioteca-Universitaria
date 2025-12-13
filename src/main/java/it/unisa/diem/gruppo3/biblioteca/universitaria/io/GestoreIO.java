@@ -25,12 +25,12 @@ public class GestoreIO<T extends Dato> implements GestoreGenericoIO<T> {
     /**
      * @brief Stringa che mantiene il percorso del file di archivio.
      */
-    private String pathname;
+    private final String pathname;
 
     /**
      * @brief Reference ad un oggetto di tipo GestoreCache per utilizzare i relativi servizi.
      */
-    private GestoreCache<T> cache;
+    private final GestoreCache<T> cache;
 
     /**
      * @brief Costruttore che istanzia l'oggetto GestoreCache e memorizza il pathname dell'archivio.
@@ -108,14 +108,21 @@ public class GestoreIO<T extends Dato> implements GestoreGenericoIO<T> {
             for(CacheRecord<T> cr : archivioCache) {
                 switch (cr.getTipoOperazione()) {
                     case AGGIUNTA:
-                        archivio.add(cr.getElem());
+                        if(cr.getElem() != null) archivio.add(cr.getElem());
                         break;
                     case MODIFICA:
-                        archivio.remove(cr.getTarget());
-                        archivio.add(cr.getElem());
+                        if(cr.getTarget() != null && cr.getElem() != null) {
+                            int index = archivio.indexOf(cr.getTarget());
+                            if(index >= 0) archivio.set(index, cr.getElem());
+                        }
                         break;
                     case CANCELLAZIONE:
-                        archivio.remove(cr.getTarget());
+                        if(cr.getTarget() != null) archivio.remove(cr.getTarget());
+                        break;
+                    default:
+                        // Clausola di default aggiunta in quanto tipoOperazione
+                        // potrebbe essere null poiché il costruttore di CacheRecord
+                        // non controlla se sia null 
                         break;
                 }
             }

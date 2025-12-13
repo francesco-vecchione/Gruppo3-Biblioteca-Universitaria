@@ -1,10 +1,5 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
-
 /**
  * @author gruppo 3
  * @brief Questa classe astrae l'oggetto libro.
@@ -18,27 +13,27 @@ public class Libro implements Dato {
     /**
      * @brief Titolo del libro.
      */
-    private StringProperty titolo;
+    private final String titolo;
 
     /**
      * @brief Lista di uno o più autori separati da una virgola.
      */
-    private StringProperty autori;
+    private final String autori;
 
     /**
      * @brief Anno di pubblicazione del libro.
      */
-    private IntegerProperty annoDiPubblicazione;
+    private final int annoDiPubblicazione;
 
     /**
      * @brief Codice identificativo univoco del libro.
      */
-    private StringProperty isbn;
+    private final String isbn;
 
     /**
      * @brief Numero di copie disponibili del libro.
      */
-    private IntegerProperty numeroCopieDisponibili;
+    private final int numeroCopieDisponibili;
 
     /**
      * @brief Costruttore che si occupa di inizializzare gli attributi.
@@ -51,11 +46,11 @@ public class Libro implements Dato {
      * L'istanza è creata e tutti gli attributi sono inizializzati.
      */
     public Libro(String titolo, String autori, int annoDiPubblicazione, String isbn, int numeroCopieDisponibili) {
-        this.titolo = new SimpleStringProperty(titolo);
-        this.autori = new SimpleStringProperty(autori);
-        this.annoDiPubblicazione = new SimpleIntegerProperty(annoDiPubblicazione);
-        this.isbn = new SimpleStringProperty(isbn);
-        this.numeroCopieDisponibili = new SimpleIntegerProperty(numeroCopieDisponibili);
+        this.titolo = titolo;
+        this.autori = autori;
+        this.annoDiPubblicazione = annoDiPubblicazione;
+        this.isbn = isbn;
+        this.numeroCopieDisponibili = numeroCopieDisponibili;
     }
 
     /**
@@ -63,7 +58,7 @@ public class Libro implements Dato {
      * @return Il titolo del libro.
      */
     public String getTitolo() {
-        return titolo.get();
+        return titolo;
     }
 
     /**
@@ -71,7 +66,7 @@ public class Libro implements Dato {
      * @return Gli autori del libro.
      */
     public String getAutori() {
-        return autori.get(); 
+        return autori; 
     }
 
     /**
@@ -79,7 +74,7 @@ public class Libro implements Dato {
      * @return L'anno di pubblicazione.
      */
     public int getAnnoDiPubblicazione() {
-        return annoDiPubblicazione.get(); 
+        return annoDiPubblicazione; 
     }
 
     /**
@@ -87,7 +82,7 @@ public class Libro implements Dato {
      * @return Il codice ISBN.
      */
     public String getIsbn() {
-        return isbn.get(); 
+        return isbn; 
     }
 
     /**
@@ -95,89 +90,9 @@ public class Libro implements Dato {
      * @return Il numero di copie.
      */
     public int getNumeroCopieDisponibili() {
-        return numeroCopieDisponibili.get();
+        return numeroCopieDisponibili;
     }
-
-    /**
-     * @brief Setter per il titolo.
-     * @param[in] titolo    Il nuovo titolo.
-     */
-    public void setTitolo(String titolo) {
-        this.titolo.set(titolo);
-    }
-
-    /**
-     * @brief Setter per gli autori.
-     * @param[in] autori    I nuovi autori.
-     */
-    public void setAutori(String autori) {
-        this.autori.set(autori);
-    }
-
-    /**
-     * @brief Setter per l'anno di pubblicazione.
-     * @param[in] annoPubblicazione Il nuovo anno di pubblicazione.
-     */
-    public void setAnnoPubblicazione(int annoPubblicazione) {
-        this.annoDiPubblicazione.set(annoPubblicazione);
-    }
-
-    /**
-     * @brief Setter per l'ISBN.
-     * @param[in] isbn  Il nuovo codice ISBN.
-     */
-    public void setIsbn(String isbn) {
-        this.isbn.set(isbn);
-    }
-
-    /**
-     * @brief Setter per il numero di copie disponibili.
-     * @param[in] numeroCopieDisponibili    Il nuovo numero di copie.
-     */
-    public void setNumeroCopieDisponibili(int numeroCopieDisponibili) {
-        this.numeroCopieDisponibili.set(numeroCopieDisponibili);
-    }
-
-    /**
-     * @brief Getter per la property del titolo.
-     * @return La StringProperty associata al titolo.
-     */
-    public StringProperty titoloProperty() {
-        return titolo; 
-    }
-
-    /**
-     * @brief Getter per la property degli autori.
-     * @return La StringProperty associata agli autori.
-     */
-    public StringProperty autoriProperty() {
-        return autori; 
-    }
-
-    /**
-     * @brief Getter per la property dell'anno di pubblicazione.
-     * @return La IntegerProperty associata all'anno.
-     */
-    public IntegerProperty annoPubblicazioneProperty() {
-        return annoDiPubblicazione; 
-    }
-
-    /**
-     * @brief Getter per la property dell'ISBN.
-     * @return La StringProperty associata all'ISBN.
-     */
-    public StringProperty isbnProperty() {
-        return isbn; 
-    }
-
-    /**
-     * @brief Getter per la property del numero di copie disponibili.
-     * @return La IntegerProperty associata al numero di copie.
-     */
-    public IntegerProperty numeroCopieDisponibiliProperty() {
-        return numeroCopieDisponibili; 
-    }
-
+    
     /**
      * @brief Contratto fornito dall'interfaccia Dato. Un oggetto Libro è valido 
      * se ha un numero di copie maggiore di zero e l'isbn rispetta il formato standard.
@@ -185,7 +100,7 @@ public class Libro implements Dato {
      */
     @Override
     public boolean isValid() {
-        return (numeroCopieDisponibili.get() > 0) && (isbn.get().matches("^(978|979)\\d{10}$")); 
+        return (getNumeroCopieDisponibili() > 0) && (getIsbn().matches("^(978|979)\\d{10}$")); 
     }
 
     /**

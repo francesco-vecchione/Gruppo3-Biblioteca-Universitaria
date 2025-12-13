@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.LinkedList;
@@ -23,7 +22,7 @@ public class GestoreCache<T extends Dato> {
     /**
      * @brief Stringa che mantiene il percorso del file di cache.
      */
-    private String pathname;
+    private final String pathname;
 
     /**
      * @brief Costruttore che salva una copia del pathname passato in input.

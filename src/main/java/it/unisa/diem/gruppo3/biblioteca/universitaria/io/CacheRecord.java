@@ -14,17 +14,17 @@ public class CacheRecord<T extends Dato> implements Serializable {
     /**
      * @brief Stringa che indica il tipo di operazione svolta.
      */
-    private TipoOperazione tipoOperazione;
+    private final TipoOperazione tipoOperazione;
 
     /**
      * @brief Elemento cancellato o modificato (null in caso di aggiunta).
      */
-    private T target;
+    private final T target;
 
     /**
      * @brief Elemento aggiunto o che modifica un elemento esistente (null in caso di cancellazione).
      */
-    private T elem;
+    private final T elem;
 
     /**
      * @brief Costruttore che inizializza gli attributi del record.
