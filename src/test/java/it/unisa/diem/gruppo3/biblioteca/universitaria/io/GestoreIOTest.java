@@ -50,7 +50,7 @@ public class GestoreIOTest {
      * UTC 9.1.3 –  Test GestoreIO – costruttore io Prestiti 
      */
     @Test
-    public void testCostruttorePrestiti_UTC_9_1_3() {
+    public void testCostruttorePrestiti() {
         String pathPrestiti = "archivioPrestiti";
         GestoreIO<Prestito> giop = new GestoreIO<>(pathPrestiti);
         
