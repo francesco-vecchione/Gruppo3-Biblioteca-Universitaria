@@ -74,7 +74,7 @@ public class Cassaforte {
      * @pre
      * Il file specificato da pathname deve esistere.
      */
-    public int leggiPasswordCriptata() {
+    public int leggiPasswordCriptata(String passwordInChiaro1) {
         
         Integer hash = null;
         

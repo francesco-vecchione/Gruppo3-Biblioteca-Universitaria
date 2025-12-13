@@ -50,8 +50,8 @@ public class LibroTest {
      * UTC 1.4 - Test of setAnnoPubblicazione method, of class Libro.
      */
     @Test
-    public void testSetAnnoPubblicazione() {
-        libro.setAnnoPubblicazione(2015);
+    public void testSetAnnoDiPubblicazione() {
+        libro.setAnnoDiPubblicazione(2015);
         assertEquals(2015, libro.getAnnoDiPubblicazione());
     }
 
