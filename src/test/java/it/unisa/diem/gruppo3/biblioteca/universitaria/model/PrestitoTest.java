@@ -19,10 +19,10 @@ public class PrestitoTest {
     }
 
     /**
-     * UTC 3.1 - Test of constructor, of class Prestito.
+     * UTC 3.1 - Test Prestito – costruttore
      */
     @Test
-    public void testUtente() {
+    public void testCostruttore() {
         assertEquals("0612709314", prestito.getMatricolaUtente());
         assertEquals("9788854175037", prestito.getIsbnPrestito());
         assertTrue(prestito.getDataPrestito().equals(LocalDate.of(2025,12,12)));
@@ -31,7 +31,7 @@ public class PrestitoTest {
     }
 
     /**
-     * UTC 3.2.1 - Test of isValid method, of class Prestito.
+     * UTC 3.2.1 - Test Prestito – controllo validità – validità riscontrata
      */
     @Test
     public void testIsValid1() {
@@ -39,7 +39,7 @@ public class PrestitoTest {
     }
     
     /**
-     * UTC 3.2.2 - Test of isValid method, of class Prestito.
+     * UTC 3.2.2 - Test Prestito – controllo validità – controllo fallito a causa di data restituzione precedente a data di prestito
      */
     @Test
     public void testIsValid2() {
@@ -48,7 +48,7 @@ public class PrestitoTest {
     }
 
     /**
-     * UTC 3.3.1 - Test of equals method, of class Prestito.
+     * UTC 3.3.1 - Test Prestito – confronto tra due oggetti uguali – confronto positivo
      */
     @Test
     public void testEquals1() {
@@ -57,7 +57,7 @@ public class PrestitoTest {
     }
     
     /**
-     * UTC 3.3.2 - Test of equals method, of class Prestito.
+     * UTC 3.3.2 - Test Prestito – confronto tra due oggetti uguali – confronto negativo data matricola diversa
      */
     @Test
     public void testEquals2() {
@@ -66,7 +66,7 @@ public class PrestitoTest {
     }
     
     /**
-     * UTC 3.3.3 - Test of equals method, of class Prestito.
+     * UTC 3.3.3 - Test Prestito – confronto tra due oggetti uguali – confronto negativo dato isbn diverso
      */
     @Test
     public void testEquals3() {
@@ -75,7 +75,7 @@ public class PrestitoTest {
     }
 
     /**
-     * UTC 3.4.1 - Test of compareTo method, of class Prestito.
+     * UTC 3.4.1 - Test Prestito – ordinamento cronologico sulla data di restituzione – prestito “maggiore” di prestito1
      */
     @Test
     public void testCompareTo1() {
@@ -84,7 +84,7 @@ public class PrestitoTest {
     }
     
     /**
-     * UTC 3.4.2 - Test of compareTo method, of class Prestito.
+     * UTC 3.4.2 - Test Prestito – ordinamento cronologico sulla data di restituzione – prestito “uguale” a prestito1
      */
     @Test
     public void testCompareTo2() {
@@ -93,7 +93,7 @@ public class PrestitoTest {
     }
     
     /**
-     * UTC 3.4.3 - Test of compareTo method, of class Prestito.
+     * UTC 3.4.3 - Test Prestito – ordinamento cronologico sulla data di restituzione – prestito “minore” di prestito1
      */
     @Test
     public void testCompareTo3() {
@@ -102,7 +102,7 @@ public class PrestitoTest {
     }
 
     /**
-     * UTC 3.5 - Test of toString method, of class Prestito.
+     * UTC 3.5 - Test Prestito – stampa della classe
      */
     @Test
     public void testToString() {

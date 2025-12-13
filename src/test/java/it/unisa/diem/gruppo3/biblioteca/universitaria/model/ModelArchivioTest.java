@@ -12,84 +12,87 @@ import java.io.File;
 public class ModelArchivioTest {
 
     private ModelArchivio<Libro> model;
-    private Libro libroTest;
-    private final String FILE_TEST = "test_archivio.dat";
+    private final String FILE_TEST = "archivioLibri";
 
     @BeforeEach
     public void setUp() {
         // Inizializzazione comune
         model = new ModelArchivio<>(FILE_TEST);
-        model.apriArchivio();
-        libroTest = new Libro("Test Book", "Test Author", 2024, "9781234567890", 1);
     }
 
     @AfterEach
     public void tearDown() {
         // Pulizia file dopo ogni test
-        File f = new File(FILE_TEST);
-        if(f.exists()) {
-            f.delete();
-        }
+        new File(FILE_TEST).delete();
+        new File(FILE_TEST + "Cache").delete();
     }
 
     /**
-     * UTC 5.1 - Test of costruttore and apriArchivio method, of class ModelArchivio.
+     * UTC 5.1 - Test ModelArchivio – apertura archivio
      */
     @Test
-    public void testCostruttoreEApriArchivio() {
+    public void testApriArchivio() {
         assertNotNull(model.getArchivioFiltrato());
     }
 
     /**
-     * UTC 5.2 - Test of chiudiArchivio method, of class ModelArchivio.
+     * UTC 5.2 - Test ModelArchivio – chiusura archivio
      */
     @Test
     public void testChiudiArchivio() {
-        boolean result = model.chiudiArchivio();
-        assertTrue(result);
+        model.apriArchivio();
+        
+        assertTrue(model.chiudiArchivio());
     }
 
     /**
-     * UTC 5.3 - Test of getArchivioFiltrato method, of class ModelArchivio.
+     * UTC 5.3 - Test ModelArchivio – getter archivio filtrato
      */
     @Test
     public void testGetArchivioFiltrato() {
+        model.apriArchivio();
+        
         assertNotNull(model.getArchivioFiltrato());
     }
 
     /**
-     * UTC 5.4 - Test of aggiungiElemento method, of class ModelArchivio.
+     * UTC 5.4 - Test ModelArchivio – aggiunta elemento
      */
     @Test
     public void testAggiungiElemento() {
-        boolean result = model.aggiungiElemento(libroTest);
-        assertTrue(result);
-        assertTrue(model.getArchivioFiltrato().contains(libroTest));
+        model.apriArchivio();
+        Libro l1 = new Libro("Test Book", "Test Author", 2024, "9781234567890", 1);
+        
+        assertTrue(model.aggiungiElemento(l1));
+        assertTrue(model.getArchivioFiltrato().contains(l1));
     }
 
     /**
-     * UTC 5.5 - Test of rimuoviElemento method, of class ModelArchivio.
+     * UTC 5.5 - Test ModelArchivio – rimozione elemento
      */
     @Test
     public void testRimuoviElemento() {
-        model.aggiungiElemento(libroTest);
-        boolean result = model.rimuoviElemento(libroTest);
-        assertTrue(result);
-        assertFalse(model.getArchivioFiltrato().contains(libroTest));
+        model.apriArchivio();
+        Libro l1 = new Libro("Test Book", "Test Author", 2024, "9781234567890", 1);
+        model.aggiungiElemento(l1);
+        
+        assertTrue(model.rimuoviElemento(l1));
+        assertFalse(model.getArchivioFiltrato().contains(l1));
     }
 
     /**
-     * UTC 5.6 - Test of modificaElemento method, of class ModelArchivio.
+     * UTC 5.6 - Test ModelArchivio – modifica elemento
      */
     @Test
     public void testModificaElemento() {
-        model.aggiungiElemento(libroTest);
-        Libro libroModificato = new Libro("Titolo Nuovo", "Autore", 2025, "9781234567890", 1);
+        model.apriArchivio();
+        Libro oldL = new Libro("Old Book", "Old Author", 2024, "9781234567890", 1);
+        Libro newL = new Libro("New Book", "New Author", 2025, "9781234567890", 1);
+        model.aggiungiElemento(oldL);
         
-        boolean result = model.modificaElemento(libroTest, libroModificato);
+        assertTrue(model.modificaElemento(oldL, newL));
         
-        assertTrue(result);
-        assertFalse(model.getArchivioFiltrato().contains(libroTest));
-        assertTrue(model.getArchivioFiltrato().contains(libroModificato));
+        int index = model.getArchivioFiltrato().indexOf(newL);
+        assertEquals("New Book", model.getArchivioFiltrato().get(index).getTitolo());
     }
 }

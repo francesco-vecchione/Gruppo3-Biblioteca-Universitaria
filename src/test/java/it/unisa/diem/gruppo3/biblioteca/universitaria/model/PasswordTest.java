@@ -26,7 +26,7 @@ public class PasswordTest {
     }
     
     /**
-     * UTC 4.1.1 - Test of verificaPassword method, of class Password.
+     * UTC 4.1.1 - Test Password – controllo della password – controllo passato con successo
      */
     @Test
     public void testVerificaPassword1() {
@@ -34,7 +34,7 @@ public class PasswordTest {
     }
     
     /**
-     * UTC 4.1.2 - Test of verificaPassword method, of class Password.
+     * UTC 4.1.2 - Test Password – controllo della password – controllo fallito a causa di password differenti
      */
     @Test
     public void testVerificaPassword2() {
@@ -42,7 +42,7 @@ public class PasswordTest {
     }
 
     /**
-     * UTC 4.2 - Test of impostaPassword method, of class Password.
+     * UTC 4.2 - Test Password – reimpostazione della password
      */
     @Test
     public void testImpostaPassword() {

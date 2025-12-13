@@ -18,10 +18,10 @@ public class UtenteTest {
     }
     
     /**
-     * UTC 2.1 - Test of constructor, of class Utente.
+     * UTC 2.1 - Test Utente – costruttore
      */
     @Test
-    public void testUtente() {
+    public void testCostruttore() {
         assertEquals("Francesco", utente.getNome());
         assertEquals("Vecchione", utente.getCognome());
         assertEquals("0612709314", utente.getMatricola());
@@ -29,7 +29,7 @@ public class UtenteTest {
     }
 
     /**
-     * UTC 2.2.1 - Test of isValid method, of class Utente.
+     * UTC 2.2.1 - Test Utente - controllo di validità – validità accertata
      */
     @Test
     public void testIsValid1() {
@@ -37,7 +37,7 @@ public class UtenteTest {
     }
     
     /**
-     * UTC 2.2.2 - Test of isValid method, of class Utente.
+     * UTC 2.2.2 - Test Utente - controllo di validità – controllo fallito a causa di matricola errata
      */
     @Test
     public void testIsValid2() {
@@ -48,7 +48,7 @@ public class UtenteTest {
     }
     
     /**
-     * UTC 2.2.3 - Test of isValid method, of class Utente.
+     * UTC 2.2.3 - Test Utente – controllo di validità – controllo fallito a causa di email errata
      */
     @Test
     public void testIsValid3() {
@@ -61,7 +61,7 @@ public class UtenteTest {
     }
 
     /**
-     * UTC 2.3 - Test of equals method, of class Utente.
+     * UTC 2.3 - Test Utente – confronto tra due utenti uguali
      */
     @Test
     public void testEquals() {
@@ -70,7 +70,7 @@ public class UtenteTest {
     }
 
     /**
-     * UTC 2.4.1 - Test of compareTo method, of class Utente.
+     * UTC 2.4.1 - Test Utente – ordinamento lessicografico su nome e cognome – utente “maggiore” di utente1
      */
     @Test
     public void testCompareTo1() {
@@ -79,7 +79,7 @@ public class UtenteTest {
     }
     
     /**
-     * UTC 2.4.2 - Test of compareTo method, of class Utente.
+     * UTC 2.4.2 - Test Utente - ordinamento lessicografico su nome e cognome – utente “uguale” a utente1
      */
     @Test
     public void testCompareTo2() {
@@ -88,7 +88,7 @@ public class UtenteTest {
     }
     
     /**
-     * UTC 2.4.3 - Test of compareTo method, of class Utente.
+     * UTC 2.4.3 - Test Utente - ordinamento lessicografico su nome e cognome – utente “minore” di utente1
      */
     @Test
     public void testCompareTo3() {
@@ -97,7 +97,7 @@ public class UtenteTest {
     }
 
     /**
-     * UTC 2.5 - Test of toString method, of class Utente.
+     * UTC 2.5 - Test Utente – stampa della classe
      */
     @Test
     public void testToString() {

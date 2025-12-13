@@ -17,10 +17,10 @@ public class LibroTest {
     }
 
     /**
-     * UTC 1.1 - Test of constructor, of class Libro.
+     * UTC 1.1 - Test Libro - costruttore
      */
     @Test
-    public void testLibro() {
+    public void testCostruttore() {
         assertEquals("L'idiota", libro.getTitolo());
         assertEquals("Dostoevskij", libro.getAutori());
         assertEquals(2023, libro.getAnnoDiPubblicazione());
@@ -29,7 +29,7 @@ public class LibroTest {
     }
 
     /**
-     * UTC 1.2.1 - Test of isValid method, of class Libro.
+     * UTC 1.2.1 - Test Libro – controllo di validità – validità accertata
      */
     @Test
     public void testIsValid1() {
@@ -37,7 +37,7 @@ public class LibroTest {
     }
     
     /**
-     * UTC 1.2.2 - Test of isValid method, of class Libro.
+     * UTC 1.2.2 - Test Libro – controllo di validità – controllo fallito a causa di isbn non standard
      */
     @Test
     public void testIsValid2() {
@@ -48,7 +48,7 @@ public class LibroTest {
     }
     
     /**
-     * UTC 1.2.3 - Test of isValid method, of class Libro.
+     * UTC 1.2.3 - Test Libro – controllo validità – controllo fallito a causa di numero di copie minore di 1
      */
     @Test
     public void testIsValid3() {
@@ -57,7 +57,7 @@ public class LibroTest {
     }
     
     /**
-     * UTC 1.3 - Test of equals method, of class Libro.
+     * UTC 1.3 - Test Libro – confronto tra due libri uguali
      */
     @Test
     public void testEquals() {
@@ -66,7 +66,7 @@ public class LibroTest {
     }
 
     /**
-     * UTC 1.4.1 - Test of compareTo method, of class Libro.
+     * UTC 1.4.1 - Test Libro – ordinamento lessicografico tra i titoli di due libri – libro “maggiore” di libro1
      */
     @Test
     public void testCompareTo1() {
@@ -75,7 +75,7 @@ public class LibroTest {
     }
 
     /**
-     * UTC 1.4.2 - Test of compareTo method, of class Libro.
+     * UTC 1.4.2 - Test Libro – ordinamento lessicografico tra i titoli di due libri – libro “uguale” a libro1
      */
     @Test
     public void testCompareTo2() {
@@ -84,7 +84,7 @@ public class LibroTest {
     }
     
     /**
-     * UTC 1.4.3 - Test of compareTo method, of class Libro.
+     * UTC 1.4.3 - Test Libro – ordinamento lessicografico tra i titoli di due libri – libro “minore” a libro1
      */
     @Test
     public void testCompareTo3() {
@@ -93,7 +93,7 @@ public class LibroTest {
     }
     
     /**
-     * UTC 1.5 Test of toString method, of class Libro.
+     * UTC 1.5 Test Libro – stampa della classe
      */
     @Test
     public void testToString() {
