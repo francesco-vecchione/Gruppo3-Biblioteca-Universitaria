@@ -41,7 +41,7 @@ public class CacheRecord<T extends Dato> implements Serializable {
     public CacheRecord(TipoOperazione tipoOperazione, T target, T elem) {
         this.tipoOperazione = tipoOperazione;
         this.target = target;
-        this.elem = target;
+        this.elem = elem;
     }
 
     /**

@@ -18,6 +18,7 @@ public class ModelArchivioTest {
     public void setUp() {
         // Inizializzazione comune
         model = new ModelArchivio<>(FILE_TEST);
+        model.apriArchivio();
     }
 
     @AfterEach
@@ -40,8 +41,6 @@ public class ModelArchivioTest {
      */
     @Test
     public void testChiudiArchivio() {
-        model.apriArchivio();
-        
         assertTrue(model.chiudiArchivio());
     }
 
@@ -49,9 +48,7 @@ public class ModelArchivioTest {
      * UTC 5.3 - Test ModelArchivio – getter archivio filtrato
      */
     @Test
-    public void testGetArchivioFiltrato() {
-        model.apriArchivio();
-        
+    public void testGetArchivioFiltrato() {   
         assertNotNull(model.getArchivioFiltrato());
     }
 
@@ -60,7 +57,6 @@ public class ModelArchivioTest {
      */
     @Test
     public void testAggiungiElemento() {
-        model.apriArchivio();
         Libro l1 = new Libro("Test Book", "Test Author", 2024, "9781234567890", 1);
         
         assertTrue(model.aggiungiElemento(l1));
@@ -72,7 +68,6 @@ public class ModelArchivioTest {
      */
     @Test
     public void testRimuoviElemento() {
-        model.apriArchivio();
         Libro l1 = new Libro("Test Book", "Test Author", 2024, "9781234567890", 1);
         model.aggiungiElemento(l1);
         
@@ -85,7 +80,6 @@ public class ModelArchivioTest {
      */
     @Test
     public void testModificaElemento() {
-        model.apriArchivio();
         Libro oldL = new Libro("Old Book", "Old Author", 2024, "9781234567890", 1);
         Libro newL = new Libro("New Book", "New Author", 2025, "9781234567890", 1);
         model.aggiungiElemento(oldL);

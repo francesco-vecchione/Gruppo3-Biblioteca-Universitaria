@@ -22,90 +22,140 @@ public class CacheRecordTest {
         utenteTest = new Utente("Francesco", "Vecchione", "0612709314", "f.vecchione17@studenti.unisa.it");
         prestitoTest = new Prestito("0612709314", "9788854175037", LocalDate.of(2025, 12, 12), LocalDate.of(2026, 1, 13));
     }
-
-    // --- UTC 6.1: Test su LIBRO ---
-
-    @Test
-    public void testCostruttoreLibroAggiunta() { // UTC 6.1.1
-        CacheRecord<Libro> record = new CacheRecord<>(StatoOperazione.AGGIUNTA, null, libroTest);
+   
+    /**
+     *  UTC 6.1.1 – Test CacheRecord – costruttore Libro – operazione di aggiunta  
+     */
+     @Test
+    public void testCostruttoreLibroAggiunta() {
+        CacheRecord<Libro> cr = new CacheRecord<>(TipoOperazione.AGGIUNTA, null, libroTest);
         
-        assertEquals(StatoOperazione.AGGIUNTA, record.getTipoOperazione());
-        assertNull(record.getTarget());
-        assertEquals("L'idiota", record.getElem().getTitolo());
+        assertEquals(TipoOperazione.AGGIUNTA, cr.getTipoOperazione());
+        assertNull(cr.getTarget());
+        assertEquals("L'idiota", cr.getElem().getTitolo());
+        assertEquals("Dostoevskij", cr.getElem().getAutori());
+        assertEquals(2023, cr.getElem().getAnnoDiPubblicazione());
+        assertEquals("9788854175037", cr.getElem().getIsbn());
+        assertEquals(1, cr.getElem().getNumeroCopieDisponibili());
     }
-
+    /**
+     * UTC 6.1.2 – Test CacheRecord – costruttore Libro – operazione di modifica  
+     */
     @Test
-    public void testCostruttoreLibroModifica() { // UTC 6.1.2
-        Libro libroNuovo = new Libro("L'idiota", "Nuovo Autore", 2024, "9788854175037", 5);
-        CacheRecord<Libro> record = new CacheRecord<>(StatoOperazione.MODIFICA, libroTest, libroNuovo);
+    public void testCostruttoreLibroModifica() {
+        Libro libroNuovo = new Libro("L'idiota", "Francesco Vecchione", 2004, "9788854175037", 5);
+        CacheRecord<Libro> cr = new CacheRecord<>(TipoOperazione.MODIFICA, libroTest, libroNuovo);
         
-        assertEquals(StatoOperazione.MODIFICA, record.getTipoOperazione());
-        assertEquals("Dostoevskij", record.getTarget().getAutori());
-        assertEquals("Nuovo Autore", record.getElem().getAutori());
+        assertEquals(TipoOperazione.MODIFICA, cr.getTipoOperazione());
+        assertEquals("L'idiota", cr.getTarget().getTitolo());
+        assertEquals("Dostoevskij", cr.getTarget().getAutori());
+        assertEquals(2023, cr.getTarget().getAnnoDiPubblicazione());
+        assertEquals("9788854175037", cr.getTarget().getIsbn());
+        assertEquals(1, cr.getTarget().getNumeroCopieDisponibili());
+        assertEquals("L'idiota", cr.getElem().getTitolo());
+        assertEquals("Francesco Vecchione", cr.getElem().getAutori());
+        assertEquals(2004, cr.getElem().getAnnoDiPubblicazione());
+        assertEquals("9788854175037", cr.getElem().getIsbn());
+        assertEquals(5, cr.getElem().getNumeroCopieDisponibili());
     }
-
+    /**
+     * UTC 6.1.3 – Test CacheRecord – costruttore Libro – operazione di Cancellazione  
+     */
     @Test
-    public void testCostruttoreLibroCancellazione() { // UTC 6.1.3
-        CacheRecord<Libro> record = new CacheRecord<>(StatoOperazione.CANCELLAZIONE, libroTest, null);
+    public void testCostruttoreLibroCancellazione() {
+        CacheRecord<Libro> cr = new CacheRecord<>(TipoOperazione.CANCELLAZIONE, libroTest, null);
         
-        assertEquals(StatoOperazione.CANCELLAZIONE, record.getTipoOperazione());
-        assertEquals("9788854175037", record.getTarget().getIsbn());
-        assertNull(record.getElem());
+        assertEquals(TipoOperazione.CANCELLAZIONE, cr.getTipoOperazione());
+        assertEquals("L'idiota", cr.getTarget().getTitolo());
+        assertEquals("Dostoevskij", cr.getTarget().getAutori());
+        assertEquals(2023, cr.getTarget().getAnnoDiPubblicazione());
+        assertEquals("9788854175037", cr.getTarget().getIsbn());
+        assertEquals(1, cr.getTarget().getNumeroCopieDisponibili());
+        assertNull(cr.getElem());
     }
-
-    // --- UTC 6.2: Test su UTENTE ---
-
+    /**
+     * UTC 6.2.1 – Test CacheRecord – costruttore Utente – operazione di aggiunta  
+     */
     @Test
-    public void testCostruttoreUtenteAggiunta() { // UTC 6.2.1
-        CacheRecord<Utente> record = new CacheRecord<>(StatoOperazione.AGGIUNTA, null, utenteTest);
+    public void testCostruttoreUtenteAggiunta() {
+        CacheRecord<Utente> cr = new CacheRecord<>(TipoOperazione.AGGIUNTA, null, utenteTest);
         
-        assertEquals(StatoOperazione.AGGIUNTA, record.getTipoOperazione());
-        assertEquals("0612709314", record.getElem().getMatricola());
+        assertEquals(TipoOperazione.AGGIUNTA, cr.getTipoOperazione());
+        assertNull(cr.getTarget());
+        assertEquals("Francesco", cr.getElem().getNome());
+        assertEquals("Vecchione", cr.getElem().getCognome());
+        assertEquals("0612709314", cr.getElem().getMatricola());
+        assertEquals("f.vecchione17@studenti.unisa.it", cr.getElem().getEmail());
     }
-
+    /**
+     * UTC 6.2.2 – Test CacheRecord – costruttore Utente – operazione di modifica  
+     */
     @Test
-    public void testCostruttoreUtenteModifica() { // UTC 6.2.2
-        Utente utenteNuovo = new Utente("Mario", "Rossi", "0612709314", "m.rossi@studenti.unisa.it");
-        CacheRecord<Utente> record = new CacheRecord<>(StatoOperazione.MODIFICA, utenteTest, utenteNuovo);
+    public void testCostruttoreUtenteModifica() {
+        Utente utenteNuovo = new Utente("Maciu", "Piciu", "0612709314", "m.piciu@studenti.unisa.it");
+        CacheRecord<Utente> cr = new CacheRecord<>(TipoOperazione.MODIFICA, utenteTest, utenteNuovo);
         
-        assertEquals(StatoOperazione.MODIFICA, record.getTipoOperazione());
-        assertEquals("Vecchione", record.getTarget().getCognome());
-        assertEquals("Rossi", record.getElem().getCognome());
+        assertEquals(TipoOperazione.MODIFICA, cr.getTipoOperazione());
+        assertEquals("Francesco", cr.getTarget().getNome());
+        assertEquals("Vecchione", cr.getTarget().getCognome());
+        assertEquals("0612709314", cr.getTarget().getMatricola());
+        assertEquals("f.vecchione17@studenti.unisa.it", cr.getTarget().getEmail());
+        assertEquals("Maciu", cr.getElem().getNome());
+        assertEquals("Piciu", cr.getElem().getCognome());
+        assertEquals("0612709314", cr.getElem().getMatricola());
+        assertEquals("m.piciu@studenti.unisa.it", cr.getElem().getEmail());
     }
-
+    /**
+     * UTC 6.2.3 – Test CacheRecord – costruttore Utente – operazione di cancellazione  
+     */
     @Test
-    public void testCostruttoreUtenteCancellazione() { // UTC 6.2.3
-        CacheRecord<Utente> record = new CacheRecord<>(StatoOperazione.CANCELLAZIONE, utenteTest, null);
+    public void testCostruttoreUtenteCancellazione() {
+        CacheRecord<Utente> cr = new CacheRecord<>(TipoOperazione.CANCELLAZIONE, utenteTest, null);
         
-        assertEquals(StatoOperazione.CANCELLAZIONE, record.getTipoOperazione());
-        assertEquals("0612709314", record.getTarget().getMatricola());
+        assertEquals(TipoOperazione.CANCELLAZIONE, cr.getTipoOperazione());
+        assertEquals("Francesco", cr.getTarget().getNome());
+        assertEquals("Vecchione", cr.getTarget().getCognome());
+        assertEquals("0612709314", cr.getTarget().getMatricola());
+        assertEquals("f.vecchione17@studenti.unisa.it", cr.getTarget().getEmail());
     }
-
-    // --- UTC 6.3: Test su PRESTITO ---
-
+    /**
+     * UTC 6.3.1 – Test CacheRecord – costruttore Prestito – operazione di aggiunta  
+     */
     @Test
-    public void testCostruttorePrestitoAggiunta() { // UTC 6.3.1
-        CacheRecord<Prestito> record = new CacheRecord<>(StatoOperazione.AGGIUNTA, null, prestitoTest);
+    public void testCostruttorePrestitoAggiunta() {
+        CacheRecord<Prestito> cr = new CacheRecord<>(TipoOperazione.AGGIUNTA, null, prestitoTest);
         
-        assertEquals(StatoOperazione.AGGIUNTA, record.getTipoOperazione());
-        assertEquals("0612709314", record.getElem().getMatricolaUtente());
+        assertEquals(TipoOperazione.AGGIUNTA, cr.getTipoOperazione());
+        assertNull(cr.getTarget());
+        assertEquals("0612709314", cr.getElem().getMatricolaUtente());
+        assertEquals("9788854175037", cr.getElem().getIsbnPrestito());
+        assertEquals(LocalDate.of(2025, 12, 12), cr.getElem().getDataPrestito());
+        assertEquals(LocalDate.of(2026, 1, 13), cr.getElem().getDataRestituzione());
     }
-
+    /**
+     * UTC 6.3.2 – Test CacheRecord – costruttore Prestito – operazione di modifica  
+     */
+     
     @Test
-    public void testCostruttorePrestitoModifica() { // UTC 6.3.2
-        Prestito prestitoNuovo = new Prestito("0612709314", "9788854175037", LocalDate.of(2025, 12, 12), LocalDate.of(2026, 2, 1));
-        CacheRecord<Prestito> record = new CacheRecord<>(StatoOperazione.MODIFICA, prestitoTest, prestitoNuovo);
+    public void testCostruttorePrestitoModifica() {
+        Prestito prestitoNuovo = new Prestito("0612701283", "9788854175222", LocalDate.of(2025, 12, 30), LocalDate.of(2026, 2, 13));
+        CacheRecord<Prestito> cr = new CacheRecord<>(TipoOperazione.MODIFICA, prestitoNuovo, prestitoTest);
         
-        assertEquals(StatoOperazione.MODIFICA, record.getTipoOperazione());
-        assertEquals(LocalDate.of(2026, 1, 13), record.getTarget().getDataRestituzione());
-        assertEquals(LocalDate.of(2026, 2, 1), record.getElem().getDataRestituzione());
+        assertEquals(TipoOperazione.MODIFICA, cr.getTipoOperazione());
     }
-
+    /**
+     * UTC 6.3.3 Test CacheRecord – costruttore Prestito – operazione di cancellazione
+     */
     @Test
-    public void testCostruttorePrestitoCancellazione() { // UTC 6.3.3
-        CacheRecord<Prestito> record = new CacheRecord<>(StatoOperazione.CANCELLAZIONE, prestitoTest, null);
+    public void testCostruttorePrestitoCancellazione() {
+        Prestito prestitoDaCancellare = new Prestito("0612701283", "9788854175222", LocalDate.of(2025, 12, 30), LocalDate.of(2026, 2, 13));
+        CacheRecord<Prestito> cr = new CacheRecord<>(TipoOperazione.CANCELLAZIONE, prestitoDaCancellare, null);
         
-        assertEquals(StatoOperazione.CANCELLAZIONE, record.getTipoOperazione());
-        assertEquals("0612709314", record.getTarget().getMatricolaUtente());
+        assertEquals(TipoOperazione.CANCELLAZIONE, cr.getTipoOperazione());
+        assertEquals("0612701283", cr.getTarget().getMatricolaUtente());
+        assertEquals("9788854175222", cr.getTarget().getIsbnPrestito());
+        assertEquals(LocalDate.of(2025, 12, 30), cr.getTarget().getDataPrestito());
+        assertEquals(LocalDate.of(2026, 2, 13), cr.getTarget().getDataRestituzione());
+        assertNull(cr.getElem());
     }
 }

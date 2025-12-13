@@ -41,8 +41,8 @@ public class LibroTest {
      */
     @Test
     public void testIsValid2() {
-        Libro libro1 = new Libro("L’idiota", "Dostoevskij", 2023, "9268854175037", 1);
-        Libro libro2 = new Libro("L’idiota", "Dostoevskij", 2023, "9788854", 1);
+        Libro libro1 = new Libro("L'idiota", "Dostoevskij", 2023, "9268854175037", 1);
+        Libro libro2 = new Libro("L'idiota", "Dostoevskij", 2023, "9788854", 1);
         assertFalse(libro1.isValid());
         assertFalse(libro2.isValid());
     }

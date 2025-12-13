@@ -15,7 +15,7 @@ public class Password implements ModelPassword {
     /**
         * @brief È la reference alla classe I/O che si occupa di memorizzare la password
     */
-    private Cassaforte cassaforte;
+    private final Cassaforte cassaforte;
     
     /**
         * @brief È il costruttore di Password, e si occupa di istanziare Cassaforte
@@ -41,7 +41,7 @@ public class Password implements ModelPassword {
     */
     @Override
     public boolean verificaPassword(String passwordInChiaro) {
-        return cassaforte.leggiPasswordCriptata() == cassaforte.criptaPassword(passwordInChiaro);
+        return cassaforte.leggiPasswordCriptata(passwordInChiaro) == cassaforte.criptaPassword(passwordInChiaro);
     }
 
     /**

@@ -50,10 +50,14 @@ public class GestoreCache<T extends Dato> {
      */
     public boolean salvaSuCache(CacheRecord<T> cacheRecord) {
         
+        File f = new File(pathname);
+        boolean appendFlag = f.exists() && f.length() > 0;
+        
         // Il costruttore usato per FileOutputStream permette di usare lo stream in 
         //      modalità append
         try (FileOutputStream fos = new FileOutputStream(pathname, true);
-                ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                ObjectOutputStream oos = appendFlag ?   new AppendableObjectOutputStream(fos) :
+                                                        new ObjectOutputStream(fos);){
             oos.writeObject(cacheRecord);
         } catch (IOException e) {
             return false;
@@ -64,17 +68,14 @@ public class GestoreCache<T extends Dato> {
 
     /**
      * @brief Recupera la lista dei record contenuti nella cache; se la lista è vuota significa che il file è stato creato ex novo.
-     * @return La lista dei record presenti nella cache.
-     * @post
-     * La lista restituita non è mai null.
+     * @return La lista dei record presenti nella cache, null se incontra un errore irreversibile.
      */
     public List<CacheRecord<T>> caricaDaCache() {
         
-        List<CacheRecord<T>> cacheRecords = null;
+        List<CacheRecord<T>> cacheRecords = new LinkedList<>();
         
         try (FileInputStream fis = new FileInputStream(pathname);
                 ObjectInputStream ois = new ObjectInputStream(fis)) {
-            cacheRecords = new LinkedList<>();
             
             while(true) {
                 cacheRecords.add((CacheRecord<T>) ois.readObject());
@@ -82,8 +83,6 @@ public class GestoreCache<T extends Dato> {
         } catch (EOFException e) {
             // Tutto bene, ha concluso la lettura
         } catch (Exception e) {
-            // Include FileNotFoundException, significa che è gestito il caso in cui
-            //      non c'è un file di cache
             return null;
         }
         
