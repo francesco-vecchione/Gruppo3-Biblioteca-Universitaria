@@ -3,10 +3,8 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.io.Cassaforte;
 
 /**
+ * @file Password.java
  * @author gruppo 3
- */
-
-/**
     * @brief Ha lo scopo di implementare l'interfaccia ModelPassword, per questo
     * ne eredita le responsabilità
 */

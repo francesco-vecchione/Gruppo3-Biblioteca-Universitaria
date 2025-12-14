@@ -12,6 +12,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
+ * @file GestoreCache.java
  * @author gruppo 3
  * @brief Questa classe rappresenta un gestore della cache. Per cache s'intende un file dove vengono salvate le operazioni svolte sull'archivio della biblioteca durante l'esecuzione del programma. La cache viene creata all'inizio dell'esecuzione e cancellata alla fine; se il file esiste da esecuzioni precedenti significa che il programma non è stato chiuso correttamente.
  * @invariant

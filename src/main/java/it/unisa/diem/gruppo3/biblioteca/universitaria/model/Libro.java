@@ -1,6 +1,7 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 
 /**
+ * @file Libro.java
  * @author gruppo 3
  * @brief Questa classe astrae l'oggetto libro.
  * @invariant

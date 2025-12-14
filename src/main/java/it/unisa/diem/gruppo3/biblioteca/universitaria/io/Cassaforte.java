@@ -5,10 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 
 /**
+ * @file Cassaforte.java
  * @author gruppo 3
  * @brief Questa classe astrae il concetto di cassaforte dove è mantenuta la password. Si occupa di salvarla criptandola su file e di restituirla.
  * @invariant

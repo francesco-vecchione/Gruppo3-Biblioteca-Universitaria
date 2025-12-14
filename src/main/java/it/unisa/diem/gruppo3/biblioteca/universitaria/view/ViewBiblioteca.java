@@ -7,6 +7,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.stage.Stage;
 
 /**
+ * @file ViewBiblioteca.java
  * @author gruppo 3
  * @brief Questa classe atrae la vista principale dell'applicazione, contenente 
  * le tre tab per i corrispondenti archivi: libri utenti e prestiti

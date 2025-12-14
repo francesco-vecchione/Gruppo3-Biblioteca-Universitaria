@@ -3,10 +3,8 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 import java.time.LocalDate;
 
 /**
+ * @file Prestito.java
  * @author gruppo 3
- */
-
-/**
         * @brief Si occupa di astrarre l'oggetto Prestito e ne fornisce le sue
         * caratteristiche
 */

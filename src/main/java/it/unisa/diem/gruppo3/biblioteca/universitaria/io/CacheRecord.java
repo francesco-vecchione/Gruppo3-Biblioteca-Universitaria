@@ -4,6 +4,7 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Dato;
 import java.io.Serializable;
 
 /**
+ * @file CacheRecord.java
  * @author gruppo 3
  * @brief Questa classe rappresenta un record della cache.
  * @invariant

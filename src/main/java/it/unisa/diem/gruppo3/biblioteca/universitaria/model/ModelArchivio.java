@@ -9,6 +9,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 
 /**
+ * @file ModelArchivio.java
  * @author Gruppo 3
  * @brief Questa classe rappresenta il modello di archivio accessibile al controller. Le funzionalità possibili sono aprire e chiudere l'archivio, ottenere la lista osservabile (filtrata) dei dati, aggiungere, rimuovere e modificare un elemento dalla lista osservabile. La classe è generica per potersi adattare alla necessità di astrarre il concetto di archivio dei Libro, degli Utente e dei Prestito.
  * @invariant

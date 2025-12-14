@@ -1,7 +1,7 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.io;
 
 /**
- *
+ * @file TipoOperazione.java
  * @author gruppo 3
  */
 public enum TipoOperazione {

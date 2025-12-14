@@ -3,6 +3,7 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 import java.io.Serializable;
 
 /**
+ * @file Dato.java
  * @author gruppo 3
  * @brief Questa interfaccia astrae il concetto di dato che la biblioteca deve gestire.
  * @invariant

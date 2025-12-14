@@ -1,7 +1,7 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 
 /**
- *
+ * @file UtilityPopUpConferma.java
  * @author gruppo 3
  * @brief Questa classe specializza UtilityPopUp e modella una finestra di conferma
  * con i soli pulsanti "Ok" e "Annulla"

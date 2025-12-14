@@ -1,10 +1,8 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 
 /**
+ * @file Utente.java
  * @author gruppo 3
- */
-
-/**
     * @brief Astrae l'oggetto Utente
     * @invariant
     * Il campo matricola deve essere composto da sole 10 cifre

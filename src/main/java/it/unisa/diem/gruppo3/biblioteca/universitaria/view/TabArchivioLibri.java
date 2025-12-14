@@ -5,8 +5,9 @@ import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Button;
 
 /**
+ * @file TabArchivioLibri.java
  * @author gruppo 3
- * @breaf Questa classe specializza TabArchivio per la gestione dell'archivio dei
+ * @brief Questa classe specializza TabArchivio per la gestione dell'archivio dei
  * libri
  */
 public class TabArchivioLibri extends TabArchivio<Libro>{

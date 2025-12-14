@@ -5,6 +5,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 
 /**
+ * @file AppendableObjectOutputStream.java
  * @author gruppo 3
  * 
  * @brief Classe necessaria al fine di eseguire correttamente l'operazione di 

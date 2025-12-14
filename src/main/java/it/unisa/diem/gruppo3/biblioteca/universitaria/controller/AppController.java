@@ -10,11 +10,8 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
 import javafx.stage.Stage;
 
 /**
+ * @file AppController.java
  * @author gruppo 3
- */
-
-
-/**
     * @brief Astrae il concetto di controller del pattern MVC, e l'unico servizio che offre in maniera
     * pubblica è quello di essere istanziata. Ha la responsabilità di passare i dati dalla view al model e viceversa
 */

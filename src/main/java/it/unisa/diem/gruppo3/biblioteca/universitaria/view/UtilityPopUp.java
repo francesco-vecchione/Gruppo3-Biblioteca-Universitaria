@@ -5,6 +5,7 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 /**
+ * @file UtilityPopUp.java
  * @author gruppo 3
  * @brief La classe astrae una generica ginestra di pop up dotata di etichette
  * di intestazione e di errore, con bottoni di azione e di annullamento dell'operazione

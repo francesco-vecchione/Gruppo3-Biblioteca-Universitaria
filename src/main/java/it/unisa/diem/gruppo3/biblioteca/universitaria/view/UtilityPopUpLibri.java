@@ -1,9 +1,9 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Libro;
 import javafx.scene.control.TextField;
 
 /**
+ * @file UtilityPopUpLibri.java
  * @author gruppo 3
  * @brief Questa classe specializza UtilityPopUp per il caso in cui la finestra 
  * di utilità venga generata dalla tab dell'archivio dei libri

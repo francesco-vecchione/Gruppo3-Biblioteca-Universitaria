@@ -1,10 +1,10 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 
 /**
+ * @file UtilityPopUpPrestiti.java
  * @author gruppo 3
  * @brief Questa classe specializza UtilityPopUp per il caso in cui la finestra
  * utilità venga generata dalla tab dell'archivio dei prestiti

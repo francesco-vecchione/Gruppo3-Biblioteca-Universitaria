@@ -1,10 +1,8 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.main;
 
 /**
+ * @file MainProxy.java
  * @author gruppo 3
- */
-
-/**
     * @brief Questa classe rappresenta un "entry point" del programma, in quanto l'unico servizio
     * che offre è fare da "proxy" per lanciare il programma. Questo per via di un bug dell'IDE
     * che non permetteva di lanciare direttamente la classe che estende Application con una versione

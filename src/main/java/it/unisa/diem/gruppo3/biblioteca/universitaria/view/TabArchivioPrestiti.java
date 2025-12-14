@@ -4,6 +4,7 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
 import javafx.collections.transformation.FilteredList;
 
 /**
+ * @file TabArchivioPrestiti.java
  * @author gruppo 3
  * @brief Questa classe specializza TabArchivio per la gestione dell'archivio dei
  * prestiti

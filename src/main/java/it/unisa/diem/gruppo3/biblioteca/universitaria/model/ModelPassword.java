@@ -1,6 +1,7 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 
 /**
+ * @file ModelPassword.java
  * @author gruppo 3
  * @brief Quest'interfaccia rappresenta il modello di password accessibile al controller. Il suo compito è di fornire le uniche funzioni che il controller può utilizzare ovvero quella di verificare che la password sia corretta e quella di impostare la password.
  */

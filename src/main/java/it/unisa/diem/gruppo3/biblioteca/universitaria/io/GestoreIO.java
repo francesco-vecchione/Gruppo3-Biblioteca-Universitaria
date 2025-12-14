@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
+ * @file GestoreIO.java
  * @author gruppo 3
  * @brief Questa classe concretizza l'interfaccia GestoreGenericoIO.
  * @invariant

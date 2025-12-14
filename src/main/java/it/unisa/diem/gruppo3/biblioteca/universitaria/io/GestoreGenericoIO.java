@@ -4,6 +4,7 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Dato;
 import javafx.collections.ObservableList;
 
 /**
+ * @file GestoreGenericoIO.java
  * @author gruppo 3
  * @brief Questa interfaccia astrae il concetto di gestore generico di IO. Fornisce i servizi necessari al modello di archivio per salvare le modifiche fatte all'archivio effettivo nella cache, caricare e salvare l'archivio in maniera trasparente rispetto a crash e chiusure inaspettate dell'applicazione.
  */

@@ -10,6 +10,7 @@ import javafx.stage.Stage;
 
 
 /**
+ * @file AppBibliotecaUniversitaria.java
     * @brief Questa è la classe che lancia effettivamente l'applicazione,
     * si occupa di passare ad AppController lo stage principale che si trova nel metodo start
 */
