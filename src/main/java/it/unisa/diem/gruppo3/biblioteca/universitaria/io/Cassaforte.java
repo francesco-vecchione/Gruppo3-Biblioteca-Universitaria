@@ -1,5 +1,7 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.io;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -59,7 +61,8 @@ public class Cassaforte {
         // Il costruttore ad un solo parametro di FileOutputStream sovrascrive di base 
         //      il contenuto del file pathname
         try (FileOutputStream fos = new FileOutputStream(pathname);
-                ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                BufferedOutputStream bos = new BufferedOutputStream(fos);
+                ObjectOutputStream oos = new ObjectOutputStream(bos)) {
             oos.writeObject(hash);
         } catch (IOException e) {
             return false;
@@ -79,7 +82,8 @@ public class Cassaforte {
         Integer hash = null;
         
         try(FileInputStream fis = new FileInputStream(pathname);
-                ObjectInputStream ois = new ObjectInputStream(fis)) {
+                BufferedInputStream bis = new BufferedInputStream(fis);
+                ObjectInputStream ois = new ObjectInputStream(bis)) {
             hash = (Integer) ois.readObject();
         } catch (EOFException e) {
             // Tutto bene, ha letto la password

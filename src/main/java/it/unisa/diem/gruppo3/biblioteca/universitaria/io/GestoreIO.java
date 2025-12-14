@@ -1,6 +1,8 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.io;
 
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Dato;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -66,7 +68,8 @@ public class GestoreIO<T extends Dato> implements GestoreGenericoIO<T> {
         
         // Riscrive il file archivio
         try (FileOutputStream fos = new FileOutputStream(pathname);
-                ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+                BufferedOutputStream bos = new BufferedOutputStream(fos);
+                ObjectOutputStream oos = new ObjectOutputStream(bos)) {
             
             for(T elem : archivio) {
                 oos.writeObject(elem);
@@ -92,7 +95,8 @@ public class GestoreIO<T extends Dato> implements GestoreGenericoIO<T> {
         ObservableList<T> archivio = FXCollections.observableArrayList();
         
         try (FileInputStream fis = new FileInputStream(pathname);
-                ObjectInputStream ois = new ObjectInputStream(fis)) {
+                BufferedInputStream bis = new BufferedInputStream(fis);
+                ObjectInputStream ois = new ObjectInputStream(bis)) {
             
             while(true) {
                 archivio.add((T) ois.readObject());

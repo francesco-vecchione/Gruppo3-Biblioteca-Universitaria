@@ -1,6 +1,8 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.io;
 
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Dato;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
@@ -57,8 +59,9 @@ public class GestoreCache<T extends Dato> {
         // Il costruttore usato per FileOutputStream permette di usare lo stream in 
         //      modalità append
         try (FileOutputStream fos = new FileOutputStream(pathname, true);
-                ObjectOutputStream oos = appendFlag ?   new AppendableObjectOutputStream(fos) :
-                                                        new ObjectOutputStream(fos);){
+                BufferedOutputStream bos = new BufferedOutputStream(fos);
+                ObjectOutputStream oos = appendFlag ?   new AppendableObjectOutputStream(bos) :
+                                                        new ObjectOutputStream(bos)){
             oos.writeObject(cacheRecord);
         } catch (IOException e) {
             return false;
@@ -76,7 +79,8 @@ public class GestoreCache<T extends Dato> {
         List<CacheRecord<T>> cacheRecords = new LinkedList<>();
         
         try (FileInputStream fis = new FileInputStream(pathname);
-                ObjectInputStream ois = new ObjectInputStream(fis)) {
+                BufferedInputStream bis = new BufferedInputStream(fis);
+                ObjectInputStream ois = new ObjectInputStream(bis)) {
             
             while(true) {
                 cacheRecords.add((CacheRecord<T>) ois.readObject());
