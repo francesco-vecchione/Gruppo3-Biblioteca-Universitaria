@@ -1,7 +1,12 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Hyperlink;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 /**
  * @file LoginDialog.java
@@ -9,6 +14,20 @@ import javafx.scene.control.TextField;
  * @brief Questa classe specializza UtilityPopUp per il caso di log in
  */
 public class LoginDialog {
+    /**
+     * @brief Dialog
+     */
+    private Dialog<String> dialog;
+    
+    /**
+     * @brief Bottone di Avanzamento
+     */
+    private Button btnOk;
+    
+    /**
+     * @brief Bottone di Chiusura
+     */
+    private Button btnChiudi;
     /**
      * @brief Campo di testo per l'inserimento della password
      */
@@ -24,7 +43,22 @@ public class LoginDialog {
      * specifici per la procedura di login
      */
     public LoginDialog() {
+        dialog = new Dialog<>();
         
+        txfPassword = new PasswordField();
+        txfPassword.setPromptText("Password");   
+        linkPasswordDimenticata = new Hyperlink("Password Dimenticata");
+        
+        VBox form = new VBox();
+        form.getChildren().addAll(txfPassword, linkPasswordDimenticata);
+        dialog.getDialogPane().setContent(form);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CLOSE);
+        
+        btnOk = (Button)dialog.getDialogPane().lookupButton(ButtonType.OK);
+        btnChiudi = (Button)dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+    
+        dialog.setTitle("Login");
+        dialog.setHeaderText("Benvenuto\nEffettua l'Accesso");
     }
 
     /**
@@ -41,5 +75,29 @@ public class LoginDialog {
      */
     public Hyperlink getLinkPasswordDimenticata() {
         return linkPasswordDimenticata;
+    }
+    
+    /**
+     * @brief Getter per il bottone Ok
+     * @return Il bottone OK
+     */
+    public Button getBtnOk() {
+        return btnOk;
+    }
+    
+    /**
+     * @brief Getter per il bottone Chiudi
+     * @return Il bottone CHIUDI
+     */
+    public Button getBtnChiudi() {
+        return btnChiudi;
+    }
+    
+    /**
+     * @brief Getter per la Dialog
+     * @return La Dialog
+     */
+    public Dialog<String> getDialog() {
+        return dialog;
     }
 }

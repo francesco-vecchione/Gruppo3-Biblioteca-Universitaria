@@ -55,9 +55,6 @@ public class LibriDialog {
      */
     public LibriDialog() {
         dialog = new Dialog<>();
-        dialog.setTitle("Inserisci");
-        dialog.setHeaderText("Inserisci un Nuovo Libro");
-        
         txfIsbn = new TextField();
         txfIsbn.setPromptText("ISBN");
         txfTitolo = new TextField();
@@ -76,11 +73,13 @@ public class LibriDialog {
         
         btnOk = (Button)dialog.getDialogPane().lookupButton(ButtonType.OK);
         
-        dialog.showAndWait();
+        dialog.setTitle("Inserisci");
+        dialog.setHeaderText("Inserisci un Nuovo Libro");
     }
     
     public LibriDialog(Libro target) {
         this();
+        
         dialog.setTitle("Modifica");
         dialog.setHeaderText("Modifica questo Libro");
 

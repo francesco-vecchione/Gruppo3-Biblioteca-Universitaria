@@ -16,11 +16,11 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
+import javafx.application.Platform;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.Hyperlink;
 import javafx.stage.Stage;
 
 /**
@@ -30,7 +30,6 @@ import javafx.stage.Stage;
  * che offre in maniera pubblica è quello di essere istanziata. Ha la
  * responsabilità di passare i dati dalla view al model e viceversa
  */
-
 public class AppController {
 
     /**
@@ -107,9 +106,83 @@ public class AppController {
         modelUtenti.apriArchivio();
         modelPrestiti.apriArchivio();
 
+        /*if(!modelPassword.esistePassword())*/ {
+            //creazionePassword();
+        }
+        /*else*/ {
+            login();
+        }
+
         viewBiblioteca = new ViewBiblioteca(stage, modelLibri.getArchivioFiltrato(), modelUtenti.getArchivioFiltrato(), modelPrestiti.getArchivioFiltrato());
 
         inizializzaEventHandlers();
+    }
+
+    /**
+     * @brief Esegue le istruzioni necessarie ad implementare la finestra di
+     * Registra Password
+     */
+    private void creazionePassword() {
+        CreazionePasswordDialog dialog = new CreazionePasswordDialog();
+        Button btnOk = dialog.getBtnOk();
+        Button btnChiudi = dialog.getBtnChiudi();
+
+        btnOk.disableProperty().bind(dialog.getTxfPassword().textProperty().isEmpty()
+                .or(dialog.getTxfConfermaPassword().textProperty().isEmpty()));
+
+        //CHIUDI
+        btnChiudi.addEventFilter(ActionEvent.ACTION, event -> Platform.exit());
+
+        //OK
+        btnOk.addEventFilter(ActionEvent.ACTION, event -> {
+            String password = dialog.getTxfPassword().getText();
+            String conferma = dialog.getTxfConfermaPassword().getText();
+
+            if (!password.equals(conferma)) {
+                new ErroreAlert("Le password non coincidono");
+                event.consume();
+                return;
+            }
+            
+            if(!modelPassword.impostaPassword(password)) {
+                new ErroreAlert("Errore nel salvataggio della password");
+                event.consume();
+                return;
+            }
+        });
+        
+        dialog.getDialog().showAndWait();
+    }
+    
+    /**
+     * @brief Esegue le istruzioni necessarie ad implementare la finestra di
+     * Login
+     */
+    private void login() {
+        LoginDialog dialog = new LoginDialog();
+        Button btnOk = dialog.getBtnOk();
+        Button btnChiudi = dialog.getBtnChiudi();
+
+        btnOk.disableProperty().bind(dialog.getTxfPassword().textProperty().isEmpty());
+
+            //CHIUDI
+        btnChiudi.addEventFilter(ActionEvent.ACTION, event -> Platform.exit());
+
+            //OK
+        btnOk.addEventFilter(ActionEvent.ACTION, event -> {
+            String password = dialog.getTxfPassword().getText();
+
+            if (!modelPassword.verificaPassword(password)) {
+                new ErroreAlert("Le password non coincidono");
+                event.consume();
+                return;
+            }
+        });
+        
+            //Password Dimenticata
+        dialog.getLinkPasswordDimenticata().addEventFilter(ActionEvent.ACTION, event -> creazionePassword());
+        
+        dialog.getDialog().showAndWait();
     }
 
     /**
@@ -125,15 +198,11 @@ public class AppController {
      * @brief Inizializza gli event handlers che riguardano Libri
      */
     private void inizializzaEventHandlersLibri() {
+        //Aggiunta Libro
         viewBiblioteca.getTabLibri().getBtnAggiungi().setOnAction(event -> {
             LibriDialog dialog = new LibriDialog();
 
-            //modelLibri.aggiungiElemento(libro);
-        });
-        viewBiblioteca.getTabLibri().getBtnModifica().setOnAction(event -> {
-            Libro target = viewBiblioteca.getTabLibri().getSelectedItem();
-            LibriDialog dialog = new LibriDialog(target);
-            
+            //Tasto OK : bindings
             Button btnOk = dialog.getBtnOk();
             btnOk.disableProperty().bind(
                     dialog.getTxfIsbn().textProperty().isEmpty()
@@ -143,6 +212,50 @@ public class AppController {
                             .or(dialog.getTxfNumCopie().textProperty().isEmpty()));
 
             btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
+                //Raccolta Elementi per Inserimento
+                try {
+                    Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText());
+                    Integer.parseInt(dialog.getTxfNumCopie().getText());
+                } catch (NumberFormatException e) {
+                    new ErroreAlert("Il formato dei dati che hai inserito non è corretto");
+                    event.consume();
+                    return;
+                }
+                Libro nuovoLibro = new Libro(dialog.getTxfTitolo().getText(), dialog.getTxfAutori().getText(), Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText()), dialog.getTxfIsbn().getText(), Integer.parseInt(dialog.getTxfNumCopie().getText()));
+                if (!modelLibri.aggiungiElemento(nuovoLibro)) {
+                    if (!nuovoLibro.isValid()) {
+                        new ErroreAlert("Il formato dell'ISBN non è corretto");
+                    } else {
+                        new ErroreAlert("Il libro è già presente in archivio");
+                    }
+                    event.consume();
+                    return;
+                }
+            });
+
+            dialog.getDialog().showAndWait();
+        });
+
+        //Modifica Libro
+        viewBiblioteca.getTabLibri().getBtnModifica().setOnAction(event -> {
+            Libro target = viewBiblioteca.getTabLibri().getSelectedItem();
+            if (target == null) {
+                new ErroreAlert("Devi prima selezionare un Libro");
+                return;
+            }
+            LibriDialog dialog = new LibriDialog(target);
+
+            //Tasto OK : bindings
+            Button btnOk = dialog.getBtnOk();
+            btnOk.disableProperty().bind(
+                    dialog.getTxfIsbn().textProperty().isEmpty()
+                            .or(dialog.getTxfTitolo().textProperty().isEmpty())
+                            .or(dialog.getTxfAutori().textProperty().isEmpty())
+                            .or(dialog.getTxfAnnoPubblicazione().textProperty().isEmpty())
+                            .or(dialog.getTxfNumCopie().textProperty().isEmpty()));
+
+            btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
+                //Raccolta Dati per la Modifica
                 try {
                     Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText());
                     Integer.parseInt(dialog.getTxfNumCopie().getText());
@@ -162,16 +275,24 @@ public class AppController {
                     return;
                 }
             });
-            //Libro nuovo = dialog.getLibro();
-            //modelLibri.modificaElemento(target, nuovo);
+            dialog.getDialog().showAndWait();
         });
+
+        //Cancellazione
         viewBiblioteca.getTabLibri().getBtnCancella().setOnAction(event -> {
             Libro target = viewBiblioteca.getTabLibri().getSelectedItem();
+            if (target == null) {
+                new ErroreAlert("Devi prima selezionare un Libro");
+            }
+
+            //Conferma
             ConfermaAlert alert = new ConfermaAlert("Vuoi davvero eliminare " + target.toString());
             if (alert.getEsito()) {
                 modelLibri.rimuoviElemento(target);
             }
         });
+
+        //Ricerca
         viewBiblioteca.getTabLibri().getBtnCerca().setOnAction(event -> {
             String testoInserito = viewBiblioteca.getTabLibri().getTxfFiltroRicerca().getText();
             String[] filtri = testoInserito.split(" ");
@@ -186,6 +307,8 @@ public class AppController {
             );
             viewBiblioteca.getTabLibri().getTabella().setItems(cercati);
         });
+
+        //Elimina Filtri
         viewBiblioteca.getTabLibri().getBtnEliminaFiltri().setOnAction(event -> {
             viewBiblioteca.getTabLibri().getTxfFiltroRicerca().clear();
             viewBiblioteca.getTabLibri().getTabella().setItems(modelLibri.getArchivioFiltrato());
@@ -196,15 +319,102 @@ public class AppController {
      * @brief Inizializza gli event handlers che riguardano Utenti
      */
     private void inizializzaEventHandlersUtenti() {
-        viewBiblioteca.getTabUtenti().getBtnAggiungi().setOnAction(event -> new UtentiDialog());
-        viewBiblioteca.getTabUtenti().getBtnModifica().setOnAction(event -> new UtentiDialog());  //a cui passo l'oggetto
-        viewBiblioteca.getTabUtenti().getBtnCancella().setOnAction(event -> new UtentiDialog());  //a cui passo l'oggetto
-        viewBiblioteca.getTabUtenti().getBtnCerca().setOnAction(event -> {
+        //Aggiunta Utente
+        viewBiblioteca.getTabUtenti().getBtnAggiungi().setOnAction(event -> {
+            UtentiDialog dialog = new UtentiDialog();
 
+            //Tasto OK : bindings
+            Button btnOk = dialog.getBtnOk();
+            btnOk.disableProperty().bind(
+                    dialog.getTxfMatricola().textProperty().isEmpty()
+                            .or(dialog.getTxfNome().textProperty().isEmpty())
+                            .or(dialog.getTxfCognome().textProperty().isEmpty())
+                            .or(dialog.getTxfEmail().textProperty().isEmpty()));
+
+            btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
+                Utente nuovoUtente = new Utente(dialog.getTxfNome().getText(), dialog.getTxfCognome().getText(), dialog.getTxfMatricola().getText(), dialog.getTxfEmail().getText());
+                if (!modelUtenti.aggiungiElemento(nuovoUtente)) {
+                    if (!nuovoUtente.isValid()) {
+                        new ErroreAlert("Il formato della Matricola o dell'Email non è corretto");
+                    } else {
+                        new ErroreAlert("Utente già presente in archivio");
+                    }
+                    event.consume();
+                    return;
+                }
+            });
+
+            dialog.getDialog().showAndWait();
         });
+
+        //Modifica Utente
+        viewBiblioteca.getTabUtenti().getBtnModifica().setOnAction(event -> {
+            Utente target = viewBiblioteca.getTabUtenti().getSelectedItem();
+            if (target == null) {
+                new ErroreAlert("Devi prima selezionare un Utente");
+                return;
+            }
+            UtentiDialog dialog = new UtentiDialog(target);
+
+            //Tasto OK : bindings
+            Button btnOk = dialog.getBtnOk();
+            btnOk.disableProperty().bind(
+                    dialog.getTxfMatricola().textProperty().isEmpty()
+                            .or(dialog.getTxfNome().textProperty().isEmpty())
+                            .or(dialog.getTxfCognome().textProperty().isEmpty())
+                            .or(dialog.getTxfEmail().textProperty().isEmpty()));
+
+            btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
+                //Raccolta Dati per la Modifica
+                Utente nuovoUtente = new Utente(dialog.getTxfNome().getText(), dialog.getTxfCognome().getText(), dialog.getTxfMatricola().getText(), dialog.getTxfEmail().getText());
+                if (!modelUtenti.modificaElemento(target, nuovoUtente)) {
+                    if (!nuovoUtente.isValid()) {
+                        new ErroreAlert("Il formato della Matricola o dell'Email non è corretto");
+                    } else {
+                        new ErroreAlert("Utente già presente in archivio");
+                    }
+                    event.consume();
+                    return;
+                }
+            });
+            dialog.getDialog().showAndWait();
+        });
+
+        //Cancellazione
+        viewBiblioteca.getTabUtenti().getBtnCancella().setOnAction(event -> {
+            Utente target = viewBiblioteca.getTabUtenti().getSelectedItem();
+            if (target == null) {
+                new ErroreAlert("Devi prima selezionare un Utente");
+                return;
+            }
+
+            //Conferma
+            ConfermaAlert alert = new ConfermaAlert("Vuoi davvero eliminare " + target.toString());
+            if (alert.getEsito()) {
+                modelUtenti.rimuoviElemento(target);
+            }
+        });
+
+        //Ricerca
+        viewBiblioteca.getTabUtenti().getBtnCerca().setOnAction(event -> {
+            String testoInserito = viewBiblioteca.getTabUtenti().getTxfFiltroRicerca().getText();
+            String[] filtri = testoInserito.split(" ");
+            List<Predicate<Utente>> filtriPredicate = new ArrayList<>();
+            for (String filtro : filtri) {
+                filtriPredicate.add(utente -> utente.toString().toLowerCase().contains(filtro.toLowerCase()));
+            }
+            FilteredList<Utente> cercati = modelUtenti.getArchivioFiltrato().filtered(
+                    filtriPredicate.stream()
+                            .reduce(Predicate::and)
+                            .orElse(x -> true) //se non ci sonon filtri resituisce tutto
+            );
+            viewBiblioteca.getTabUtenti().getTabella().setItems(cercati);
+        });
+
+        //Elimina Filtri
         viewBiblioteca.getTabUtenti().getBtnEliminaFiltri().setOnAction(event -> {
-            //ripristino della tabella
             viewBiblioteca.getTabUtenti().getTxfFiltroRicerca().clear();
+            viewBiblioteca.getTabUtenti().getTabella().setItems(modelUtenti.getArchivioFiltrato());
         });
     }
 
