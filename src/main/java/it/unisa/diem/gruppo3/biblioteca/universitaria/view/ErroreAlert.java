@@ -11,10 +11,12 @@ import javafx.scene.control.Alert;
  *
  * @author giosc
  */
-public class ConfermaAlert {
-
-    public ConfermaAlert(String text) {
-        
+public class ErroreAlert {
+    public ErroreAlert(String text) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Errore");
+        alert.setHeaderText("Errore!");
+        alert.setContentText(text);
+        alert.showAndWait();
     }
-    
 }
