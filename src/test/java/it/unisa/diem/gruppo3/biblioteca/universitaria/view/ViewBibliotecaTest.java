@@ -23,7 +23,7 @@ public class ViewBibliotecaTest {
     }
 
     /**
-     * UTC 18 - Test ViewBiblioteca – costruttore
+     * UTC 17 - Test ViewBiblioteca – costruttore
      */
     @Test
     public void testCostruttore() {

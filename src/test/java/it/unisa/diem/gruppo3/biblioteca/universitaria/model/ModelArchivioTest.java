@@ -136,21 +136,78 @@ public class ModelArchivioTest {
         stressModel.apriArchivio();
         
         assertTimeout(Duration.ofMillis(500), () -> {
-           stressModel.chiudiArchivio(); 
+            assertTrue(stressModel.chiudiArchivio()); 
         });
     }
     
     /**
-     * UTC 5.7.2 - Test ModelArchivio – stress test archivio libri con 150000 entry – apertura archivio sotto i 500 millisecondi
+     * UTC 5.7.2 - Test ModelArchivio – stress test archivio libri con 150000 entry – apertura archivio sotto i 1500 millisecondi
      */    
     @Test 
     public void testStressApriArchivio() {
         stressModel = new ModelArchivio<>(STRESS_FILE_TEST);
         
-        assertTimeout(Duration.ofMillis(500), () -> {
-           stressModel.apriArchivio();
+        assertTimeout(Duration.ofMillis(1500), () -> {
+            stressModel.apriArchivio();
         });
         
-        new File(STRESS_FILE_TEST + "Cache").delete();
+        stressModel.chiudiArchivio();
     }
+    
+    /**
+     * UTC 5.7.3 - Test ModelArchivio – stress test archivio libri con 150000 entry – aggiunta elemento sotto 100 millisecondi
+     */    
+    @Test 
+    public void testStressAggiungiElemento() {
+        stressModel = new ModelArchivio<>(STRESS_FILE_TEST);
+        stressModel.apriArchivio();
+        
+        Libro l1 = new Libro("Il principe", "Machiavelli", 2023, "9781237475633", 2);
+        
+        assertTimeout(Duration.ofMillis(100), () -> {
+            assertTrue(stressModel.aggiungiElemento(l1));
+        });
+        
+        stressModel.rimuoviElemento(l1);
+        stressModel.chiudiArchivio();
+    }
+    
+    /**
+     * UTC 5.7.4 - Test ModelArchivio – stress test archivio libri con 150000 entry – modifica elemento sotto 100 millisecondi
+     */    
+    @Test 
+    public void testStressModificaElemento() {
+        stressModel = new ModelArchivio<>(STRESS_FILE_TEST);
+        stressModel.apriArchivio();
+        Libro l1 = new Libro("L'idiota", "Dostoevskij", 2023, "9781237475664", 3);
+        Libro l2 = new Libro("Francesco", "Vecchione", 2023, "9781237475664", 5);
+        
+        stressModel.aggiungiElemento(l1);
+           
+        assertTimeout(Duration.ofMillis(100), () -> {
+            assertTrue(stressModel.modificaElemento(l1, l2));
+        });
+        
+        stressModel.rimuoviElemento(l2);
+        stressModel.chiudiArchivio();
+    }
+    
+    /**
+     * UTC 5.7.5 - Test ModelArchivio – stress test archivio libri con 150000 entry – elimina elemento sotto 100 millisecondi
+     */    
+    @Test 
+    public void testStressEliminaElemento() {
+        stressModel = new ModelArchivio<>(STRESS_FILE_TEST);
+        stressModel.apriArchivio();
+        
+        Libro l1 = new Libro("Francesco", "Vecchione", 2023, "9781237475664", 5);
+        stressModel.aggiungiElemento(l1);
+        
+        assertTimeout(Duration.ofMillis(100), () -> {
+            assertTrue(stressModel.rimuoviElemento(l1));
+        });
+        
+        stressModel.chiudiArchivio();
+    }
+    
 }

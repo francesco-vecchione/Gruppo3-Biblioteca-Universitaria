@@ -100,7 +100,7 @@ public class AppController {
      * di inizializzare gli event handlers e i bindings
      */
     public AppController(Stage stage) {
-        modelPassword = new Password("cassaforte");
+        modelPassword = new Password("Files/cassaforte");
         
         boolean accessoRiuscito = false;
         if (!modelPassword.esistePassword()) {
@@ -112,9 +112,9 @@ public class AppController {
         if (accessoRiuscito) {
             // E' inutile aprire gli archivi se non si fa l'accesso
             
-            modelLibri = new ModelArchivio<>("archivioLibri");
-            modelUtenti = new ModelArchivio<>("archivioUtenti");
-            modelPrestiti = new ModelArchivio<>("archivioPrestiti");
+            modelLibri = new ModelArchivio<>("files/archivioLibri");
+            modelUtenti = new ModelArchivio<>("files/archivioUtenti");
+            modelPrestiti = new ModelArchivio<>("files/archivioPrestiti");
             
             modelLibri.apriArchivio();
             modelUtenti.apriArchivio();
