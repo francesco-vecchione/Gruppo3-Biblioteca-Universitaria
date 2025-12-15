@@ -50,9 +50,6 @@ public class UtentiDialog {
      */
     public UtentiDialog() {
         dialog = new Dialog<>();
-        dialog.setTitle("Inserisci");
-        dialog.setHeaderText("Inserisci un Nuovo Utente");
-        
         txfNome = new TextField();
         txfNome.setPromptText("Nome");
         txfCognome = new TextField();
@@ -68,12 +65,16 @@ public class UtentiDialog {
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         
         btnOk = (Button)dialog.getDialogPane().lookupButton(ButtonType.OK);
+        
+        dialog.setTitle("Registra");
+        dialog.setHeaderText("Registra un Nuovo Utente");
     }
     
     public UtentiDialog(Utente target) {
         this();
+        
         dialog.setTitle("Modifica");
-        dialog.setHeaderText("Inserisci un Nuovo Utente");
+        dialog.setHeaderText("Modifica questo Utente");
         
         txfNome.setText(target.getNome());
         txfCognome.setText(target.getCognome());

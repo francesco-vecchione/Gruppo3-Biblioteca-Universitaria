@@ -68,6 +68,6 @@ public class Password implements ModelPassword {
     
     @Override
     public boolean esistePassword() {
-        return cassaforte.leggiPasswordCriptata() != null;
+        return !(cassaforte.leggiPasswordCriptata() < 0);
     }
 }

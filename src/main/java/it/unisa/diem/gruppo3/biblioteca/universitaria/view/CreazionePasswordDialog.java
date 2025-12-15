@@ -1,6 +1,11 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.VBox;
 
 /**
  * @file CreazionePasswordDialog.java
@@ -9,6 +14,21 @@ import javafx.scene.control.TextField;
  * di registrazione e di reimpostazione password
  */
 public class CreazionePasswordDialog {
+    /**
+     * @brief Dialog
+     */
+    private Dialog<String> dialog;
+    
+    /**
+     * @brief Bottone di Avanzamento
+     */
+    private Button btnOk;
+    
+    /**
+     * @brief Bottone di Chiusura
+     */
+    private Button btnChiudi;
+    
     /**
      * @brief Campo di testo per inserire la password
      */
@@ -24,6 +44,24 @@ public class CreazionePasswordDialog {
      * specifici per l'inserimento password
      */
     public CreazionePasswordDialog() {
+        dialog = new Dialog<>();
+        
+        txfPassword = new PasswordField();
+        txfPassword.setPromptText("Password");
+        txfConfermaPassword = new PasswordField();
+        txfConfermaPassword.setPromptText("Conferma Password");
+        
+        VBox form = new VBox();
+        form.getChildren().addAll(txfPassword, txfConfermaPassword);
+        dialog.getDialogPane().setContent(form);
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CLOSE);
+        
+        btnOk = (Button)dialog.getDialogPane().lookupButton(ButtonType.OK);
+        btnChiudi = (Button)dialog.getDialogPane().lookupButton(ButtonType.CLOSE);
+        
+        
+        dialog.setTitle("Registra Password");
+        dialog.setHeaderText("Registra una Nuova Password");
     }
 
     /**
@@ -40,5 +78,29 @@ public class CreazionePasswordDialog {
      */
     public TextField getTxfConfermaPassword() {
         return txfConfermaPassword;
+    }
+    
+    /**
+     * @brief Getter per il bottone Ok
+     * @return Il bottone OK
+     */
+    public Button getBtnOk() {
+        return btnOk;
+    }
+    
+    /**
+     * @brief Getter per il bottone Chiudi
+     * @return Il bottone CHIUDI
+     */
+    public Button getBtnChiudi() {
+        return btnChiudi;
+    }
+    
+    /**
+     * @brief Getter per la Dialog
+     * @return La Dialog
+     */
+    public Dialog<String> getDialog() {
+        return dialog;
     }
 }
