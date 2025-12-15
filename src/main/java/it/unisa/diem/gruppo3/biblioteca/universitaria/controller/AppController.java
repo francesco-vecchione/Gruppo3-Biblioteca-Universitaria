@@ -7,6 +7,7 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ConfermaAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.CreazionePasswordDialog;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ErroreAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.LibriDialog;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.LoginDialog;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.UtentiDialog;
@@ -16,6 +17,9 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import javafx.collections.transformation.FilteredList;
+import javafx.event.ActionEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 
 /**
@@ -122,6 +126,34 @@ public class AppController {
         viewBiblioteca.getTabLibri().getBtnModifica().setOnAction(event -> {
             Libro target = viewBiblioteca.getTabLibri().getSelectedItem();
             LibriDialog dialog = new LibriDialog(target);
+            Button btnOk = dialog.getBtnOk();
+            btnOk.disableProperty().bind(
+                    dialog.getTxfIsbn().textProperty().isEmpty()
+                            .or(dialog.getTxfTitolo().textProperty().isEmpty())
+                            .or(dialog.getTxfAutori().textProperty().isEmpty())
+                            .or(dialog.getTxfAnnoPubblicazione().textProperty().isEmpty())
+                            .or(dialog.getTxfNumCopie().textProperty().isEmpty()));
+
+            btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
+                try {
+                    Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText());
+                    Integer.parseInt(dialog.getTxfNumCopie().getText());
+                } catch (NumberFormatException e) {
+                    new ErroreAlert("Il formato dei dati che hai inserito non è corretto");
+                    event.consume();
+                    return;
+                }
+                Libro nuovoLibro = new Libro(dialog.getTxfTitolo().getText(), dialog.getTxfAutori().getText(), Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText()), dialog.getTxfIsbn().getText(), Integer.parseInt(dialog.getTxfNumCopie().getText()));
+                if (!modelLibri.modificaElemento(target, nuovoLibro)) {
+                    if (!nuovoLibro.isValid()) {
+                        new ErroreAlert("Il formato dell'ISBN non è corretto");
+                    } else {
+                        new ErroreAlert("Il libro è già presente in archivio");
+                    }
+                    event.consume();
+                    return;
+                }
+            });
             Libro nuovo = dialog.getLibro();
             modelLibri.modificaElemento(target, nuovo);
         });

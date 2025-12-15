@@ -122,32 +122,6 @@ public class LibriDialog {
         form.getChildren().addAll(txfIsbn, txfTitolo, txfAutori, txfAnnoPubblicazione, txfNumCopie);
         dialog.getDialogPane().setContent(form);
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-        
-        Button btnOk = (Button)dialog.getDialogPane().lookupButton(ButtonType.OK);
-        btnOk.disableProperty().bind(
-            txfIsbn.textProperty().isEmpty()
-            .or(txfTitolo.textProperty().isEmpty())
-            .or(txfAutori.textProperty().isEmpty())
-            .or(txfAnnoPubblicazione.textProperty().isEmpty())
-            .or(txfNumCopie.textProperty().isEmpty()));
-        
-        btnOk.addEventFilter(ActionEvent.ACTION, event -> {
-            try{
-                Integer.parseInt(txfAnnoPubblicazione.getText());
-                Integer.parseInt(txfNumCopie.getText());
-            }
-            catch(NumberFormatException e) {
-                new ErroreAlert("Il formato dei dati che hai inserito non è corretto");
-                event.consume();
-                return;
-            }
-            nuovoLibro = new Libro(txfTitolo.getText(), txfAutori.getText(), Integer.parseInt(txfAnnoPubblicazione.getText()), txfIsbn.getText(), Integer.parseInt(txfNumCopie.getText()));
-            if(!nuovoLibro.isValid()) {
-                new ErroreAlert("Il formato dell'ISBN che hai inserito non è valido");
-                event.consume();
-            }
-        });
-        
         dialog.showAndWait();
     }
 
@@ -197,5 +171,13 @@ public class LibriDialog {
      */
     public Libro getLibro() {
         return nuovoLibro;
+    }
+    
+    public Button getBtnOk() {
+        return (Button)dialog.getDialogPane().lookupButton(ButtonType.OK);
+    }
+    
+    public Dialog<Libro> getDialog() {
+        return dialog;
     }
 }
