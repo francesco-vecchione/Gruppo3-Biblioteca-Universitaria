@@ -54,7 +54,8 @@ public class ModelArchivio<T extends Dato> {
     public void apriArchivio() {
         
         archivio = io.caricaArchivio();
-        SortedList archivioOrdinato = new SortedList(archivio);
+        SortedList<T> archivioOrdinato = new SortedList<>(archivio);
+        archivioOrdinato.setComparator((o1, o2) -> o1.compareTo(o2));
         archivioFiltrato = new FilteredList<>(archivioOrdinato);
         
     }
@@ -124,19 +125,10 @@ public class ModelArchivio<T extends Dato> {
         if(!elem.isValid())
             return false;
         
-        int index = ricercaElemento(target);
+        int index = archivio.indexOf(target);
         if(index < 0) return false;
         
         archivio.set(index, elem);
         return io.salvaModificaArchivio(new CacheRecord<>(TipoOperazione.MODIFICA, target, elem));
-    }
-    
-    /**
-     * @brief Funzione per ricercare la posizione dell'elemento all'interno dell'archivio
-     * @param[in] target elemento di di cui si vuole controllare la presenza nell'archivio
-     * @return Indice dell'elemento nll'archivio, ritorna -1 se non è presente
-     */
-    public int ricercaElemento(T target) {
-        return archivio.indexOf(target);
     }
 }
