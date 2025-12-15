@@ -1,10 +1,17 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 
+import java.io.BufferedInputStream;
+import java.io.DataInputStream;
+import java.io.EOFException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.time.Duration;
+import org.junit.jupiter.api.BeforeAll;
 /**
  * @author gruppo 3
  */
@@ -13,7 +20,36 @@ public class ModelArchivioTest {
 
     private ModelArchivio<Libro> model;
     private final String FILE_TEST = "archivioLibri";
-
+    
+    //private static ModelArchivio<Libro> stressModel;
+    private ModelArchivio<Libro> stressModel;
+    private final String STRESS_FILE_TEST = "testFiles/stressArchivioLibri"; 
+    
+    @BeforeAll
+    public static void setUpClass() {
+        /* codice commentato perché la sua funzione, ovvero di fare il parsing del file dove originariamente sono stati scritte le entry per i libri, è stata svolta con successo
+        
+        String stressTestFile = "testFiles/stressArchivioLibriRaw.txt";
+        stressModel = new ModelArchivio<>("testFiles/stressArchivioLibri");
+        stressModel.apriArchivio();
+        
+        try (FileInputStream fis = new FileInputStream(stressTestFile);
+                BufferedInputStream bis = new BufferedInputStream(fis);
+                DataInputStream dis = new DataInputStream(bis)) {
+            while(true) {
+                String[] toAdd = dis.readUTF().split(";");
+                
+                stressModel.aggiungiElemento(new Libro(toAdd[0], toAdd[1], Integer.parseInt(toAdd[2]), toAdd[3], Integer.parseInt(toAdd[4])));
+            }
+        } catch (EOFException e) {
+            // fine lettura
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        */
+    }
+    
+    
     @BeforeEach
     public void setUp() {
         // Inizializzazione comune
@@ -88,5 +124,33 @@ public class ModelArchivioTest {
         
         int index = model.getArchivioFiltrato().indexOf(newL);
         assertEquals("New Book", model.getArchivioFiltrato().get(index).getTitolo());
+    }
+    
+    
+    /**
+     * UTC 5.7.1 - Test ModelArchivio – stress test archivio libri con 150000 entry – chiusura archivio sotto i 500 millisecondi
+     */
+    @Test
+    public void testStressChiudiArchivio() {
+        stressModel = new ModelArchivio<>(STRESS_FILE_TEST);
+        stressModel.apriArchivio();
+        
+        assertTimeout(Duration.ofMillis(500), () -> {
+           stressModel.chiudiArchivio(); 
+        });
+    }
+    
+    /**
+     * UTC 5.7.2 - Test ModelArchivio – stress test archivio libri con 150000 entry – apertura archivio sotto i 500 millisecondi
+     */    
+    @Test 
+    public void testStressApriArchivio() {
+        stressModel = new ModelArchivio<>(STRESS_FILE_TEST);
+        
+        assertTimeout(Duration.ofMillis(500), () -> {
+           stressModel.apriArchivio();
+        });
+        
+        new File(STRESS_FILE_TEST + "Cache").delete();
     }
 }
