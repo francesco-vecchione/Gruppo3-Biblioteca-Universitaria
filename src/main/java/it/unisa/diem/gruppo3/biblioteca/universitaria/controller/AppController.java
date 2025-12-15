@@ -11,8 +11,10 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.view.CreazionePasswordDial
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ErroreAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.LibriDialog;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.LoginDialog;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.view.PrestitiDialog;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.UtentiDialog;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -106,23 +108,25 @@ public class AppController {
         modelUtenti.apriArchivio();
         modelPrestiti.apriArchivio();
 
-        /*if(!modelPassword.esistePassword())*/ {
-            //creazionePassword();
-        }
-        /*else*/ {
-            login();
+        boolean accessoRiuscito = false;
+        if (!modelPassword.esistePassword()) {
+            accessoRiuscito = creazionePassword();
+        } else {
+            accessoRiuscito = login();
         }
 
-        viewBiblioteca = new ViewBiblioteca(stage, modelLibri.getArchivioFiltrato(), modelUtenti.getArchivioFiltrato(), modelPrestiti.getArchivioFiltrato());
-
-        inizializzaEventHandlers();
+        if (accessoRiuscito) {
+            viewBiblioteca = new ViewBiblioteca(stage, modelLibri.getArchivioFiltrato(), modelUtenti.getArchivioFiltrato(), modelPrestiti.getArchivioFiltrato());
+            inizializzaEventHandlers();
+        }
     }
 
     /**
      * @brief Esegue le istruzioni necessarie ad implementare la finestra di
      * Registra Password
      */
-    private void creazionePassword() {
+    private boolean creazionePassword() {
+        final boolean[] accessoRiuscito = {false};
         CreazionePasswordDialog dialog = new CreazionePasswordDialog();
         Button btnOk = dialog.getBtnOk();
         Button btnChiudi = dialog.getBtnChiudi();
@@ -143,54 +147,63 @@ public class AppController {
                 event.consume();
                 return;
             }
-            
-            if(!modelPassword.impostaPassword(password)) {
+
+            if (!modelPassword.impostaPassword(password)) {
                 new ErroreAlert("Errore nel salvataggio della password");
                 event.consume();
                 return;
             }
+            accessoRiuscito[0] = true;
         });
-        
+
         dialog.getDialog().showAndWait();
+        return accessoRiuscito[0];
     }
-    
+
     /**
      * @brief Esegue le istruzioni necessarie ad implementare la finestra di
      * Login
      */
-    private void login() {
+    private boolean login() {
+        final boolean[] accessoRiuscito = {false};
         LoginDialog dialog = new LoginDialog();
         Button btnOk = dialog.getBtnOk();
         Button btnChiudi = dialog.getBtnChiudi();
 
         btnOk.disableProperty().bind(dialog.getTxfPassword().textProperty().isEmpty());
 
-            //CHIUDI
+        //CHIUDI
         btnChiudi.addEventFilter(ActionEvent.ACTION, event -> Platform.exit());
 
-            //OK
+        //OK
         btnOk.addEventFilter(ActionEvent.ACTION, event -> {
             String password = dialog.getTxfPassword().getText();
 
             if (!modelPassword.verificaPassword(password)) {
-                new ErroreAlert("Le password non coincidono");
+                new ErroreAlert("La password non è esatta");
                 event.consume();
                 return;
             }
+
+            dialog.getDialog().close();
+            accessoRiuscito[0] = true;
         });
-        
-            //Password Dimenticata
-        dialog.getLinkPasswordDimenticata().addEventFilter(ActionEvent.ACTION, event -> creazionePassword());
-        
+
+        //Password Dimenticata
+        dialog.getLinkPasswordDimenticata().addEventFilter(ActionEvent.ACTION, event -> {
+            creazionePassword();
+        });
+
         dialog.getDialog().showAndWait();
+        return accessoRiuscito[0];
     }
 
     /**
      * @brief Inizializza gli event handlers
      */
     private void inizializzaEventHandlers() {
-        inizializzaEventHandlersLibri();
         inizializzaEventHandlersPrestiti();
+        inizializzaEventHandlersLibri();
         inizializzaEventHandlersUtenti();
     }
 
@@ -422,22 +435,81 @@ public class AppController {
      * @brief Inizializza gli event handlers che riguardano Prestiti
      */
     private void inizializzaEventHandlersPrestiti() {
-        //viewBiblioteca.getTabPrestiti().getBtnAggiungi().setOnAction(event -> new PrestitiDialog());
-        //viewBiblioteca.getTabPrestiti().getBtnModifica().setOnAction(event -> new PrestitiDialog());  //a cui passo l'oggetto
-        viewBiblioteca.getTabPrestiti().getBtnCerca().setOnAction(event -> {
+        //Registrazione Prestito
+        viewBiblioteca.getTabPrestiti().getBtnAggiungi().setOnAction(event -> {
+            PrestitiDialog dialog = new PrestitiDialog(modelLibri.getArchivioFiltrato(), modelUtenti.getArchivioFiltrato());
 
+            // Tasto OK : bindings
+            Button btnOk = dialog.getBtnOk();
+            btnOk.disableProperty().bind(
+                    dialog.getCbLibri().valueProperty().isNull()
+                            .or(dialog.getCbUtenti().valueProperty().isNull())
+                            .or(dialog.getDatePicker().valueProperty().isNull())
+            );
+
+            btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
+                // Raccolta dati dalla dialog
+                Libro libroSelezionato = dialog.getCbLibri().getValue();
+                Utente utenteSelezionato = dialog.getCbUtenti().getValue();
+                LocalDate dataPrestito = dialog.getDatePicker().getValue();
+
+                if (libroSelezionato == null || utenteSelezionato == null || dataPrestito == null) {
+                    new ErroreAlert("Devi selezionare Libro, Utente e Data");
+                    eventOk.consume();
+                    return;
+                }
+
+                Prestito nuovoPrestito = new Prestito(utenteSelezionato.getMatricola(), libroSelezionato.getIsbn(), LocalDate.now(), dataPrestito);
+
+                if (!modelPrestiti.aggiungiElemento(nuovoPrestito)) {
+                    new ErroreAlert("Errore: il prestito è già presente in archivio");
+                    eventOk.consume();
+                    return;
+                }
+            });
+
+            dialog.getDialog().showAndWait();
         });
-        viewBiblioteca.getTabPrestiti().getBtnEliminaFiltri().setOnAction(event -> {
-            //ripristino della tabella
-            viewBiblioteca.getTabPrestiti().getTxfFiltroRicerca().clear();
+
+        // Registra Restituzione
+        viewBiblioteca.getTabLibri().getBtnModifica().setOnAction(event -> {
+            Prestito target = viewBiblioteca.getTabPrestiti().getSelectedItem();
+
+            if (target == null) {
+                new ErroreAlert("Devi prima selezionare un Prestito");
+                return;
+            }
+
+            // Conferma
+            ConfermaAlert alert = new ConfermaAlert("Vuoi Registrare la Restituzione del Prestito?");
+
+            // Attendi la risposta dell'utente
+            if (alert.getEsito()) { // getEsito() deve restituire true se confermato
+                target.registraRestituzione();
+            }
         });
-    }
 
-    /**
-     * @brief Inizializza gli event handlers che riguardano Passwrod
-     */
-    private void inizializzaEventHandlersPassword() {
+        //Ricerca
+        viewBiblioteca.getTabLibri().getBtnCerca().setOnAction(event -> {
+            String testoInserito = viewBiblioteca.getTabLibri().getTxfFiltroRicerca().getText();
+            String[] filtri = testoInserito.split(" ");
+            List<Predicate<Libro>> filtriPredicate = new ArrayList<>();
+            for (String filtro : filtri) {
+                filtriPredicate.add(libro -> libro.toString().toLowerCase().contains(filtro.toLowerCase()));
+            }
+            FilteredList<Libro> cercati = modelLibri.getArchivioFiltrato().filtered(
+                    filtriPredicate.stream()
+                            .reduce(Predicate::and)
+                            .orElse(x -> true) //se non ci sonon filtri resituisce tutto
+            );
+            viewBiblioteca.getTabLibri().getTabella().setItems(cercati);
+        });
 
+        //Elimina Filtri
+        viewBiblioteca.getTabLibri().getBtnEliminaFiltri().setOnAction(event -> {
+            viewBiblioteca.getTabLibri().getTxfFiltroRicerca().clear();
+            viewBiblioteca.getTabLibri().getTabella().setItems(modelLibri.getArchivioFiltrato());
+        });
     }
 
     /**

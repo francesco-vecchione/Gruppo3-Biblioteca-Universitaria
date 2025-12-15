@@ -45,10 +45,10 @@ public class CassaforteTest {
         String passwordInChiaro2 = "\'\'\"\"\'\'\'";
 
         assertTrue(cf.salvaPasswordCriptata(passwordInChiaro1));
-        assertEquals(cf.criptaPassword(passwordInChiaro1), cf.leggiPasswordCriptata(passwordInChiaro1));
+        assertEquals(cf.criptaPassword(passwordInChiaro1), cf.leggiPasswordCriptata());
         
         assertTrue(cf.salvaPasswordCriptata(passwordInChiaro2));
-        assertEquals(cf.criptaPassword(passwordInChiaro2), cf.leggiPasswordCriptata(passwordInChiaro2));
+        assertEquals(cf.criptaPassword(passwordInChiaro2), cf.leggiPasswordCriptata());
     }
 
     /**
@@ -59,7 +59,7 @@ public class CassaforteTest {
         String passwordInChiaro1 = "@ksfutlSTTn2&3s";
         cf.salvaPasswordCriptata(passwordInChiaro1);
 
-        assertEquals(cf.criptaPassword(passwordInChiaro1), cf.leggiPasswordCriptata(passwordInChiaro1));
+        assertEquals(cf.criptaPassword(passwordInChiaro1), cf.leggiPasswordCriptata());
     }
 
     /**
@@ -70,6 +70,6 @@ public class CassaforteTest {
         String passwordInChiaro2 = "\'\'\"\"\'\'\'";
         cf.salvaPasswordCriptata(passwordInChiaro2);
 
-        assertEquals(cf.criptaPassword(passwordInChiaro2), cf.leggiPasswordCriptata(passwordInChiaro2));
+        assertEquals(cf.criptaPassword(passwordInChiaro2), cf.leggiPasswordCriptata());
     }
 }

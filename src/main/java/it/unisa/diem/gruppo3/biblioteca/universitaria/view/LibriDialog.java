@@ -138,6 +138,10 @@ public class LibriDialog {
         return btnOk;
     }
     
+    /**
+     * @brief Getter per la finestra
+     * @return Reference alla finestra
+     */
     public Dialog<Libro> getDialog() {
         return dialog;
     }

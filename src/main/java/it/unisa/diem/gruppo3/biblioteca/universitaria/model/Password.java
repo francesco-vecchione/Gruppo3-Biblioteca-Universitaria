@@ -26,7 +26,7 @@ public class Password implements ModelPassword {
     }
 
     /**
-        * @brief Viene fornito da ModelPassword, che si occupa di verificare che la password
+        * @brief Viene fornito da ModelPassword, e si occupa di verificare che la password
         * inserita come argomento coincida con quella memorizzata nella cassaforte
         * 
         * @param[in] passwordInChiaro La password inserita dall'utente che verrà conforntata con quella
@@ -39,11 +39,11 @@ public class Password implements ModelPassword {
     */
     @Override
     public boolean verificaPassword(String passwordInChiaro) {
-        return cassaforte.leggiPasswordCriptata(passwordInChiaro) == cassaforte.criptaPassword(passwordInChiaro);
+        return cassaforte.leggiPasswordCriptata() == cassaforte.criptaPassword(passwordInChiaro);
     }
 
     /**
-        * @brief Viene fornito da ModelPassword, che si occupa di salvare l'hash della password
+        * @brief Viene fornito da ModelPassword, e si occupa di salvare l'hash della password
         * all'interno dell'archivio
         * 
         * @param[in] passwordInChiaro La nuova password che verrà memorizzata in archivio e che
@@ -57,5 +57,17 @@ public class Password implements ModelPassword {
     @Override
     public boolean impostaPassword(String passwordInChiaro) {
         return cassaforte.salvaPasswordCriptata(passwordInChiaro);
+    }
+    
+    /**
+     * @brief Viene fornito da ModelPassword, e si occupa di determinare se sia già salvata una
+     * password nella cassaforte
+     * @return Ritorna un booleano che simboleggia se nel file di cassaforte sia stata scritta una
+     * password (true) o non sia stato ancora scritto nulla (false)
+     */
+    
+    @Override
+    public boolean esistePassword() {
+        return !(cassaforte.leggiPasswordCriptata() < 0);
     }
 }

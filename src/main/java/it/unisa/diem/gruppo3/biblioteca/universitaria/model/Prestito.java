@@ -33,7 +33,7 @@ public class Prestito implements Dato {
     /**
         * @brief È un booleano che indica lo stato del prestito
     */
-    private final StatoPrestito statoPrestito;
+    private StatoPrestito statoPrestito;
     
     /**
         * @brief È il costruttore che si occupa di inizializzare gli attributi
@@ -111,6 +111,17 @@ public class Prestito implements Dato {
         * solo se dataRestituzione è "maggiore" di dataPrestito
         * @return ritorna true se i dati rispettano lo standard 
     */
+    
+    /**
+        * @brief Getter di matricolaUtente
+        * 
+        * @return Ritorna la MatricolaUtente dell'utente che ha registrato il prestito
+    */
+    public void registraRestituzione() {
+        statoPrestito = StatoPrestito.RESTITUITO;
+    }
+    
+    
     @Override
     public boolean isValid() {
         return getDataRestituzione().isAfter(dataPrestito);

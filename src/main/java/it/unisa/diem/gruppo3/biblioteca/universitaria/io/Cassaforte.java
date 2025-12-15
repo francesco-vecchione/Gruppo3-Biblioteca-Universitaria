@@ -77,9 +77,9 @@ public class Cassaforte {
      * @pre
      * Il file specificato da pathname deve esistere.
      */
-    public int leggiPasswordCriptata(String passwordInChiaro1) {
+    public int leggiPasswordCriptata() {
         
-        Integer hash = null;
+        Integer hash = -1;
         
         try(FileInputStream fis = new FileInputStream(pathname);
                 BufferedInputStream bis = new BufferedInputStream(fis);

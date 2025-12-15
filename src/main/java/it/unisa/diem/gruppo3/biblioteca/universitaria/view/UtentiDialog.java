@@ -123,8 +123,8 @@ public class UtentiDialog {
     }
     
     /**
-     * @brief Getter per la dialog
-     * @return Reference al Dialog
+     * @brief Getter per la finestra
+     * @return Reference alla finestra
      */
     public Dialog<Utente> getDialog() {
         return dialog;
