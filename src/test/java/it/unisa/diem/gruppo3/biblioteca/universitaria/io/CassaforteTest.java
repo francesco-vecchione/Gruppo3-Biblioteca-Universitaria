@@ -32,8 +32,8 @@ public class CassaforteTest {
         String passwordInChiaro1 = "@ksfutlSTTn2&3s";
         String passwordInChiaro2 = "\'\'\"\"\'\'\'";
 
-        assertEquals(passwordInChiaro1.hashCode(), cf.criptaPassword(passwordInChiaro1));
-        assertEquals(passwordInChiaro2.hashCode(), cf.criptaPassword(passwordInChiaro2));
+        assertEquals(String.valueOf(passwordInChiaro1.hashCode()), cf.criptaPassword(passwordInChiaro1));
+        assertEquals(String.valueOf(passwordInChiaro2.hashCode()), cf.criptaPassword(passwordInChiaro2));
     }
 
     /**

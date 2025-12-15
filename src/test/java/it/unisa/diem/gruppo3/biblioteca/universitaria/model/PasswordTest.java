@@ -17,7 +17,6 @@ public class PasswordTest {
     @BeforeEach
     public void setUp() {
         password = new Password("cassaforte");
-        password.impostaPassword("ciaoMondo");
     }
 
     @AfterEach
@@ -30,6 +29,7 @@ public class PasswordTest {
      */
     @Test
     public void testVerificaPassword1() {
+        password.impostaPassword("ciaoMondo");
         assertTrue(password.verificaPassword("ciaoMondo"));
     }
     
@@ -38,6 +38,7 @@ public class PasswordTest {
      */
     @Test
     public void testVerificaPassword2() {
+        password.impostaPassword("ciaoMondo");
         assertFalse(password.verificaPassword("biblioteca"));
     }
 
@@ -46,6 +47,7 @@ public class PasswordTest {
      */
     @Test
     public void testImpostaPassword() {
+        password.impostaPassword("ciaoMondo");
         password.impostaPassword("biblioteca");
         assertTrue(password.verificaPassword("biblioteca"));
     }

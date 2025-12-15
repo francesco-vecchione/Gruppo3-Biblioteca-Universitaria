@@ -75,8 +75,6 @@ public class LibriDialog {
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         
         btnOk = (Button)dialog.getDialogPane().lookupButton(ButtonType.OK);
-        
-        dialog.showAndWait();
     }
     
     public LibriDialog(Libro target) {

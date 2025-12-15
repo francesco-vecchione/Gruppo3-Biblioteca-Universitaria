@@ -68,8 +68,6 @@ public class UtentiDialog {
         dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
         
         btnOk = (Button)dialog.getDialogPane().lookupButton(ButtonType.OK);
-        
-        dialog.showAndWait();
     }
     
     public UtentiDialog(Utente target) {
@@ -77,7 +75,7 @@ public class UtentiDialog {
         dialog.setTitle("Modifica");
         dialog.setHeaderText("Inserisci un Nuovo Utente");
         
-        txfNome.setText(target.toString());
+        txfNome.setText(target.getNome());
         txfCognome.setText(target.getCognome());
         txfMatricola.setText(target.getMatricola());
         txfEmail.setText(target.getEmail());

@@ -1,23 +1,24 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 
 import javafx.stage.Stage;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
 
 /**
  *
  * @author gruppo 3
  */
+@ExtendWith(ApplicationExtension.class)
 public class ViewBibliotecaTest {
     
     private ViewBiblioteca v;
     
-    @BeforeEach
-    public void setUp() {   
+    @Start
+    private void start(Stage stage) {
         v = new ViewBiblioteca(new Stage(), null, null, null);
     }
 
