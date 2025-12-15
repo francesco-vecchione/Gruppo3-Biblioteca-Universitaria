@@ -38,7 +38,7 @@ public class CreazionePasswordDialog {
      * @brief Campo di testo per reinserire la password
      */
     private TextField txfConfermaPassword;
-
+    
     /**
      * @brief Costruttore di default che aggiunge al layout base i campi di testo
      * specifici per l'inserimento password

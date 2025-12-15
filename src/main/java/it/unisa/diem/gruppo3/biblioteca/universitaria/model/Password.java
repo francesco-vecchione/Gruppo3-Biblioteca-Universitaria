@@ -39,7 +39,7 @@ public class Password implements ModelPassword {
     */
     @Override
     public boolean verificaPassword(String passwordInChiaro) {
-        return cassaforte.leggiPasswordCriptata() == cassaforte.criptaPassword(passwordInChiaro);
+        return cassaforte.leggiPasswordCriptata().equals(cassaforte.criptaPassword(passwordInChiaro));
     }
 
     /**

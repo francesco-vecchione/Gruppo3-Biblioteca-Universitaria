@@ -42,8 +42,8 @@ public class Cassaforte {
      * @param[in] passwordInChiaro La password in chiaro che deve essere criptata
      * @return Ritorna la password criptata
      */
-    public int criptaPassword(String passwordInChiaro) {
-        return passwordInChiaro.hashCode();
+    public String criptaPassword(String passwordInChiaro) {
+        return String.valueOf(passwordInChiaro.hashCode());
     }
     
     
@@ -56,7 +56,7 @@ public class Cassaforte {
      * La password in chiaro non deve essere null.
      */
     public boolean salvaPasswordCriptata(String passwordInChiaro) {
-        Integer hash = criptaPassword(passwordInChiaro);
+        String hash = criptaPassword(passwordInChiaro);
         
         // Il costruttore ad un solo parametro di FileOutputStream sovrascrive di base 
         //      il contenuto del file pathname
@@ -77,18 +77,16 @@ public class Cassaforte {
      * @pre
      * Il file specificato da pathname deve esistere.
      */
-    public int leggiPasswordCriptata() {
+    public String leggiPasswordCriptata() {
         
-        Integer hash = -1;
+        String hash;
         
         try(FileInputStream fis = new FileInputStream(pathname);
                 BufferedInputStream bis = new BufferedInputStream(fis);
                 ObjectInputStream ois = new ObjectInputStream(bis)) {
-            hash = (Integer) ois.readObject();
-        } catch (EOFException e) {
-            // Tutto bene, ha letto la password
+            hash = (String) ois.readObject();
         } catch (Exception e) {
-            return -1;
+            return null;
         }
         
         return hash;

@@ -1,29 +1,40 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
+import javafx.stage.Stage;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.testfx.framework.junit5.ApplicationExtension;
+import org.testfx.framework.junit5.Start;
 
 /**
  *
  * @author gruppo 3
  */
+@ExtendWith(ApplicationExtension.class)
 public class UtentiDialogTest {
     
-    private UtentiDialog d;
+    private UtentiDialog d1;
+    private UtentiDialog d2;
 
+    @Start
+    private void start(Stage stage) {
+        d1 = new UtentiDialog();
+        d2 = new UtentiDialog(new Utente("Francesco", "Pisaturo", "0612709311", "f.pisaturo1@studenti.unisa.it"));
+    }    
+    
     /**
      * UTC 13.1 - Test UtentiDialog – costruttore
      */
     @Test
     public void testCostruttore() {
-        d = new UtentiDialog();
         
-        assertNotNull(d.getTxfNome());
-        assertNotNull(d.getTxfCognome());
-        assertNotNull(d.getTxfMatricola());
-        assertNotNull(d.getTxfEmail());
-        assertNotNull(d.getDialog());
+        assertNotNull(d1.getTxfNome());
+        assertNotNull(d1.getTxfCognome());
+        assertNotNull(d1.getTxfMatricola());
+        assertNotNull(d1.getTxfEmail());
+        assertNotNull(d1.getDialog());
     }
 
     /**
@@ -31,12 +42,10 @@ public class UtentiDialogTest {
      */
     @Test
     public void testCostruttoreSovraccarico() {
-        d = new UtentiDialog(new Utente("Francesco", "Pisaturo", "0612709311", "f.pisaturo1@studenti.unisa.it"));
-        
-        assertEquals("Francesco", d.getTxfNome().getText());
-        assertEquals("Pisaturo", d.getTxfCognome().getText());
-        assertEquals("0612709311", d.getTxfMatricola().getText());
-        assertEquals("f.pisaturo1@studenti.unisa.it", d.getTxfEmail().getText());
+        assertEquals("Francesco", d2.getTxfNome().getText());
+        assertEquals("Pisaturo", d2.getTxfCognome().getText());
+        assertEquals("0612709311", d2.getTxfMatricola().getText());
+        assertEquals("f.pisaturo1@studenti.unisa.it", d2.getTxfEmail().getText());
     }
     
 }

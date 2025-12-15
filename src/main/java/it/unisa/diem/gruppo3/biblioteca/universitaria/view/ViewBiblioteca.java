@@ -59,7 +59,6 @@ public class ViewBiblioteca {
         Scene scene = new Scene(root, 900, 400);
         this.stage.setTitle("Gestione Biblioteca Universitaria.");
         this.stage.setScene(scene);
-        this.stage.show();
     }
     
     /**
