@@ -138,4 +138,8 @@ public class LibriDialog {
     public Button getBtnOk() {
         return btnOk;
     }
+    
+    public Dialog<Libro> getDialog() {
+        return dialog;
+    }
 }
