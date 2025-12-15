@@ -85,6 +85,11 @@ public class ModelArchivio<T extends Dato> {
      */
     public boolean aggiungiElemento(T elem) {
         
+        if(!elem.isValid())
+            return false;
+        if(archivio.contains(elem))
+            return false;
+        
         if(archivio.add(elem))
             return io.salvaModificaArchivio(new CacheRecord<>(TipoOperazione.AGGIUNTA, null, elem));
         
@@ -116,6 +121,9 @@ public class ModelArchivio<T extends Dato> {
      */
     public boolean modificaElemento(T target, T elem) {
 
+        if(!elem.isValid())
+            return false;
+        
         int index = archivio.indexOf(target);
         if(index < 0) return false;
         

@@ -9,7 +9,7 @@ import javafx.scene.control.TextField;
  * @brief Questa classe specializza UtilityPopUp per il caso in cui la finestra
  * utilità venga generata dalla tab dell'archivio dei prestiti
  */
-public class UtilityPopUpPrestiti extends UtilityPopUp {
+public class UtilityPopUpPrestiti {
     /**
      * @brief Campo di testo per la matricola dell'utente richiedente del prestito
      */

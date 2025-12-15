@@ -3,12 +3,12 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 import javafx.scene.control.TextField;
 
 /**
- * @file UtilityPopUpLibri.java
+ * @file LibriDialog.java
  * @author gruppo 3
  * @brief Questa classe specializza UtilityPopUp per il caso in cui la finestra 
  * di utilità venga generata dalla tab dell'archivio dei libri
  */
-public class UtilityPopUpLibri extends UtilityPopUp{
+public class LibriDialog {
     /**
      * @brief Campo di testo per il testo del libro
      */
@@ -38,7 +38,7 @@ public class UtilityPopUpLibri extends UtilityPopUp{
      * @brief Costruttore di default che aggiunge al layout base i campi di testo
      * specifici per l'inserimento o la modifica di un libro
      */
-    public UtilityPopUpLibri() {
+    public LibriDialog() {
         
     }
 

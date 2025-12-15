@@ -3,9 +3,11 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Dato;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 /**
  * @file TabArchivio.java
@@ -18,37 +20,43 @@ public abstract class TabArchivio<T extends Dato> {
     /**
  * @brief Tabella che visualizza i dati di tipo T
  */
-    private TableView<T> tabella;
+    private final TableView<T> tabella;
     
     /**
- * @brief  Etichetta che visualizza i filtri attivi
+ * @brief  Campo per l'inserimento dei filtri di ricerca
  */
-    private Label lblFiltriAttivi;
+    private final TextField txfFiltroRicerca;
     
         /**
  * @brief Bottone per aggiungere un Dato 
  */
-    private Button btnAggiungi;
+    private final Button btnAggiungi;
     
         /**
  * @brief Bottone per modificare il Dato selezionato nella TableView
  */
-    private Button btnModifica;
+    private final Button btnModifica;
     
         /**
  * @brief Bottone per cercare un Dato
  */
-    private Button btnCerca;
+    private final Button btnCerca;
     
         /**
  * @brief Bottone per eliminare i filtri di ricerca e resettare la TableView di default
  */
-    private Button btnEliminaFiltri;
+    private final Button btnEliminaFiltri;
     
         /**
  * @brief Reference alla Tab
  */
-    private Tab tab;
+    private final Tab tab;
+    
+        /**
+ * @brief Reference al box centrale
+ * 
+ */
+    private final VBox boxCentro;
     
     /**
      * @brief Costruttore che imposta la FilteredList visualizza nella TableView
@@ -58,20 +66,21 @@ public abstract class TabArchivio<T extends Dato> {
      * componenti
      */
     public TabArchivio(FilteredList<T> listaOsservabile) { 
+        tabella = new TableView<>();
+        btnAggiungi = new Button();
+        btnModifica = new Button();
+        btnCerca = new Button("Cerca");
+        btnEliminaFiltri = new Button("Elimina Filtri");
+        txfFiltroRicerca = new TextField();
+        txfFiltroRicerca.setPromptText("Cerca");
         
+        tab = new Tab();
         
-    }
-/**
-     * @brief imposta il testo visibile nella label lblFiltriAttivi
-     * @param[in] testo Testo visualizzato in lblFiltriAttivi
-     * @pre
-     * testo non deve essere null
-     * @post
-     * lblFiltriAttivi mostra il testo specificato
-     */
-    
-    public void setLblFiltriAttivi(String testo) {
+        HBox boxCerca = new HBox();
+        boxCerca.getChildren().addAll(txfFiltroRicerca, btnCerca, btnEliminaFiltri);
         
+        boxCentro = new VBox();
+        boxCentro.getChildren().addAll(boxCerca, tabella);
     }
     
     /**
@@ -125,6 +134,33 @@ public abstract class TabArchivio<T extends Dato> {
      * @preturn l'oggetto selezionato di tipo T
      */
     public T getSelectedItem() {
-        return null;
+        return tabella.getSelectionModel().getSelectedItem();
+    }
+    
+    /**
+     * @brief restituisce il TextField che fa da filtro di ricerca
+     * @param[in] 
+     * @preturn l'oggetto txfFiltroRicerca
+     */
+    public TextField getTxfFiltroRicerca() {
+        return txfFiltroRicerca;
+    }
+    
+    /**
+     * @brief restituisce la tabella contenente i dati visualizzati
+     * @param[in] 
+     * @preturn l'oggetto TableView<T>
+     */
+    public TableView<T> getTabella() {
+        return tabella;
+    }
+    
+    /**
+     * @brief restituisce il box contenente la tabella e i componenti di ricerca
+     * @param[in] 
+     * @preturn l'oggetto VBox
+     */
+    public VBox getBoxCentro() {
+        return boxCentro;
     }
 }

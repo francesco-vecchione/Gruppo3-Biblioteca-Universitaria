@@ -139,9 +139,7 @@ public class Libro implements Dato {
      * @return Una stringa contenente Titolo e ISBN.
      */
     @Override
-    public String toString() {
-        
-        // Da finire
-        return null;
+    public String toString() {        
+        return isbn + ":" + titolo + " - " + autori + ", " + annoDiPubblicazione;
     }
 }

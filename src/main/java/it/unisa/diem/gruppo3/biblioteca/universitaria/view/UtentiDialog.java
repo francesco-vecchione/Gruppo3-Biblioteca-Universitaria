@@ -3,12 +3,12 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 import javafx.scene.control.TextField;
 
 /**
- * @file UtilityPopUpUtenti.java
+ * @file UtentiDialog.java
  * @author gruppo 3
  * @brief Questa classe specializza UtilityPopUp per il caso in cui la finestra 
  * utilità venga generata dalla tab dell'archivio degli utenti
  */
-public class UtilityPopUpUtenti extends UtilityPopUp {
+public class UtentiDialog {
     /**
      * @brief Campo di testo per il nome dell'utente
      */
@@ -33,7 +33,7 @@ public class UtilityPopUpUtenti extends UtilityPopUp {
      * @brief Costruttore di default che aggiunge al layout base i campi di testo
      * specifici per l'inserimento o la modifica di un utente
      */
-    public UtilityPopUpUtenti() {
+    public UtentiDialog() {
         
     }
 
