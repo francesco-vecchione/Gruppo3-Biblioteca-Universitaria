@@ -6,6 +6,7 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelPassword;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Password;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ConfermaAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.CreazionePasswordDialog;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.LibriDialog;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.LoginDialog;
@@ -106,9 +107,18 @@ public class AppController {
     * @brief Inizializza gli event handlers che riguardano Libri
     */
     private void inizializzaEventHandlersLibri() {
-        viewBiblioteca.getTabLibri().getBtnAggiungi().setOnAction(event -> new LibriDialog());
-        viewBiblioteca.getTabLibri().getBtnModifica().setOnAction(event -> new LibriDialog());  //a cui passo l'oggetto
-        viewBiblioteca.getTabLibri().getBtnCancella().setOnAction(event -> new LibriDialog());  //a cui passo l'oggetto
+        viewBiblioteca.getTabLibri().getBtnAggiungi().setOnAction(event -> {
+            LibriDialog dialog = new LibriDialog();
+
+            //modelLibri.aggiungiElemento(libro);
+        });
+        viewBiblioteca.getTabLibri().getBtnModifica().setOnAction(event -> {
+            Libro target = viewBiblioteca.getTabLibri().getSelectedItem();
+            LibriDialog dialog = new LibriDialog(target);
+
+            //modelLibri.modificaElemento(target, nuovo);
+        });
+        viewBiblioteca.getTabLibri().getBtnCancella().setOnAction(event -> new ConfermaAlert("Vuoi davvero eliminare " + viewBiblioteca.getTabLibri().getSelectedItem().toString()));  //a cui passo l'oggetto
         viewBiblioteca.getTabLibri().getBtnCerca().setOnAction(event -> {
             
         });

@@ -11,5 +11,9 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
  * 
  */
 public class ConfermaAlert {
+
+    public ConfermaAlert(String text) {
+        
+    }
     
 }
