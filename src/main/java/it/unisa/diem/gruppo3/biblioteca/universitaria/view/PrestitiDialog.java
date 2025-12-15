@@ -8,10 +8,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.Dialog;
-import javafx.scene.layout.GridPane;
 
 import java.time.LocalDate;
-import java.util.List;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.layout.VBox;
 

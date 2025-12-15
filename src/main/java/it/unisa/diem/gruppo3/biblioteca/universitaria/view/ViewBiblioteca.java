@@ -2,6 +2,7 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Libro;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.model.StatoPrestito;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.Scene;
@@ -47,8 +48,10 @@ public class ViewBiblioteca {
     public ViewBiblioteca(Stage stage, FilteredList<Libro> listaOsservabileLibri, FilteredList<Utente> listaOsservabileUtenti, FilteredList<Prestito> listaOsservabilePrestiti) {
         this.stage = stage;
         
+        FilteredList<Prestito> prestitiStampabili = listaOsservabilePrestiti.filtered(prestito -> prestito.getStatoPrestito().equals(StatoPrestito.ATTIVO));
+        
         TabPane tabPane = new TabPane();
-        tabPrestiti = new TabArchivioPrestiti(listaOsservabilePrestiti);
+        tabPrestiti = new TabArchivioPrestiti(prestitiStampabili);
         tabUtenti = new TabArchivioUtenti(listaOsservabileUtenti);
         tabLibri = new TabArchivioLibri(listaOsservabileLibri);
         tabPane.getTabs().addAll(tabPrestiti.getTab(), tabUtenti.getTab(), tabLibri.getTab());

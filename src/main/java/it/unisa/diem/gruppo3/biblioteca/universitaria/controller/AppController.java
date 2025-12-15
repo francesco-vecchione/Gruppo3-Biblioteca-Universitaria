@@ -5,6 +5,7 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelArchivio;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelPassword;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Password;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.model.StatoPrestito;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ConfermaAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.CreazionePasswordDialog;
@@ -101,7 +102,7 @@ public class AppController {
      */
     public AppController(Stage stage) {
         modelPassword = new Password("cassaforte");
-        
+
         boolean accessoRiuscito = false;
         if (!modelPassword.esistePassword()) {
             accessoRiuscito = creazionePassword();
@@ -110,16 +111,14 @@ public class AppController {
         }
 
         if (accessoRiuscito) {
-            // E' inutile aprire gli archivi se non si fa l'accesso
-            
             modelLibri = new ModelArchivio<>("archivioLibri");
             modelUtenti = new ModelArchivio<>("archivioUtenti");
             modelPrestiti = new ModelArchivio<>("archivioPrestiti");
-            
+
             modelLibri.apriArchivio();
             modelUtenti.apriArchivio();
             modelPrestiti.apriArchivio();
-            
+
             viewBiblioteca = new ViewBiblioteca(stage, modelLibri.getArchivioFiltrato(), modelUtenti.getArchivioFiltrato(), modelPrestiti.getArchivioFiltrato());
             inizializzaEventHandlers();
             viewBiblioteca.getStage().show();
@@ -207,27 +206,33 @@ public class AppController {
      * @brief Inizializza gli event handlers
      */
     private void inizializzaEventHandlers() {
-        
+
         // Sulla main view, una volta premuto la x, l'archivio viene salvato automaticamente
         viewBiblioteca.getStage().setOnCloseRequest(event -> {
             boolean chiusuraCorrettaLibri = modelLibri.chiudiArchivio();
             boolean chiusuraCorrettaUtenti = modelUtenti.chiudiArchivio();
             boolean chiusuraCorrettaPrestiti = modelPrestiti.chiudiArchivio();
-        
+
             Alert chiusura = new Alert(Alert.AlertType.NONE);
-            if(!chiusuraCorrettaLibri || !chiusuraCorrettaUtenti || !chiusuraCorrettaPrestiti) {
+            if (!chiusuraCorrettaLibri || !chiusuraCorrettaUtenti || !chiusuraCorrettaPrestiti) {
                 // Nel caso vada storto qualcosa nella chiusura, lo si notifica all'utente prima di chiudere l'applicazione
                 chiusura.setAlertType(Alert.AlertType.WARNING);
                 chiusura.setTitle("Attenzione");
                 chiusura.setHeaderText("Attenzione!");
-                
+
                 StringBuffer buff = new StringBuffer();
                 buff.append("Salvataggio non riuscito per i seguenti archivi:\n");
-                if(!chiusuraCorrettaLibri) buff.append("\tArchivio Libri\n");
-                if(!chiusuraCorrettaUtenti) buff.append("\tArchivio Utenti\n");
-                if(!chiusuraCorrettaPrestiti) buff.append("\tArchivio Prestiti\n");
+                if (!chiusuraCorrettaLibri) {
+                    buff.append("\tArchivio Libri\n");
+                }
+                if (!chiusuraCorrettaUtenti) {
+                    buff.append("\tArchivio Utenti\n");
+                }
+                if (!chiusuraCorrettaPrestiti) {
+                    buff.append("\tArchivio Prestiti\n");
+                }
                 buff.append("\nAl prossimo accesso i dati verranno aggiornati con quelli contenuti negli archivi cache.");
-                
+
                 chiusura.setContentText(buff.toString());
             } else {
                 // Nel caso vada tutto bene, lo si notifica comunque all'utente
@@ -236,10 +241,10 @@ public class AppController {
                 chiusura.setHeaderText("Successo!");
                 chiusura.setContentText("Archivi chiusi e salvati con successo");
             }
-            
+
             chiusura.showAndWait();
         });
-        
+
         inizializzaEventHandlersPrestiti();
         inizializzaEventHandlersLibri();
         inizializzaEventHandlersUtenti();
@@ -339,24 +344,30 @@ public class AppController {
             //Conferma
             ConfermaAlert alert = new ConfermaAlert("Vuoi davvero eliminare " + target.toString());
             if (alert.getEsito()) {
-                modelLibri.rimuoviElemento(target);
+                if(modelPrestiti.getArchivioFiltrato().filtered(prestito -> prestito.getIsbnPrestito().equals(target.getIsbn())).size() > 0) {
+                    target.azzeraCopie();
+                    new ErroreAlert("Ho cancellato le copie disponibili in quanto una copia è ancora in presito");
+                }
+                else {
+                    modelLibri.rimuoviElemento(target);
+                }
             }
         });
 
         //Ricerca
-        viewBiblioteca.getTabLibri().getBtnCerca().setOnAction(event -> {
-            String testoInserito = viewBiblioteca.getTabLibri().getTxfFiltroRicerca().getText();
+        viewBiblioteca.getTabPrestiti().getBtnCerca().setOnAction(event -> {
+            String testoInserito = viewBiblioteca.getTabPrestiti().getTxfFiltroRicerca().getText();
             String[] filtri = testoInserito.split(" ");
-            List<Predicate<Libro>> filtriPredicate = new ArrayList<>();
+            List<Predicate<Prestito>> filtriPredicate = new ArrayList<>();
             for (String filtro : filtri) {
-                filtriPredicate.add(libro -> libro.toString().toLowerCase().contains(filtro.toLowerCase()));
+                filtriPredicate.add(prestito -> prestito.toString().toLowerCase().contains(filtro.toLowerCase()));
             }
-            FilteredList<Libro> cercati = modelLibri.getArchivioFiltrato().filtered(
+            FilteredList<Prestito> cercati = modelPrestiti.getArchivioFiltrato().filtered(
                     filtriPredicate.stream()
                             .reduce(Predicate::and)
                             .orElse(x -> true) //se non ci sonon filtri resituisce tutto
             );
-            viewBiblioteca.getTabLibri().getTabella().setItems(cercati);
+            viewBiblioteca.getTabPrestiti().getTabella().setItems(cercati);
         });
 
         //Elimina Filtri
@@ -442,6 +453,10 @@ public class AppController {
             //Conferma
             ConfermaAlert alert = new ConfermaAlert("Vuoi davvero eliminare " + target.toString());
             if (alert.getEsito()) {
+                if(modelPrestiti.getArchivioFiltrato().filtered(prestito -> prestito.getMatricolaUtente().equals(target.getMatricola())).size() > 0) {
+                    new ErroreAlert("Non è possibile eliminare un utente che ha un Prestito in atto");
+                    return;
+                }
                 modelUtenti.rimuoviElemento(target);
             }
         });
@@ -475,7 +490,18 @@ public class AppController {
     private void inizializzaEventHandlersPrestiti() {
         //Registrazione Prestito
         viewBiblioteca.getTabPrestiti().getBtnAggiungi().setOnAction(event -> {
-            PrestitiDialog dialog = new PrestitiDialog(modelLibri.getArchivioFiltrato(), modelUtenti.getArchivioFiltrato());
+            FilteredList<Libro> libriPrestabili = modelLibri.getArchivioFiltrato().filtered(libro->
+                    libro.getNumeroCopieDisponibili() > 0);
+            FilteredList<Utente> utentiPrestabili= modelUtenti.getArchivioFiltrato().filtered(utente->
+                    modelPrestiti.getArchivioFiltrato().stream()
+                            .filter(prestito
+                                    -> prestito.getStatoPrestito().equals(StatoPrestito.ATTIVO)
+                            && prestito.getMatricolaUtente().equals(utente.getMatricola())
+                            )
+                            .count() < 3
+                    );
+
+            PrestitiDialog dialog = new PrestitiDialog(libriPrestabili, utentiPrestabili);
 
             // Tasto OK : bindings
             Button btnOk = dialog.getBtnOk();
@@ -500,21 +526,23 @@ public class AppController {
                 Prestito nuovoPrestito = new Prestito(utenteSelezionato.getMatricola(), libroSelezionato.getIsbn(), LocalDate.now(), dataPrestito);
 
                 if (!modelPrestiti.aggiungiElemento(nuovoPrestito)) {
-                    if(!nuovoPrestito.isValid()) {
-                        new ErroreAlert("Errore: data restituzione invalida, scegliere una data successiva a quella odierna");
+                    if (!nuovoPrestito.isValid()) {
+                        new ErroreAlert("Data restituzione invalida, scegliere una data successiva a quella odierna");
                     } else {
-                        new ErroreAlert("Errore: il prestito è già presente in archivio");
+                        new ErroreAlert("L'utente non può richiedere lo stesso libro mentre già lo possiede");
                     }
                     eventOk.consume();
                     return;
                 }
+                
+                libroSelezionato.prestaCopia();
             });
 
             dialog.getDialog().showAndWait();
         });
 
         // Registra Restituzione
-        viewBiblioteca.getTabLibri().getBtnModifica().setOnAction(event -> {
+        viewBiblioteca.getTabPrestiti().getBtnModifica().setOnAction(event -> {
             Prestito target = viewBiblioteca.getTabPrestiti().getSelectedItem();
 
             if (target == null) {
@@ -528,11 +556,14 @@ public class AppController {
             // Attendi la risposta dell'utente
             if (alert.getEsito()) { // getEsito() deve restituire true se confermato
                 target.registraRestituzione();
+                FilteredList<Libro> libroSelezionato = modelLibri.getArchivioFiltrato().filtered(libro -> libro.getIsbn().equals(target.getIsbnPrestito()));
+                libroSelezionato.get(0).restituisciCopia();
             }
-        });
+        });FilteredList<Libro> libriPrestabili = modelLibri.getArchivioFiltrato().filtered(libro->
+                    libro.getNumeroCopieDisponibili() > 0);
 
         //Ricerca
-        viewBiblioteca.getTabLibri().getBtnCerca().setOnAction(event -> {
+        viewBiblioteca.getTabPrestiti().getBtnCerca().setOnAction(event -> {
             String testoInserito = viewBiblioteca.getTabLibri().getTxfFiltroRicerca().getText();
             String[] filtri = testoInserito.split(" ");
             List<Predicate<Libro>> filtriPredicate = new ArrayList<>();
@@ -548,9 +579,9 @@ public class AppController {
         });
 
         //Elimina Filtri
-        viewBiblioteca.getTabLibri().getBtnEliminaFiltri().setOnAction(event -> {
-            viewBiblioteca.getTabLibri().getTxfFiltroRicerca().clear();
-            viewBiblioteca.getTabLibri().getTabella().setItems(modelLibri.getArchivioFiltrato());
+        viewBiblioteca.getTabPrestiti().getBtnEliminaFiltri().setOnAction(event -> {
+            viewBiblioteca.getTabPrestiti().getTxfFiltroRicerca().clear();
+            viewBiblioteca.getTabPrestiti().getTabella().setItems(modelPrestiti.getArchivioFiltrato());
         });
     }
 }

@@ -3,15 +3,12 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import javafx.beans.binding.Bindings;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 /**
  * @file TabArchivioPrestiti.java
