@@ -122,4 +122,12 @@ public class UtentiDialog {
     public Button getBtnOk() {
         return btnOk;
     }
+    
+    /**
+     * @brief Getter per la finestra
+     * @return Reference alla finestra
+     */
+    public Dialog<Utente> getDialog() {
+        return dialog;
+    }
 }

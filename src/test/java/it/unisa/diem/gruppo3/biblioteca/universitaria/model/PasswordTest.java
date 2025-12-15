@@ -50,4 +50,21 @@ public class PasswordTest {
         assertTrue(password.verificaPassword("biblioteca"));
     }
     
+    /**
+     * UTC 4.3.1 - Test Password – controllare se sia presente una password – caso vero
+     */
+    @Test
+    public void testEsistePassword_Caso1() {
+        password.impostaPassword("ciaoMondo");
+        assertTrue(password.esistePassword());
+    }
+    
+    /**
+     * UTC 4.3.2 - Test Password – controllare se sia presente una password – caso false
+     */
+    @Test
+    public void testEsistePassword_Caso2() {
+        assertFalse(password.esistePassword());
+    }
+    
 }
