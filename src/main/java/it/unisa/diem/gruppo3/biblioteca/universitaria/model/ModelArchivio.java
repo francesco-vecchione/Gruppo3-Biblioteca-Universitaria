@@ -131,4 +131,14 @@ public class ModelArchivio<T extends Dato> {
         archivio.set(index, elem);
         return io.salvaModificaArchivio(new CacheRecord<>(TipoOperazione.MODIFICA, target, elem));
     }
+   
+    /**
+     * @brief Metodo per trovare un elemento basandosi solo sui campi univoci
+     * @param target Elemento fittizio in cui sono valorizzati solo i campi degli identificatori univoci
+     * @return L'elemento che cercavamo, null se non lo trova
+     */
+    public T ricercaElemento(T target) {   
+        int index = archivio.indexOf(target);
+        return (index < 0) ? null : archivio.get(index);
+    }
 }

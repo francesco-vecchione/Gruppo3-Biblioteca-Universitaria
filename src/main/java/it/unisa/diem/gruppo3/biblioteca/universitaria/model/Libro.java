@@ -34,7 +34,7 @@ public class Libro implements Dato {
     /**
      * @brief Numero di copie disponibili del libro.
      */
-    private final int numeroCopieDisponibili;
+    private int numeroCopieDisponibili;
 
     /**
      * @brief Costruttore che si occupa di inizializzare gli attributi.
@@ -93,6 +93,31 @@ public class Libro implements Dato {
     public int getNumeroCopieDisponibili() {
         return numeroCopieDisponibili;
     }
+    
+    /**
+     * @brief Metodo per decrementare la disponibilità del libro
+     * @return 
+     */
+    public void prestaCopia() {
+        numeroCopieDisponibili--;
+    }
+    
+    /**
+     * @brief Metodo per decrementare la disponibilità del libro
+     * @return 
+     */
+    public void restituisciCopia() {
+        numeroCopieDisponibili++;
+    }
+    
+    /**
+     * @brief Metodo azzerare le copie disponibili
+     * @return 
+     */
+    public void azzeraCopie() {
+        numeroCopieDisponibili = 0;
+    }
+    
     
     /**
      * @brief Contratto fornito dall'interfaccia Dato. Un oggetto Libro è valido 

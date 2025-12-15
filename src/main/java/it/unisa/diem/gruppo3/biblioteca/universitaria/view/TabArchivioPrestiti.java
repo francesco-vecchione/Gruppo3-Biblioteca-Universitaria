@@ -1,17 +1,15 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.model.StatoPrestito;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import javafx.beans.binding.Bindings;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
-import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
-import javafx.util.Callback;
 
 /**
  * @file TabArchivioPrestiti.java
@@ -46,6 +44,9 @@ public class TabArchivioPrestiti extends TabArchivio<Prestito> {
 
         TableColumn<Prestito, LocalDate> dataRestituzioneCol = new TableColumn<>("Data di Restituzione Concordata");
         dataRestituzioneCol.setCellValueFactory(new PropertyValueFactory<>("dataRestituzione"));
+        
+        TableColumn<Prestito, LocalDate> statoPrestitoCol = new TableColumn<>("Stato del Prestito");
+        statoPrestitoCol.setCellValueFactory(new PropertyValueFactory<>("statoPrestito"));
 
         getTabella().setRowFactory(tv -> new TableRow<Prestito>() {
             @Override
@@ -55,7 +56,10 @@ public class TabArchivioPrestiti extends TabArchivio<Prestito> {
                 if (!empty && item != null) {
                     if (!isSelected()) {
                         LocalDate dataRestituzione = item.getDataRestituzione();
-                        if (dataRestituzione != null) {
+                        
+                        if (item.getStatoPrestito() == StatoPrestito.RESTITUITO) {
+                            setStyle("-fx-background-color: #C8E6C9;");
+                        } else if (dataRestituzione != null) {
                             long giorniRimanenti = ChronoUnit.DAYS.between(LocalDate.now(), dataRestituzione);
                             if (giorniRimanenti < 0) {
                                 setStyle("-fx-background-color: #FFA07A;");
@@ -69,7 +73,10 @@ public class TabArchivioPrestiti extends TabArchivio<Prestito> {
                             setStyle("");
                         } else {
                             LocalDate dataRestituzione = getItem().getDataRestituzione();
-                            if (dataRestituzione != null) {
+                            
+                            if(getItem().getStatoPrestito() == StatoPrestito.RESTITUITO) {
+                                setStyle("-fx-background-color: #C8E6C9;");
+                            } else if (dataRestituzione != null) {
                                 long giorniRimanenti = ChronoUnit.DAYS.between(LocalDate.now(), dataRestituzione);
                                 if (giorniRimanenti < 0) {
                                     setStyle("-fx-background-color: #FFA07A;");
@@ -83,7 +90,7 @@ public class TabArchivioPrestiti extends TabArchivio<Prestito> {
             }
         });
 
-        getTabella().getColumns().addAll(matricolaCol, isbnCol, dataPrestitoCol, dataRestituzioneCol);
+        getTabella().getColumns().addAll(matricolaCol, isbnCol, dataPrestitoCol, dataRestituzioneCol, statoPrestitoCol);
         getTabella().setItems(listaOsservabilePrestiti);
 
         VBox boxBottoni = new VBox();
