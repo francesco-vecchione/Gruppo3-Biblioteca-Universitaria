@@ -17,12 +17,13 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.Predicate;
 import javafx.application.Platform;
 import javafx.collections.transformation.FilteredList;
 import javafx.event.ActionEvent;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.Hyperlink;
 import javafx.stage.Stage;
 
 /**
@@ -99,15 +100,8 @@ public class AppController {
      * di inizializzare gli event handlers e i bindings
      */
     public AppController(Stage stage) {
-        modelLibri = new ModelArchivio<>("libri");
-        modelUtenti = new ModelArchivio<>("utenti");
-        modelPrestiti = new ModelArchivio<>("prestiti");
         modelPassword = new Password("cassaforte");
-
-        modelLibri.apriArchivio();
-        modelUtenti.apriArchivio();
-        modelPrestiti.apriArchivio();
-
+        
         boolean accessoRiuscito = false;
         if (!modelPassword.esistePassword()) {
             accessoRiuscito = creazionePassword();
@@ -116,8 +110,19 @@ public class AppController {
         }
 
         if (accessoRiuscito) {
+            // E' inutile aprire gli archivi se non si fa l'accesso
+            
+            modelLibri = new ModelArchivio<>("archivioLibri");
+            modelUtenti = new ModelArchivio<>("archivioUtenti");
+            modelPrestiti = new ModelArchivio<>("archivioPrestiti");
+            
+            modelLibri.apriArchivio();
+            modelUtenti.apriArchivio();
+            modelPrestiti.apriArchivio();
+            
             viewBiblioteca = new ViewBiblioteca(stage, modelLibri.getArchivioFiltrato(), modelUtenti.getArchivioFiltrato(), modelPrestiti.getArchivioFiltrato());
             inizializzaEventHandlers();
+            viewBiblioteca.getStage().show();
         }
     }
 
@@ -126,7 +131,7 @@ public class AppController {
      * Registra Password
      */
     private boolean creazionePassword() {
-        final boolean[] accessoRiuscito = {false};
+        AtomicBoolean accessoRiuscito = new AtomicBoolean(false);
         CreazionePasswordDialog dialog = new CreazionePasswordDialog();
         Button btnOk = dialog.getBtnOk();
         Button btnChiudi = dialog.getBtnChiudi();
@@ -153,11 +158,11 @@ public class AppController {
                 event.consume();
                 return;
             }
-            accessoRiuscito[0] = true;
+            accessoRiuscito.set(true);
         });
 
         dialog.getDialog().showAndWait();
-        return accessoRiuscito[0];
+        return accessoRiuscito.get();
     }
 
     /**
@@ -165,7 +170,7 @@ public class AppController {
      * Login
      */
     private boolean login() {
-        final boolean[] accessoRiuscito = {false};
+        AtomicBoolean accessoRiuscito = new AtomicBoolean(false);
         LoginDialog dialog = new LoginDialog();
         Button btnOk = dialog.getBtnOk();
         Button btnChiudi = dialog.getBtnChiudi();
@@ -186,7 +191,7 @@ public class AppController {
             }
 
             dialog.getDialog().close();
-            accessoRiuscito[0] = true;
+            accessoRiuscito.set(true);
         });
 
         //Password Dimenticata
@@ -195,13 +200,46 @@ public class AppController {
         });
 
         dialog.getDialog().showAndWait();
-        return accessoRiuscito[0];
+        return accessoRiuscito.get();
     }
 
     /**
      * @brief Inizializza gli event handlers
      */
     private void inizializzaEventHandlers() {
+        
+        // Sulla main view, una volta premuto la x, l'archivio viene salvato automaticamente
+        viewBiblioteca.getStage().setOnCloseRequest(event -> {
+            boolean chiusuraCorrettaLibri = modelLibri.chiudiArchivio();
+            boolean chiusuraCorrettaUtenti = modelUtenti.chiudiArchivio();
+            boolean chiusuraCorrettaPrestiti = modelPrestiti.chiudiArchivio();
+        
+            Alert chiusura = new Alert(Alert.AlertType.NONE);
+            if(!chiusuraCorrettaLibri || !chiusuraCorrettaUtenti || !chiusuraCorrettaPrestiti) {
+                // Nel caso vada storto qualcosa nella chiusura, lo si notifica all'utente prima di chiudere l'applicazione
+                chiusura.setAlertType(Alert.AlertType.WARNING);
+                chiusura.setTitle("Attenzione");
+                chiusura.setHeaderText("Attenzione!");
+                
+                StringBuffer buff = new StringBuffer();
+                buff.append("Salvataggio non riuscito per i seguenti archivi:\n");
+                if(!chiusuraCorrettaLibri) buff.append("\tArchivio Libri\n");
+                if(!chiusuraCorrettaUtenti) buff.append("\tArchivio Utenti\n");
+                if(!chiusuraCorrettaPrestiti) buff.append("\tArchivio Prestiti\n");
+                buff.append("\nAl prossimo accesso i dati verranno aggiornati con quelli contenuti negli archivi cache.");
+                
+                chiusura.setContentText(buff.toString());
+            } else {
+                // Nel caso vada tutto bene, lo si notifica comunque all'utente
+                chiusura.setAlertType(Alert.AlertType.INFORMATION);
+                chiusura.setTitle("Informazione");
+                chiusura.setHeaderText("Successo!");
+                chiusura.setContentText("Archivi chiusi e salvati con successo");
+            }
+            
+            chiusura.showAndWait();
+        });
+        
         inizializzaEventHandlersPrestiti();
         inizializzaEventHandlersLibri();
         inizializzaEventHandlersUtenti();
@@ -231,7 +269,7 @@ public class AppController {
                     Integer.parseInt(dialog.getTxfNumCopie().getText());
                 } catch (NumberFormatException e) {
                     new ErroreAlert("Il formato dei dati che hai inserito non è corretto");
-                    event.consume();
+                    eventOk.consume();
                     return;
                 }
                 Libro nuovoLibro = new Libro(dialog.getTxfTitolo().getText(), dialog.getTxfAutori().getText(), Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText()), dialog.getTxfIsbn().getText(), Integer.parseInt(dialog.getTxfNumCopie().getText()));
@@ -241,7 +279,7 @@ public class AppController {
                     } else {
                         new ErroreAlert("Il libro è già presente in archivio");
                     }
-                    event.consume();
+                    eventOk.consume();
                     return;
                 }
             });
@@ -274,7 +312,7 @@ public class AppController {
                     Integer.parseInt(dialog.getTxfNumCopie().getText());
                 } catch (NumberFormatException e) {
                     new ErroreAlert("Il formato dei dati che hai inserito non è corretto");
-                    event.consume();
+                    eventOk.consume();
                     return;
                 }
                 Libro nuovoLibro = new Libro(dialog.getTxfTitolo().getText(), dialog.getTxfAutori().getText(), Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText()), dialog.getTxfIsbn().getText(), Integer.parseInt(dialog.getTxfNumCopie().getText()));
@@ -284,7 +322,7 @@ public class AppController {
                     } else {
                         new ErroreAlert("Il libro è già presente in archivio");
                     }
-                    event.consume();
+                    eventOk.consume();
                     return;
                 }
             });
@@ -352,7 +390,7 @@ public class AppController {
                     } else {
                         new ErroreAlert("Utente già presente in archivio");
                     }
-                    event.consume();
+                    eventOk.consume();
                     return;
                 }
             });
@@ -386,7 +424,7 @@ public class AppController {
                     } else {
                         new ErroreAlert("Utente già presente in archivio");
                     }
-                    event.consume();
+                    eventOk.consume();
                     return;
                 }
             });
@@ -462,7 +500,11 @@ public class AppController {
                 Prestito nuovoPrestito = new Prestito(utenteSelezionato.getMatricola(), libroSelezionato.getIsbn(), LocalDate.now(), dataPrestito);
 
                 if (!modelPrestiti.aggiungiElemento(nuovoPrestito)) {
-                    new ErroreAlert("Errore: il prestito è già presente in archivio");
+                    if(!nuovoPrestito.isValid()) {
+                        new ErroreAlert("Errore: data restituzione invalida, scegliere una data successiva a quella odierna");
+                    } else {
+                        new ErroreAlert("Errore: il prestito è già presente in archivio");
+                    }
                     eventOk.consume();
                     return;
                 }
@@ -510,12 +552,5 @@ public class AppController {
             viewBiblioteca.getTabLibri().getTxfFiltroRicerca().clear();
             viewBiblioteca.getTabLibri().getTabella().setItems(modelLibri.getArchivioFiltrato());
         });
-    }
-
-    /**
-     * @brief Inizializza i bindings
-     */
-    private void inizializzaBindings() {
-
     }
 }

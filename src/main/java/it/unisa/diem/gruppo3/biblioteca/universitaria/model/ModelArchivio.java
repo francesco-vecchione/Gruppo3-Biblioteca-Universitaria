@@ -124,10 +124,19 @@ public class ModelArchivio<T extends Dato> {
         if(!elem.isValid())
             return false;
         
-        int index = archivio.indexOf(target);
+        int index = ricercaElemento(target);
         if(index < 0) return false;
         
         archivio.set(index, elem);
         return io.salvaModificaArchivio(new CacheRecord<>(TipoOperazione.MODIFICA, target, elem));
+    }
+    
+    /**
+     * @brief Funzione per ricercare la posizione dell'elemento all'interno dell'archivio
+     * @param[in] target elemento di di cui si vuole controllare la presenza nell'archivio
+     * @return Indice dell'elemento nll'archivio, ritorna -1 se non è presente
+     */
+    public int ricercaElemento(T target) {
+        return archivio.indexOf(target);
     }
 }
