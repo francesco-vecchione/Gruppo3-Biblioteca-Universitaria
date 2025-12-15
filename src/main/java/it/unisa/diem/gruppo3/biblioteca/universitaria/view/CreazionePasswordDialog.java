@@ -11,7 +11,7 @@ import javafx.scene.control.TextField;
  * @brief Questa classe specializza UtilityPopUp per adattarsi alle funzionalità 
  * di registrazione e di reimpostazione password
  */
-public class UtilityPopUpCreazionePassword extends UtilityPopUp {
+public class CreazionePasswordDialog {
     /**
      * @brief Campo di testo per inserire la password
      */
@@ -26,7 +26,7 @@ public class UtilityPopUpCreazionePassword extends UtilityPopUp {
      * @brief Costruttore di default che aggiunge al layout base i campi di testo
      * specifici per l'inserimento password
      */
-    public UtilityPopUpCreazionePassword() {
+    public CreazionePasswordDialog() {
     }
 
     /**

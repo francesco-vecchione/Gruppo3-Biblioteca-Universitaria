@@ -4,6 +4,9 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Libro;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
 import javafx.collections.transformation.FilteredList;
+import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -20,17 +23,17 @@ public class ViewBiblioteca {
     /**
      * @brief La tab della gestione dell'archivio dei libri
      */
-    private TabArchivio<Libro> tabLibri;
+    private TabArchivioLibri tabLibri;
     
     /** 
      * @brief La tab della gestione dell'archivio degli utenti
      */
-    private TabArchivio<Utente> tabUtenti;
+    private TabArchivioUtenti tabUtenti;
     
     /**
      * @brief La tab della gestione dell'archivio dei prestiti
      */
-    private TabArchivio<Prestito> tabPrestiti;
+    private TabArchivioPrestiti tabPrestiti;
     
     /**
      * @brief Costruttore che istanzia gli attributi dell'oggetto ed imposta il 
@@ -41,7 +44,21 @@ public class ViewBiblioteca {
      * @param[in] listaOsservabilePrestiti 
      */
     public ViewBiblioteca(Stage stage, FilteredList<Libro> listaOsservabileLibri, FilteredList<Utente> listaOsservabileUtenti, FilteredList<Prestito> listaOsservabilePrestiti) {
+        this.stage = stage;
         
+        TabPane tabPane = new TabPane();
+        tabPrestiti = new TabArchivioPrestiti(listaOsservabilePrestiti);
+        tabUtenti = new TabArchivioUtenti(listaOsservabileUtenti);
+        tabLibri = new TabArchivioLibri(listaOsservabileLibri);
+        tabPane.getTabs().addAll(tabPrestiti.getTab(), tabUtenti.getTab(), tabLibri.getTab());
+        
+        VBox root = new VBox();
+        root.getChildren().add(tabPane);
+        
+        Scene scene = new Scene(root, 900, 400);
+        this.stage.setTitle("Gestione Biblioteca Universitaria.");
+        this.stage.setScene(scene);
+        this.stage.show();
     }
     
     /**
@@ -49,30 +66,30 @@ public class ViewBiblioteca {
      * @return Stage per la vista principale
      */
     public Stage getStage() {
-        return null;
+        return stage;
     }
     
     /**
      * @brief Getter per la classe tab per la gestione dei libri
      * @return Tab per la gestione dei libri
      */
-    public TabArchivio<Libro> getTabLibri() {
-        return null;
+    public TabArchivioLibri getTabLibri() {
+        return tabLibri;
     }
 
     /**
      * @brief Getter per la classe tab per la gestione degli utenti
      * @return Tab per la gestione degli utenti
      */
-    public TabArchivio<Utente> getTabUtenti() {
-        return null;
+    public TabArchivioUtenti getTabUtenti() {
+        return tabUtenti;
     }
 
     /**
      * @brief Getter per la classe tab per la gestione dei prestiti
      * @return Tab per la gestione dei prestiti
      */    
-    public TabArchivio<Prestito> getTabPrestiti() {
-        return null;
+    public TabArchivioPrestiti getTabPrestiti() {
+        return tabPrestiti;
     }
 }

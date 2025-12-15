@@ -12,7 +12,7 @@ import javafx.scene.control.TextField;
  * @author gruppo 3
  * @brief Questa classe specializza UtilityPopUp per il caso di log in
  */
-public class UtilityPopUpLogin extends UtilityPopUp {
+public class LoginDialog {
     /**
      * @brief Campo di testo per l'inserimento della password
      */
@@ -27,7 +27,7 @@ public class UtilityPopUpLogin extends UtilityPopUp {
      * @brief Costruttore di default che aggiunge al layout base i campi di testo
      * specifici per la procedura di login
      */
-    public UtilityPopUpLogin() {
+    public LoginDialog() {
     }
 
     /**

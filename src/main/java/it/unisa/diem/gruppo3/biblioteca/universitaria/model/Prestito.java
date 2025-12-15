@@ -166,8 +166,6 @@ public class Prestito implements Dato {
     */
     @Override
     public String toString() {
-        
-        // Da fare
-        return null;
+        return matricolaUtente + "->" + isbnPrestito + ": " + dataPrestito + "->" + dataRestituzione;
     }
 }

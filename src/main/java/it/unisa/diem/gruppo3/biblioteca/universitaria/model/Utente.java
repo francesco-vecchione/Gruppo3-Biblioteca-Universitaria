@@ -154,8 +154,6 @@ public class Utente implements Dato {
     */
     @Override
     public String toString() {
-        
-        // Da fare
-        return null;
+        return matricola + ": " + nome + " " + cognome + " - " + email;
     }
 }

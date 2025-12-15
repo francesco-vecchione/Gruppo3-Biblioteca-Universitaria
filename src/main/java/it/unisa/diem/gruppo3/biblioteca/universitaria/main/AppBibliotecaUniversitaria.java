@@ -1,6 +1,13 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.main;
 
+import it.unisa.diem.gruppo3.biblioteca.universitaria.controller.AppController;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Libro;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.stage.Stage;
 
 
@@ -25,7 +32,7 @@ public class AppBibliotecaUniversitaria extends Application {
     */
     @Override
     public void start(Stage stage) {
-        
+        new AppController(stage);
     }
 
     /**

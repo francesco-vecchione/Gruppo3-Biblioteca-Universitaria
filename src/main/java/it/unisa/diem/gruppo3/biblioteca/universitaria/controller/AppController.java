@@ -5,8 +5,12 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelArchivio;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelPassword;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.view.UtilityPopUp;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.view.CreazionePasswordDialog;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.view.LibriDialog;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.view.LoginDialog;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.view.UtentiDialog;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
+import javafx.scene.control.Tab;
 import javafx.stage.Stage;
 
 /**
@@ -49,27 +53,27 @@ public class AppController {
     * @brief La view che astrae la finestra di pop up generica generabile dal premere uno dei
     * bottoni della tab dei libri
     */ 
-    private /*final*/ UtilityPopUp popUpLibri;
+    private /*final*/ LibriDialog popUpLibri;
     /**
     * @brief La view che astrae la finestra di pop up generica generabile dal premere uno dei
     * bottoni della tab degli utenti
     */ 
-    private /*final*/ UtilityPopUp popUpUtenti;
+    private /*final*/ UtentiDialog popUpUtenti;
     /**
     * @brief La view che astrae la finestra di pop up generica generabile dal premere uno dei
     * bottoni della tab dei prestiti
     */ 
-    private /*final*/ UtilityPopUp popUpPrestiti;
+    private /*final*/ UtentiDialog popUpPrestiti;
     /**
     * @brief La view che astrae la finestra di log in visualizzata prima dell'apertura della
     * finestra principale
     */ 
-    private /*final*/ UtilityPopUp stageLogIn;
+    private /*final*/ LoginDialog stageLogIn;
     /**
     * @brief La view che astrae la finestra di sign up e la finestra di recupero password; le
     * due differenziano solo per il titolo della finestra e un'etichetta descrittiva
     */
-    private /*final*/ UtilityPopUp stageCreazionePassword;
+    private /*final*/ CreazionePasswordDialog stageCreazionePassword;
     
     /**
     * @brief È il costruttore di AppController, che accetta una reference di tipo Stage come parametro
@@ -78,35 +82,73 @@ public class AppController {
     *                  gli event handlers e i bindings
     */
     public AppController(Stage stage) {
+        modelLibri = new ModelArchivio<>("libri");
+        modelUtenti = new ModelArchivio<>("utenti");
+        modelPrestiti = new ModelArchivio<>("prestiti");
         
+        modelLibri.apriArchivio();
+        modelUtenti.apriArchivio();
+        modelPrestiti.apriArchivio();
+        
+        viewBiblioteca = new ViewBiblioteca(stage, modelLibri.getArchivioFiltrato(), modelUtenti.getArchivioFiltrato(), modelPrestiti.getArchivioFiltrato());
+        
+        inizializzaEventHandlers();
     }
     
     /**
     * @brief Inizializza gli event handlers
     */
     private void inizializzaEventHandlers() {
-        
+        inizializzaEventHandlersLibri();
+        inizializzaEventHandlersPrestiti();
+        inizializzaEventHandlersUtenti();
     }
     
     /**
     * @brief Inizializza gli event handlers che riguardano Libri
     */
     private void inizializzaEventHandlersLibri() {
-        
+        viewBiblioteca.getTabLibri().getBtnAggiungi().setOnAction(event -> new LibriDialog());
+        viewBiblioteca.getTabLibri().getBtnModifica().setOnAction(event -> new LibriDialog());  //a cui passo l'oggetto
+        viewBiblioteca.getTabLibri().getBtnCancella().setOnAction(event -> new LibriDialog());  //a cui passo l'oggetto
+        viewBiblioteca.getTabLibri().getBtnCerca().setOnAction(event -> {
+            
+        });
+        viewBiblioteca.getTabLibri().getBtnEliminaFiltri().setOnAction(event -> {
+            viewBiblioteca.getTabLibri().getTxfFiltroRicerca().clear();
+            //ripristino della tabella
+        });
     }
     
     /**
     * @brief Inizializza gli event handlers che riguardano Utenti
     */
     private void inizializzaEventHandlersUtenti() {
-        
+        viewBiblioteca.getTabUtenti().getBtnAggiungi().setOnAction(event -> new UtentiDialog());
+        viewBiblioteca.getTabUtenti().getBtnModifica().setOnAction(event -> new UtentiDialog());  //a cui passo l'oggetto
+        viewBiblioteca.getTabUtenti().getBtnCancella().setOnAction(event -> new UtentiDialog());  //a cui passo l'oggetto
+        viewBiblioteca.getTabUtenti().getBtnCerca().setOnAction(event -> {
+            
+        });
+        viewBiblioteca.getTabUtenti().getBtnEliminaFiltri().setOnAction(event -> {
+            viewBiblioteca.getTabUtenti().getTxfFiltroRicerca().clear();
+            //ripristino della tabella
+        });
     }
     
     /**
     * @brief Inizializza gli event handlers che riguardano Prestiti
     */
     private void inizializzaEventHandlersPrestiti() {
-        
+        //viewBiblioteca.getTabPrestiti().getBtnAggiungi().setOnAction(event -> new PrestitiDialog());
+        //viewBiblioteca.getTabPrestiti().getBtnModifica().setOnAction(event -> new PrestitiDialog());  //a cui passo l'oggetto
+        viewBiblioteca.getTabPrestiti().getBtnCerca().setOnAction(event -> {
+            
+        });
+        viewBiblioteca.getTabPrestiti().getBtnEliminaFiltri().setOnAction(event -> {
+            viewBiblioteca.getTabPrestiti().getTxfFiltroRicerca().clear();
+            //ripristino della tabella
+        });
     }
     
     /**
