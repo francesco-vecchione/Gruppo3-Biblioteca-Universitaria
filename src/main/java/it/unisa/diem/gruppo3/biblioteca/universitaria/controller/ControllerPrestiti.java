@@ -125,6 +125,7 @@ public class ControllerPrestiti implements ControllerDato {
                 Libro elem = libroSelezionato;
                 elem.prestaCopia();
                 modelLibri.modificaElemento(libroSelezionato, elem);
+                viewBiblioteca.getTabLibri().getTabella().refresh();
             });
 
             dialog.getDialog().showAndWait();
@@ -154,12 +155,14 @@ public class ControllerPrestiti implements ControllerDato {
                 Prestito elemPrestito = target;
                 elemPrestito.registraRestituzione();
                 modelPrestiti.modificaElemento(target, elemPrestito);
+                viewBiblioteca.getTabPrestiti().getTabella().refresh();
                 
                 // Aggiorna numero di copie libro
                 Libro libroInPrestito = modelLibri.ricercaElemento(new Libro("", "", 0, elemPrestito.getIsbnPrestito(), 0));
                 Libro elemLibro = libroInPrestito;
                 elemLibro.restituisciCopia();
                 modelLibri.modificaElemento(libroInPrestito, elemLibro);
+                viewBiblioteca.getTabLibri().getTabella().refresh();
             }
         });
     }

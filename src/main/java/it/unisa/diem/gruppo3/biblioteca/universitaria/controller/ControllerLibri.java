@@ -170,8 +170,10 @@ public class ControllerLibri implements ControllerDato {
                     }).size() > 0) {
                     // Se nella lista dei filtrati tramite isbn c'è un prestito che combacia con l'isbn selezionato dalla tableview
                     // e che ha stato attivo, allora posso svolgere l'operazione di azzeramento copie senza levare il libro dall'archivio
-                    target.azzeraCopie();
-                    modelLibri.modificaElemento(target, target);
+                    Libro elem = target;
+                    elem.azzeraCopie();
+                    modelLibri.modificaElemento(target, elem);
+                    viewBiblioteca.getTabLibri().getTabella().refresh();
                     new ErroreAlert("Ho cancellato le copie disponibili in quanto una copia è ancora in presito");
                 }
                 else {

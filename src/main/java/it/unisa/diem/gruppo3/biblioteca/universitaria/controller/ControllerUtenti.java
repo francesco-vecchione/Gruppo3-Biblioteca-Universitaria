@@ -153,6 +153,7 @@ public class ControllerUtenti implements ControllerDato {
                     return;
                 }
                 modelUtenti.rimuoviElemento(target);
+                viewBiblioteca.getTabUtenti().getTabella().refresh();
             }
         });
     }
