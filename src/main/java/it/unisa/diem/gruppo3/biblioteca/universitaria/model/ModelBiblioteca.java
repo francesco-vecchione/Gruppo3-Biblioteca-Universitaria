@@ -207,6 +207,7 @@ public class ModelBiblioteca {
                 prestito.getStatoPrestito().equals(StatoPrestito.ATTIVO)).size() >= MAX_PRESTITI_UTENTE) return false;
         
         libro.prestaCopia();
+        modelLibri.modificaElemento(libro, libro);
         return modelPrestiti.aggiungiElemento(new Prestito(utente.getMatricola(), libro.getIsbn(), LocalDate.now(), dataRestituzione));
     }
     
@@ -216,8 +217,11 @@ public class ModelBiblioteca {
      */
     public void registraRestituzione(Prestito prestito) {
         prestito.registraRestituzione();
+        modelPrestiti.modificaElemento(prestito, prestito); // Salva operazione nella cache
+        
         Libro libroInPrestito = modelLibri.ricercaElemento(new Libro("", "", 0, prestito.getIsbnPrestito(), 0));
         libroInPrestito.restituisciCopia();
+        modelLibri.modificaElemento(libroInPrestito, libroInPrestito);  // Salva operazione nella cache
     }
     
     /**
