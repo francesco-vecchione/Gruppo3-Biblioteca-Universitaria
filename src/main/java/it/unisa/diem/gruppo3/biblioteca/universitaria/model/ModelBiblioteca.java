@@ -81,7 +81,7 @@ public class ModelBiblioteca {
      * @brief Operazione atomica di cancellazione di un libro dall'archivio dei libri
      * 
      * Il metodo si limita ad azzerare il numero di copie del libro se è attualmente
-     * in prestito, altrimenti elimina il record direttamente dall'archivio
+     * in prestito, altrimenti elimina il record direttamente dall'archivio, eliminando anche i prestiti relativi al libro da eliminare
      * 
      * @param[in] libro     Il libro da cancellare
      * @return Ritorna true se è stato possibile cancellare il record del libro dall'archivio, false se il libro era in prestito
@@ -94,6 +94,10 @@ public class ModelBiblioteca {
                     libro.azzeraCopie();
                     return false;
         }
+        //Elimina i prestiti restituiti relativi al libro da eliminare
+        for(Prestito prestito : modelPrestiti.getArchivioFiltrato().filtered(prestito -> prestito.getIsbnPrestito().equals(libro.getIsbn()) && 
+                prestito.getStatoPrestito() == StatoPrestito.RESTITUITO))
+            modelPrestiti.rimuoviElemento(prestito);
         return modelLibri.rimuoviElemento(libro);
     }
 
@@ -145,6 +149,8 @@ public class ModelBiblioteca {
     
     /**
      * @brief Operazione atomica di cancellazione di un utente dall'archivio degli utenti
+     * 
+     * Vengono eliminati anche i prestiti relativi all'utente da cancellare
      * @param[in] utente    L'utente da cancellare nell'archivio
      * @return Ritorna true se l'operazione di cancellazione è andata a buon fine, false altrimenti
      */
@@ -152,6 +158,10 @@ public class ModelBiblioteca {
         if(modelPrestiti.getArchivioFiltrato().filtered(prestito -> prestito.getMatricolaUtente().equals(utente.getMatricola())).size() > 0) {
             return false;
         }
+        //Elimina i prestiti relativi all'utente da eliminare
+        for(Prestito prestito : modelPrestiti.getArchivioFiltrato().filtered(prestito -> prestito.getMatricolaUtente().equals(utente.getMatricola()) && 
+                prestito.getStatoPrestito() == StatoPrestito.RESTITUITO))
+            modelPrestiti.rimuoviElemento(prestito);
         return modelUtenti.rimuoviElemento(utente);
     }
     
