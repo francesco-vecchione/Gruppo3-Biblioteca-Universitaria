@@ -53,19 +53,6 @@ public class AppController {
     private ViewBiblioteca viewBiblioteca;
 
     /**
-     * @brief La view che astrae la finestra di log in visualizzata prima
-     * dell'apertura della finestra principale
-     */
-    private LoginDialog stageLogIn;
-
-    /**
-     * @brief La view che astrae la finestra di sign up e la finestra di
-     * recupero password; le due differenziano solo per il titolo della finestra
-     * e un'etichetta descrittiva
-     */
-    private CreazionePasswordDialog stageCreazionePassword;
-
-    /**
      * @brief Controller specifico per la gestione degli eventi legati ai libri
      */
     private ControllerDato controllerLibri;
