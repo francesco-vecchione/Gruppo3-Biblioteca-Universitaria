@@ -1,6 +1,5 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.controller;
 
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Libro;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelArchivio;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
@@ -16,8 +15,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 
 /**
- * @brief
+ * @file
  * @author gruppo 3
+ * @brief Classe che si occupa dell'inizializzazione degli event handlers per gli utenti
  */
 public class ControllerUtenti implements ControllerDato {
     /**

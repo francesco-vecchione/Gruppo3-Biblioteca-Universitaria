@@ -2,7 +2,6 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.io;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.EOFException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;

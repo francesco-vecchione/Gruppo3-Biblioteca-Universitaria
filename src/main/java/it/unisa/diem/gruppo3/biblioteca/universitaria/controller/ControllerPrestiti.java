@@ -18,8 +18,9 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 
 /**
- * 
+ * @file
  * @author gruppo 3
+ * @brief Classe che si occupa dell'inizializzazione degli event handlers per i prestiti
  */
 public class ControllerPrestiti implements ControllerDato {
     
