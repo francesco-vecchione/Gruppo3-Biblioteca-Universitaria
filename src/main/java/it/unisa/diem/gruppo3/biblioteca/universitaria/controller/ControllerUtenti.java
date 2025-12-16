@@ -1,14 +1,11 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.controller;
 
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelArchivio;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelBiblioteca;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ConfermaAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ErroreAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.TabArchivioUtenti;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.UtentiDialog;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -28,24 +25,19 @@ public class ControllerUtenti implements ControllerDato {
     private ModelBiblioteca modelBiblioteca;
     
     /**
-     * @brief La view che astrae la finestra principale della pagine dove sono
-     * presenti le tab degli archivi dei libri, degli utenti e dei prestiti
+     * @brief La view che astrae la tab per la gestione degli utenti
      */
     private TabArchivioUtenti tabArchivioUtenti;
     
-    
     /**
      * @brief Costruttore che imposta le reference ai valori passati per parametro
-     * @param[in] modelUtenti       Il modello di archivio degli utenti a cui si rifà l'applicazione
-     * @param[in] modelPrestiti     Il modello di archivio dei prestiti a cui si rifà l'applicazione
-     * @param[in] viewBiblioteca    La vista principale dell'applicazione
-     * @param[in] popUpDialog       La finestra di pop up legata alla tab dei libri
+     * @param[in] modelBiblioteca           Il modello di biblioteca accessibile al controller
+     * @param[in] tabArchivioUtenti          La vista principale sulla tab della gestione degli utenti
      */
     public ControllerUtenti(ModelBiblioteca modelBiblioteca, TabArchivioUtenti tabArchivioUtenti) {
         this.modelBiblioteca = modelBiblioteca;
         this.tabArchivioUtenti = tabArchivioUtenti;
     }
-    
     
      /**
      * @brief Contratto ereditato dall'interfaccia ControllerDato - Inizializza gli event handlers che riguardano gli utenti

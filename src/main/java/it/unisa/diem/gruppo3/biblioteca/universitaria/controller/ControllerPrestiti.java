@@ -8,7 +8,6 @@ import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ConfermaAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ErroreAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.PrestitiDialog;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.TabArchivioPrestiti;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,24 +28,19 @@ public class ControllerPrestiti implements ControllerDato {
     private ModelBiblioteca modelBiblioteca;
     
     /**
-     * @brief La view che astrae la finestra principale della pagine dove sono
-     * presenti le tab degli archivi dei libri, degli utenti e dei prestiti
+     * @brief La view che astrae la tab per la gestione dei prestiti
      */
     private TabArchivioPrestiti tabArchivioPrestiti;
     
     /**
      * @brief Costruttore che imposta le reference ai valori passati per parametro
-     * @param[in] modelPrestiti     Il modello di archivio dei prestiti a cui si rifà l'applicazione
-     * @param[in] modelLibri        Il modello di archivio dei libri a cui si rifà l'applicazione
-     * @param[in] modelUtenti       Il modello di archivio degli utenti a cui si rifa l'applicazione
-     * @param[in] viewBiblioteca    La vista principale dell'applicazione
+     * @param[in] modelBiblioteca           Il modello di biblioteca accessibile al controller
+     * @param[in] tabArchivioPrestiti       La vista principale sulla tab della gestione dei prestiti
      */
     public ControllerPrestiti(ModelBiblioteca modelBiblioteca, TabArchivioPrestiti tabArchivioPrestiti) {
         this.modelBiblioteca = modelBiblioteca;
         this.tabArchivioPrestiti = tabArchivioPrestiti;
-    }    
-   
-    
+    }     
     
     /**
      * @brief Contratto ereditato dall'interfaccia ControllerDato - Inizializza gli event handlers che riguardano i prestiti

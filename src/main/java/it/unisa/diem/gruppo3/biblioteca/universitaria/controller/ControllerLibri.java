@@ -25,16 +25,14 @@ public class ControllerLibri implements ControllerDato {
     private ModelBiblioteca modelBiblioteca;
     
     /**
-     * @brief La view che astrae la finestra principale della pagine dove sono
-     * presenti le tab degli archivi dei libri, degli utenti e dei prestiti
+     * @brief La view che astrae la tab per la gestione dei libri
      */
     private TabArchivioLibri tabArchivioLibri;
     
     /**
      * @brief Costruttore che imposta le reference ai valori passati per parametro
-     * @param[in] modelLibri        Il modello di archivio dei libri a cui si rifà l'applicazione
-     * @param[in] modelPrestiti     Il modello di archivio dei prestiti a cui si rifà l'applicazione
-     * @param[in] viewBiblioteca    La vista principale dell'applicazione
+     * @param[in] modelBiblioteca           Il modello di biblioteca accessibile al controller
+     * @param[in] tabArchivioLibri          La vista principale sulla tab della gestione dei libri
      */
     public ControllerLibri(ModelBiblioteca modelBiblioteca, TabArchivioLibri tabArchivioLibri) {
         this.modelBiblioteca = modelBiblioteca;
