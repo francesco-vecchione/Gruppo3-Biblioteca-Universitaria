@@ -143,7 +143,7 @@ public class Prestito implements Dato {
         if(this.getClass() != o.getClass()) return false;
         
         Prestito tmp = (Prestito) o;
-        return (this.getMatricolaUtente().equals(tmp.getMatricolaUtente())) && (this.getIsbnPrestito().equals(tmp.getIsbnPrestito())) ;
+        return (this.getMatricolaUtente().equals(tmp.getMatricolaUtente())) && (this.getIsbnPrestito().equals(tmp.getIsbnPrestito()) && (this.getStatoPrestito() == tmp.getStatoPrestito())) ;
     }
     
     /**

@@ -1,7 +1,6 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 
 import javafx.stage.Stage;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.extension.ExtendWith;

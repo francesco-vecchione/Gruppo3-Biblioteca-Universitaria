@@ -44,7 +44,7 @@ public class AppController {
     /**
      * @brief Il model che astrae il concetto di archivio utenti
      */
-    private /*final*/ ModelArchivio<Utente> modelUtenti;
+    private ModelArchivio<Utente> modelUtenti;
 
     /**
      * @brief Il model che astrae il concetto di archivio prestiti
@@ -63,24 +63,6 @@ public class AppController {
     private ViewBiblioteca viewBiblioteca;
 
     /**
-     * @brief La view che astrae la finestra di pop up generica generabile dal
-     * premere uno dei bottoni della tab dei libri
-     */
-    private LibriDialog popUpLibri;
-
-    /**
-     * @brief La view che astrae la finestra di pop up generica generabile dal
-     * premere uno dei bottoni della tab degli utenti
-     */
-    private UtentiDialog popUpUtenti;
-
-    /**
-     * @brief La view che astrae la finestra di pop up generica generabile dal
-     * premere uno dei bottoni della tab dei prestiti
-     */
-    private UtentiDialog popUpPrestiti;
-
-    /**
      * @brief La view che astrae la finestra di log in visualizzata prima
      * dell'apertura della finestra principale
      */
@@ -93,6 +75,22 @@ public class AppController {
      */
     private CreazionePasswordDialog stageCreazionePassword;
 
+    /**
+     * @brief Controller specifico per la gestione degli eventi legati ai libri
+     */
+    private ControllerDato controllerLibri;
+    
+    /**
+     * @brief Controller specifico per la gestione degli eventi legati agli utenti
+     */
+    private ControllerDato controllerUtenti;
+    
+    /**
+     * @brief Controller specifico per la gestione degli eventi legati ai prestiti
+     */
+    private ControllerDato controllerPrestiti;
+    
+    
     /**
      * @brief È il costruttore di AppController, che accetta una reference di
      * tipo Stage come parametro
@@ -120,8 +118,13 @@ public class AppController {
             modelLibri.apriArchivio();
             modelUtenti.apriArchivio();
             modelPrestiti.apriArchivio();
-
+            
             viewBiblioteca = new ViewBiblioteca(stage, modelLibri.getArchivioFiltrato(), modelUtenti.getArchivioFiltrato(), modelPrestiti.getArchivioFiltrato());
+
+            controllerLibri = new ControllerLibri(modelLibri, modelPrestiti, viewBiblioteca);
+            controllerUtenti = new ControllerUtenti(modelUtenti, modelPrestiti, viewBiblioteca);
+            controllerPrestiti = new ControllerPrestiti(modelPrestiti, modelLibri, modelUtenti, viewBiblioteca);
+
             inizializzaEventHandlers();
             viewBiblioteca.getStage().show();
         }
@@ -247,353 +250,9 @@ public class AppController {
             chiusura.showAndWait();
         });
 
-        inizializzaEventHandlersPrestiti();
-        inizializzaEventHandlersLibri();
-        inizializzaEventHandlersUtenti();
+        controllerLibri.inizializzaEventHandlersSpecifici();
+        controllerUtenti.inizializzaEventHandlersSpecifici();
+        controllerPrestiti.inizializzaEventHandlersSpecifici();
     }
 
-    /**
-     * @brief Inizializza gli event handlers che riguardano Libri
-     */
-    private void inizializzaEventHandlersLibri() {
-        //Aggiunta Libro
-        viewBiblioteca.getTabLibri().getBtnAggiungi().setOnAction(event -> {
-            LibriDialog dialog = new LibriDialog();
-
-            //Tasto OK : bindings
-            Button btnOk = dialog.getBtnOk();
-            btnOk.disableProperty().bind(
-                    dialog.getTxfIsbn().textProperty().isEmpty()
-                            .or(dialog.getTxfTitolo().textProperty().isEmpty())
-                            .or(dialog.getTxfAutori().textProperty().isEmpty())
-                            .or(dialog.getTxfAnnoPubblicazione().textProperty().isEmpty())
-                            .or(dialog.getTxfNumCopie().textProperty().isEmpty()));
-
-            btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
-                //Raccolta Elementi per Inserimento
-                try {
-                    Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText());
-                    Integer.parseInt(dialog.getTxfNumCopie().getText());
-                } catch (NumberFormatException e) {
-                    new ErroreAlert("Il formato dei dati che hai inserito non è corretto");
-                    eventOk.consume();
-                    return;
-                }
-                Libro nuovoLibro = new Libro(dialog.getTxfTitolo().getText(), dialog.getTxfAutori().getText(), Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText()), dialog.getTxfIsbn().getText(), Integer.parseInt(dialog.getTxfNumCopie().getText()));
-                if (!modelLibri.aggiungiElemento(nuovoLibro)) {
-                    if (!nuovoLibro.isValid()) {
-                        new ErroreAlert("Il formato dell'ISBN non è corretto");
-                    } else {
-                        new ErroreAlert("Il libro è già presente in archivio");
-                    }
-                    eventOk.consume();
-                    return;
-                }
-            });
-
-            dialog.getDialog().showAndWait();
-        });
-
-        //Modifica Libro
-        viewBiblioteca.getTabLibri().getBtnModifica().setOnAction(event -> {
-            Libro target = viewBiblioteca.getTabLibri().getSelectedItem();
-            if (target == null) {
-                new ErroreAlert("Devi prima selezionare un Libro");
-                return;
-            }
-            LibriDialog dialog = new LibriDialog(target);
-
-            //Tasto OK : bindings
-            Button btnOk = dialog.getBtnOk();
-            btnOk.disableProperty().bind(
-                    dialog.getTxfIsbn().textProperty().isEmpty()
-                            .or(dialog.getTxfTitolo().textProperty().isEmpty())
-                            .or(dialog.getTxfAutori().textProperty().isEmpty())
-                            .or(dialog.getTxfAnnoPubblicazione().textProperty().isEmpty())
-                            .or(dialog.getTxfNumCopie().textProperty().isEmpty()));
-
-            btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
-                //Raccolta Dati per la Modifica
-                try {
-                    Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText());
-                    Integer.parseInt(dialog.getTxfNumCopie().getText());
-                } catch (NumberFormatException e) {
-                    new ErroreAlert("Il formato dei dati che hai inserito non è corretto");
-                    eventOk.consume();
-                    return;
-                }
-                Libro nuovoLibro = new Libro(dialog.getTxfTitolo().getText(), dialog.getTxfAutori().getText(), Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText()), dialog.getTxfIsbn().getText(), Integer.parseInt(dialog.getTxfNumCopie().getText()));
-                if (!modelLibri.modificaElemento(target, nuovoLibro)) {
-                    if (!nuovoLibro.isValid()) {
-                        new ErroreAlert("Il formato dell'ISBN non è corretto");
-                    } else {
-                        new ErroreAlert("Il libro è già presente in archivio");
-                    }
-                    eventOk.consume();
-                    return;
-                }
-            });
-            dialog.getDialog().showAndWait();
-        });
-
-        //Cancellazione
-        viewBiblioteca.getTabLibri().getBtnCancella().setOnAction(event -> {
-            Libro target = viewBiblioteca.getTabLibri().getSelectedItem();
-            if (target == null) {
-                new ErroreAlert("Devi prima selezionare un Libro");
-            }
-
-            //Conferma
-            ConfermaAlert alert = new ConfermaAlert("Vuoi davvero eliminare " + target.toString());
-            if (alert.getEsito()) {
-                if(modelPrestiti.getArchivioFiltrato().filtered(prestito -> prestito.getIsbnPrestito().equals(target.getIsbn())).size() > 0) {
-                    target.azzeraCopie();
-                    new ErroreAlert("Ho cancellato le copie disponibili in quanto una copia è ancora in presito");
-                }
-                else {
-                    modelLibri.rimuoviElemento(target);
-                }
-            }
-        });
-
-        //Ricerca
-        viewBiblioteca.getTabLibri().getBtnCerca().setOnAction(event -> {
-            String testoInserito = viewBiblioteca.getTabLibri().getTxfFiltroRicerca().getText();
-            String[] filtri = testoInserito.split(" ");
-            List<Predicate<Libro>> filtriPredicate = new ArrayList<>();
-            for (String filtro : filtri) {
-                filtriPredicate.add(libro -> libro.toString().toLowerCase().contains(filtro.toLowerCase()));
-            }
-            FilteredList<Libro> cercati = modelLibri.getArchivioFiltrato().filtered(
-                    filtriPredicate.stream()
-                            .reduce(Predicate::and)
-                            .orElse(x -> true) //se non ci sonon filtri resituisce tutto
-            );
-            viewBiblioteca.getTabLibri().getTabella().setItems(cercati);
-        });
-
-        //Elimina Filtri
-        viewBiblioteca.getTabLibri().getBtnEliminaFiltri().setOnAction(event -> {
-            viewBiblioteca.getTabLibri().getTxfFiltroRicerca().clear();
-            viewBiblioteca.getTabLibri().getTabella().setItems(modelLibri.getArchivioFiltrato());
-        });
-    }
-
-    /**
-     * @brief Inizializza gli event handlers che riguardano Utenti
-     */
-    private void inizializzaEventHandlersUtenti() {
-        //Aggiunta Utente
-        viewBiblioteca.getTabUtenti().getBtnAggiungi().setOnAction(event -> {
-            UtentiDialog dialog = new UtentiDialog();
-
-            //Tasto OK : bindings
-            Button btnOk = dialog.getBtnOk();
-            btnOk.disableProperty().bind(
-                    dialog.getTxfMatricola().textProperty().isEmpty()
-                            .or(dialog.getTxfNome().textProperty().isEmpty())
-                            .or(dialog.getTxfCognome().textProperty().isEmpty())
-                            .or(dialog.getTxfEmail().textProperty().isEmpty()));
-
-            btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
-                Utente nuovoUtente = new Utente(dialog.getTxfNome().getText(), dialog.getTxfCognome().getText(), dialog.getTxfMatricola().getText(), dialog.getTxfEmail().getText());
-                if (!modelUtenti.aggiungiElemento(nuovoUtente)) {
-                    if (!nuovoUtente.isValid()) {
-                        new ErroreAlert("Il formato della Matricola o dell'Email non è corretto");
-                    } else {
-                        new ErroreAlert("Utente già presente in archivio");
-                    }
-                    eventOk.consume();
-                    return;
-                }
-            });
-
-            dialog.getDialog().showAndWait();
-        });
-
-        //Modifica Utente
-        viewBiblioteca.getTabUtenti().getBtnModifica().setOnAction(event -> {
-            Utente target = viewBiblioteca.getTabUtenti().getSelectedItem();
-            if (target == null) {
-                new ErroreAlert("Devi prima selezionare un Utente");
-                return;
-            }
-            UtentiDialog dialog = new UtentiDialog(target);
-
-            //Tasto OK : bindings
-            Button btnOk = dialog.getBtnOk();
-            btnOk.disableProperty().bind(
-                    dialog.getTxfMatricola().textProperty().isEmpty()
-                            .or(dialog.getTxfNome().textProperty().isEmpty())
-                            .or(dialog.getTxfCognome().textProperty().isEmpty())
-                            .or(dialog.getTxfEmail().textProperty().isEmpty()));
-
-            btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
-                //Raccolta Dati per la Modifica
-                Utente nuovoUtente = new Utente(dialog.getTxfNome().getText(), dialog.getTxfCognome().getText(), dialog.getTxfMatricola().getText(), dialog.getTxfEmail().getText());
-                if (!modelUtenti.modificaElemento(target, nuovoUtente)) {
-                    if (!nuovoUtente.isValid()) {
-                        new ErroreAlert("Il formato della Matricola o dell'Email non è corretto");
-                    } else {
-                        new ErroreAlert("Utente già presente in archivio");
-                    }
-                    eventOk.consume();
-                    return;
-                }
-            });
-            dialog.getDialog().showAndWait();
-        });
-
-        //Cancellazione
-        viewBiblioteca.getTabUtenti().getBtnCancella().setOnAction(event -> {
-            Utente target = viewBiblioteca.getTabUtenti().getSelectedItem();
-            if (target == null) {
-                new ErroreAlert("Devi prima selezionare un Utente");
-                return;
-            }
-
-            //Conferma
-            ConfermaAlert alert = new ConfermaAlert("Vuoi davvero eliminare " + target.toString());
-            if (alert.getEsito()) {
-                if(modelPrestiti.getArchivioFiltrato().filtered(prestito -> prestito.getMatricolaUtente().equals(target.getMatricola())).size() > 0) {
-                    new ErroreAlert("Non è possibile eliminare un utente che ha un Prestito in atto");
-                    return;
-                }
-                modelUtenti.rimuoviElemento(target);
-            }
-        });
-
-        //Ricerca
-        viewBiblioteca.getTabUtenti().getBtnCerca().setOnAction(event -> {
-            String testoInserito = viewBiblioteca.getTabUtenti().getTxfFiltroRicerca().getText();
-            String[] filtri = testoInserito.split(" ");
-            List<Predicate<Utente>> filtriPredicate = new ArrayList<>();
-            for (String filtro : filtri) {
-                filtriPredicate.add(utente -> utente.toString().toLowerCase().contains(filtro.toLowerCase()));
-            }
-            FilteredList<Utente> cercati = modelUtenti.getArchivioFiltrato().filtered(
-                    filtriPredicate.stream()
-                            .reduce(Predicate::and)
-                            .orElse(x -> true) //se non ci sonon filtri resituisce tutto
-            );
-            viewBiblioteca.getTabUtenti().getTabella().setItems(cercati);
-        });
-
-        //Elimina Filtri
-        viewBiblioteca.getTabUtenti().getBtnEliminaFiltri().setOnAction(event -> {
-            viewBiblioteca.getTabUtenti().getTxfFiltroRicerca().clear();
-            viewBiblioteca.getTabUtenti().getTabella().setItems(modelUtenti.getArchivioFiltrato());
-        });
-    }
-
-    /**
-     * @brief Inizializza gli event handlers che riguardano Prestiti
-     */
-    private void inizializzaEventHandlersPrestiti() {
-        //Registrazione Prestito
-        viewBiblioteca.getTabPrestiti().getBtnAggiungi().setOnAction(event -> {
-            FilteredList<Libro> libriPrestabili = modelLibri.getArchivioFiltrato().filtered(libro->
-                    libro.getNumeroCopieDisponibili() > 0);
-            FilteredList<Utente> utentiPrestabili= modelUtenti.getArchivioFiltrato().filtered(utente->
-                    modelPrestiti.getArchivioFiltrato().stream()
-                            .filter(prestito
-                                    -> prestito.getStatoPrestito().equals(StatoPrestito.ATTIVO)
-                            && prestito.getMatricolaUtente().equals(utente.getMatricola())
-                            )
-                            .count() < 3
-                    );
-
-            PrestitiDialog dialog = new PrestitiDialog(libriPrestabili, utentiPrestabili);
-
-            // Tasto OK : bindings
-            Button btnOk = dialog.getBtnOk();
-            btnOk.disableProperty().bind(
-                    dialog.getCbLibri().valueProperty().isNull()
-                            .or(dialog.getCbUtenti().valueProperty().isNull())
-                            .or(dialog.getDatePicker().valueProperty().isNull())
-            );
-
-            btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
-                // Raccolta dati dalla dialog
-                Libro libroSelezionato = dialog.getCbLibri().getValue();
-                Utente utenteSelezionato = dialog.getCbUtenti().getValue();
-                LocalDate dataPrestito = dialog.getDatePicker().getValue();
-
-                if (libroSelezionato == null || utenteSelezionato == null || dataPrestito == null) {
-                    new ErroreAlert("Devi selezionare Libro, Utente e Data");
-                    eventOk.consume();
-                    return;
-                }
-
-                Prestito nuovoPrestito = new Prestito(utenteSelezionato.getMatricola(), libroSelezionato.getIsbn(), LocalDate.now(), dataPrestito);
-
-                if (!modelPrestiti.aggiungiElemento(nuovoPrestito)) {
-                    if (!nuovoPrestito.isValid()) {
-                        new ErroreAlert("Data restituzione invalida, scegliere una data successiva a quella odierna");
-                    } else {
-                        new ErroreAlert("L'utente non può richiedere lo stesso libro mentre già lo possiede");
-                    }
-                    eventOk.consume();
-                    return;
-                }
-                
-                // Aggiorna copie disponibili
-                Libro elem = libroSelezionato;
-                elem.prestaCopia();
-                modelLibri.modificaElemento(libroSelezionato, elem);
-            });
-
-            dialog.getDialog().showAndWait();
-        });
-
-        // Registra Restituzione
-        viewBiblioteca.getTabPrestiti().getBtnModifica().setOnAction(event -> {
-            Prestito target = viewBiblioteca.getTabPrestiti().getSelectedItem();
-
-            if (target == null) {
-                new ErroreAlert("Devi prima selezionare un Prestito");
-                return;
-            }
-
-            // Conferma
-            ConfermaAlert alert = new ConfermaAlert("Vuoi Registrare la Restituzione del Prestito?");
-
-            // Attendi la risposta dell'utente
-            if (alert.getEsito()) { // getEsito() deve restituire true se confermato
-                
-                // Aggiorna stato prestito
-                Prestito elemPrestito = target;
-                elemPrestito.registraRestituzione();
-                modelPrestiti.modificaElemento(target, elemPrestito);
-                
-                // Aggiorna numero di copie libro
-                Libro libroInPrestito = modelLibri.ricercaElemento(new Libro("", "", 0, elemPrestito.getIsbnPrestito(), 0));
-                Libro elemLibro = libroInPrestito;
-                elemLibro.restituisciCopia();
-                modelLibri.modificaElemento(libroInPrestito, elemLibro);
-            }
-        });
-
-        //Ricerca
-        viewBiblioteca.getTabPrestiti().getBtnCerca().setOnAction(event -> {
-            String testoInserito = viewBiblioteca.getTabPrestiti().getTxfFiltroRicerca().getText();
-            String[] filtri = testoInserito.split(" ");
-            List<Predicate<Prestito>> filtriPredicate = new ArrayList<>();
-            for (String filtro : filtri) {
-                filtriPredicate.add(prestito -> prestito.toString().toLowerCase().contains(filtro.toLowerCase()));
-            }
-            FilteredList<Prestito> cercati = modelPrestiti.getArchivioFiltrato().filtered(
-                    filtriPredicate.stream()
-                            .reduce(Predicate::and)
-                            .orElse(x -> true) //se non ci sonon filtri resituisce tutto
-            );
-            viewBiblioteca.getTabPrestiti().getTabella().setItems(cercati);
-        });
-
-        //Elimina Filtri
-        viewBiblioteca.getTabPrestiti().getBtnEliminaFiltri().setOnAction(event -> {
-            viewBiblioteca.getTabPrestiti().getTxfFiltroRicerca().clear();
-            viewBiblioteca.getTabPrestiti().getTabella().setItems(modelPrestiti.getArchivioFiltrato());
-        });
-    }
 }
