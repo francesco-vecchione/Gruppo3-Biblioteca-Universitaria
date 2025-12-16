@@ -63,7 +63,7 @@ public class AppController {
      * di inizializzare gli event handlers e i bindings
      */
     public AppController(Stage stage) {
-        modelPassword = new Password("Files/cassaforte");
+        modelPassword = new Password("files/cassaforte");
         
         boolean accessoRiuscito = false;
         if (!modelPassword.esistePassword()) {
