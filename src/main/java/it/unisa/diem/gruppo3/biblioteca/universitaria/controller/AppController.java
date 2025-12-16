@@ -1,11 +1,8 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.controller;
 
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Libro;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelArchivio;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelBiblioteca;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelPassword;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Password;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.CreazionePasswordDialog;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ErroreAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.LoginDialog;
@@ -27,19 +24,9 @@ import javafx.stage.Stage;
 public class AppController {
 
     /**
-     * @brief Il model che astrae il concetto di archivio libri
+     * @brief Il model che astrae le funzionalità necessarie alla gestione della biblioteca
      */
-    private ModelArchivio<Libro> modelLibri;
-
-    /**
-     * @brief Il model che astrae il concetto di archivio utenti
-     */
-    private ModelArchivio<Utente> modelUtenti;
-
-    /**
-     * @brief Il model che astrae il concetto di archivio prestiti
-     */
-    private ModelArchivio<Prestito> modelPrestiti;
+    private ModelBiblioteca modelBiblioteca;
 
     /**
      * @brief Il model che astrae il contenitore della password
@@ -86,21 +73,13 @@ public class AppController {
         }
 
         if (accessoRiuscito) {
-            // E' inutile aprire gli archivi se non si fa l'accesso
+            modelBiblioteca = new ModelBiblioteca();
             
-            modelLibri = new ModelArchivio<>("files/archivioLibri");
-            modelUtenti = new ModelArchivio<>("files/archivioUtenti");
-            modelPrestiti = new ModelArchivio<>("files/archivioPrestiti");
-            
-            modelLibri.apriArchivio();
-            modelUtenti.apriArchivio();
-            modelPrestiti.apriArchivio();
-            
-            viewBiblioteca = new ViewBiblioteca(stage, modelLibri.getArchivioFiltrato(), modelUtenti.getArchivioFiltrato(), modelPrestiti.getArchivioFiltrato());
+            viewBiblioteca = new ViewBiblioteca(stage, modelBiblioteca.getArchivioLibri(), modelBiblioteca.getArchivioUtenti(), modelBiblioteca.getArchivioPrestiti());
 
-            controllerLibri = new ControllerLibri(modelLibri, modelPrestiti, viewBiblioteca);
-            controllerUtenti = new ControllerUtenti(modelUtenti, modelPrestiti, viewBiblioteca);
-            controllerPrestiti = new ControllerPrestiti(modelPrestiti, modelLibri, modelUtenti, viewBiblioteca);
+            controllerLibri = new ControllerLibri(modelBiblioteca, viewBiblioteca.getTabLibri());
+            controllerUtenti = new ControllerUtenti(modelBiblioteca, viewBiblioteca.getTabUtenti());
+            controllerPrestiti = new ControllerPrestiti(modelBiblioteca, viewBiblioteca.getTabPrestiti());
 
             inizializzaEventHandlers();
             viewBiblioteca.getStage().show();
@@ -192,9 +171,9 @@ public class AppController {
         // Sulla main view, una volta premuto la x, l'archivio viene salvato automaticamente
         viewBiblioteca.getStage().setOnCloseRequest(event -> {
             
-            boolean chiusuraCorrettaLibri = modelLibri.chiudiArchivio();
-            boolean chiusuraCorrettaUtenti = modelUtenti.chiudiArchivio();
-            boolean chiusuraCorrettaPrestiti = modelPrestiti.chiudiArchivio();
+            boolean chiusuraCorrettaLibri = modelBiblioteca.chiudiModelLibri();
+            boolean chiusuraCorrettaUtenti = modelBiblioteca.chiudiModelUtenti();
+            boolean chiusuraCorrettaPrestiti = modelBiblioteca.chiudiModelPrestiti();
 
             Alert chiusura = new Alert(Alert.AlertType.NONE);
             if (!chiusuraCorrettaLibri || !chiusuraCorrettaUtenti || !chiusuraCorrettaPrestiti) {
