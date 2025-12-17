@@ -48,10 +48,8 @@ public class ViewBiblioteca {
     public ViewBiblioteca(Stage stage, FilteredList<Libro> listaOsservabileLibri, FilteredList<Utente> listaOsservabileUtenti, FilteredList<Prestito> listaOsservabilePrestiti) {
         this.stage = stage;
         
-        FilteredList<Prestito> prestitiStampabili = listaOsservabilePrestiti.filtered(prestito -> prestito.getStatoPrestito().equals(StatoPrestito.ATTIVO));
-        
         TabPane tabPane = new TabPane();
-        tabPrestiti = new TabArchivioPrestiti(prestitiStampabili);
+        tabPrestiti = new TabArchivioPrestiti(listaOsservabilePrestiti);
         tabUtenti = new TabArchivioUtenti(listaOsservabileUtenti);
         tabLibri = new TabArchivioLibri(listaOsservabileLibri);
         tabPane.getTabs().addAll(tabPrestiti.getTab(), tabUtenti.getTab(), tabLibri.getTab());

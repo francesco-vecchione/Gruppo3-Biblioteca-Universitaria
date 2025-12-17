@@ -1,12 +1,11 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.controller;
 
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelArchivio;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelBiblioteca;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ConfermaAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ErroreAlert;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.view.TabArchivioUtenti;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.UtentiDialog;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -21,35 +20,24 @@ import javafx.scene.control.Button;
  */
 public class ControllerUtenti implements ControllerDato {
     /**
-     * @brief Il model che astrae il concetto di archivio utenti
+     * @brief Il model che astrae le funzionalità necessarie alla gestione della biblioteca
      */
-    private ModelArchivio<Utente> modelUtenti;
+    private ModelBiblioteca modelBiblioteca;
     
     /**
-     * @brief Il model che astrae il concetto di archivio prestiti
+     * @brief La view che astrae la tab per la gestione degli utenti
      */
-    private ModelArchivio<Prestito> modelPrestiti;
-    
-    /**
-     * @brief La view che astrae la finestra principale della pagine dove sono
-     * presenti le tab degli archivi dei libri, degli utenti e dei prestiti
-     */
-    private ViewBiblioteca viewBiblioteca;
-    
+    private TabArchivioUtenti tabArchivioUtenti;
     
     /**
      * @brief Costruttore che imposta le reference ai valori passati per parametro
-     * @param[in] modelUtenti       Il modello di archivio degli utenti a cui si rifà l'applicazione
-     * @param[in] modelPrestiti     Il modello di archivio dei prestiti a cui si rifà l'applicazione
-     * @param[in] viewBiblioteca    La vista principale dell'applicazione
-     * @param[in] popUpDialog       La finestra di pop up legata alla tab dei libri
+     * @param[in] modelBiblioteca           Il modello di biblioteca accessibile al controller
+     * @param[in] tabArchivioUtenti          La vista principale sulla tab della gestione degli utenti
      */
-    public ControllerUtenti(ModelArchivio<Utente> modelUtenti, ModelArchivio<Prestito> modelPrestiti, ViewBiblioteca viewBiblioteca) {
-        this.modelUtenti = modelUtenti;
-        this.modelPrestiti = modelPrestiti;
-        this.viewBiblioteca = viewBiblioteca;
+    public ControllerUtenti(ModelBiblioteca modelBiblioteca, TabArchivioUtenti tabArchivioUtenti) {
+        this.modelBiblioteca = modelBiblioteca;
+        this.tabArchivioUtenti = tabArchivioUtenti;
     }
-    
     
      /**
      * @brief Contratto ereditato dall'interfaccia ControllerDato - Inizializza gli event handlers che riguardano gli utenti
@@ -67,7 +55,7 @@ public class ControllerUtenti implements ControllerDato {
      */    
     private void EventHandlersAggiungiUtente() {
         
-        viewBiblioteca.getTabUtenti().getBtnAggiungi().setOnAction(event -> {
+        tabArchivioUtenti.getBtnAggiungi().setOnAction(event -> {
             UtentiDialog dialog = new UtentiDialog();
 
             //Tasto OK : bindings
@@ -80,7 +68,7 @@ public class ControllerUtenti implements ControllerDato {
 
             btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
                 Utente nuovoUtente = new Utente(dialog.getTxfNome().getText(), dialog.getTxfCognome().getText(), dialog.getTxfMatricola().getText(), dialog.getTxfEmail().getText());
-                if (!modelUtenti.aggiungiElemento(nuovoUtente)) {
+                if (!modelBiblioteca.aggiungUtente(nuovoUtente)) {
                     if (!nuovoUtente.isValid()) {
                         new ErroreAlert("Il formato della Matricola o dell'Email non è corretto");
                     } else {
@@ -100,8 +88,8 @@ public class ControllerUtenti implements ControllerDato {
      */    
     private void EventHandlersModificaUtente() {
         
-        viewBiblioteca.getTabUtenti().getBtnModifica().setOnAction(event -> {
-            Utente target = viewBiblioteca.getTabUtenti().getSelectedItem();
+        tabArchivioUtenti.getBtnModifica().setOnAction(event -> {
+            Utente target = tabArchivioUtenti.getSelectedItem();
             if (target == null) {
                 new ErroreAlert("Devi prima selezionare un Utente");
                 return;
@@ -119,7 +107,7 @@ public class ControllerUtenti implements ControllerDato {
             btnOk.addEventFilter(ActionEvent.ACTION, eventOk -> {
                 //Raccolta Dati per la Modifica
                 Utente nuovoUtente = new Utente(dialog.getTxfNome().getText(), dialog.getTxfCognome().getText(), dialog.getTxfMatricola().getText(), dialog.getTxfEmail().getText());
-                if (!modelUtenti.modificaElemento(target, nuovoUtente)) {
+                if (!modelBiblioteca.modificaUtente(target, nuovoUtente)) {
                     if (!nuovoUtente.isValid()) {
                         new ErroreAlert("Il formato della Matricola o dell'Email non è corretto");
                     } else {
@@ -138,8 +126,8 @@ public class ControllerUtenti implements ControllerDato {
      */    
     private void EventHandlersCancellaUtente() {
 
-        viewBiblioteca.getTabUtenti().getBtnCancella().setOnAction(event -> {
-            Utente target = viewBiblioteca.getTabUtenti().getSelectedItem();
+        tabArchivioUtenti.getBtnCancella().setOnAction(event -> {
+            Utente target = tabArchivioUtenti.getSelectedItem();
             if (target == null) {
                 new ErroreAlert("Devi prima selezionare un Utente");
                 return;
@@ -148,12 +136,11 @@ public class ControllerUtenti implements ControllerDato {
             //Conferma
             ConfermaAlert alert = new ConfermaAlert("Vuoi davvero eliminare " + target.toString());
             if (alert.getEsito()) {
-                if(modelPrestiti.getArchivioFiltrato().filtered(prestito -> prestito.getMatricolaUtente().equals(target.getMatricola())).size() > 0) {
+                if(!modelBiblioteca.cancellaUtente(target)) {
                     new ErroreAlert("Non è possibile eliminare un utente che ha un Prestito in atto");
                     return;
                 }
-                modelUtenti.rimuoviElemento(target);
-                viewBiblioteca.getTabUtenti().getTabella().refresh();
+                tabArchivioUtenti.getTabella().refresh();
             }
         });
     }
@@ -164,25 +151,25 @@ public class ControllerUtenti implements ControllerDato {
      */    
     private void EventHandlersFiltri() {
         //Applica filtri
-        viewBiblioteca.getTabUtenti().getBtnCerca().setOnAction(event -> {
-            String testoInserito = viewBiblioteca.getTabUtenti().getTxfFiltroRicerca().getText();
+        tabArchivioUtenti.getBtnCerca().setOnAction(event -> {
+            String testoInserito = tabArchivioUtenti.getTxfFiltroRicerca().getText();
             String[] filtri = testoInserito.split(" ");
             List<Predicate<Utente>> filtriPredicate = new ArrayList<>();
             for (String filtro : filtri) {
                 filtriPredicate.add(utente -> utente.toString().toLowerCase().contains(filtro.toLowerCase()));
             }
-            FilteredList<Utente> cercati = modelUtenti.getArchivioFiltrato().filtered(
+            FilteredList<Utente> cercati = modelBiblioteca.getArchivioUtenti().filtered(
                     filtriPredicate.stream()
                             .reduce(Predicate::and)
                             .orElse(x -> true) //se non ci sonon filtri resituisce tutto
             );
-            viewBiblioteca.getTabUtenti().getTabella().setItems(cercati);
+            tabArchivioUtenti.getTabella().setItems(cercati);
         });
 
         //Elimina Filtri
-        viewBiblioteca.getTabUtenti().getBtnEliminaFiltri().setOnAction(event -> {
-            viewBiblioteca.getTabUtenti().getTxfFiltroRicerca().clear();
-            viewBiblioteca.getTabUtenti().getTabella().setItems(modelUtenti.getArchivioFiltrato());
+        tabArchivioUtenti.getBtnEliminaFiltri().setOnAction(event -> {
+            tabArchivioUtenti.getTxfFiltroRicerca().clear();
+            tabArchivioUtenti.getTabella().setItems(modelBiblioteca.getArchivioUtenti());
         });
     }
 }

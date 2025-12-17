@@ -1,14 +1,13 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.controller;
 
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Libro;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelArchivio;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelBiblioteca;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.StatoPrestito;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ConfermaAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ErroreAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.PrestitiDialog;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.view.TabArchivioPrestiti;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,43 +22,25 @@ import javafx.scene.control.Button;
  * @brief Classe che si occupa dell'inizializzazione degli event handlers per i prestiti
  */
 public class ControllerPrestiti implements ControllerDato {
+    /**
+     * @brief Il model che astrae le funzionalità necessarie alla gestione della biblioteca
+     */
+    private ModelBiblioteca modelBiblioteca;
     
     /**
-     * @brief Il model che astrae il concetto di archivio prestiti
+     * @brief La view che astrae la tab per la gestione dei prestiti
      */
-    private ModelArchivio<Prestito> modelPrestiti;
-    
-    /**
-     * @brief Il model che astrae il concetto di archivio libri
-     */
-    private ModelArchivio<Libro> modelLibri;
-
-    /**
-     * @brief Il model che astrae il concetto di archivio utenti
-     */
-    private ModelArchivio<Utente> modelUtenti;
-    
-    /**
-     * @brief La view che astrae la finestra principale della pagine dove sono
-     * presenti le tab degli archivi dei libri, degli utenti e dei prestiti
-     */
-    private ViewBiblioteca viewBiblioteca;
+    private TabArchivioPrestiti tabArchivioPrestiti;
     
     /**
      * @brief Costruttore che imposta le reference ai valori passati per parametro
-     * @param[in] modelPrestiti     Il modello di archivio dei prestiti a cui si rifà l'applicazione
-     * @param[in] modelLibri        Il modello di archivio dei libri a cui si rifà l'applicazione
-     * @param[in] modelUtenti       Il modello di archivio degli utenti a cui si rifa l'applicazione
-     * @param[in] viewBiblioteca    La vista principale dell'applicazione
+     * @param[in] modelBiblioteca           Il modello di biblioteca accessibile al controller
+     * @param[in] tabArchivioPrestiti       La vista principale sulla tab della gestione dei prestiti
      */
-    public ControllerPrestiti(ModelArchivio<Prestito> modelPrestiti, ModelArchivio<Libro> modelLibri, ModelArchivio<Utente> modelUtenti, ViewBiblioteca viewBiblioteca) {
-        this.modelPrestiti = modelPrestiti;
-        this.modelLibri = modelLibri;
-        this.modelUtenti = modelUtenti;
-        this.viewBiblioteca = viewBiblioteca;
-    }    
-   
-    
+    public ControllerPrestiti(ModelBiblioteca modelBiblioteca, TabArchivioPrestiti tabArchivioPrestiti) {
+        this.modelBiblioteca = modelBiblioteca;
+        this.tabArchivioPrestiti = tabArchivioPrestiti;
+    }     
     
     /**
      * @brief Contratto ereditato dall'interfaccia ControllerDato - Inizializza gli event handlers che riguardano i prestiti
@@ -76,17 +57,9 @@ public class ControllerPrestiti implements ControllerDato {
      */
     private void EventHandlersRegistraPrestito() {
 
-        viewBiblioteca.getTabPrestiti().getBtnAggiungi().setOnAction(event -> {
-            FilteredList<Libro> libriPrestabili = modelLibri.getArchivioFiltrato().filtered(libro->
-                    libro.getNumeroCopieDisponibili() > 0);
-            FilteredList<Utente> utentiPrestabili= modelUtenti.getArchivioFiltrato().filtered(utente->
-                    modelPrestiti.getArchivioFiltrato().stream()
-                            .filter(prestito
-                                    -> prestito.getStatoPrestito().equals(StatoPrestito.ATTIVO)
-                            && prestito.getMatricolaUtente().equals(utente.getMatricola())
-                            )
-                            .count() < 3
-                    );
+        tabArchivioPrestiti.getBtnAggiungi().setOnAction(event -> {
+            FilteredList<Libro> libriPrestabili = modelBiblioteca.getLibriPrestabili();
+            FilteredList<Utente> utentiPrestabili = modelBiblioteca.getUtentiPrestabili();
 
             PrestitiDialog dialog = new PrestitiDialog(libriPrestabili, utentiPrestabili);
 
@@ -102,18 +75,16 @@ public class ControllerPrestiti implements ControllerDato {
                 // Raccolta dati dalla dialog
                 Libro libroSelezionato = dialog.getCbLibri().getValue();
                 Utente utenteSelezionato = dialog.getCbUtenti().getValue();
-                LocalDate dataPrestito = dialog.getDatePicker().getValue();
+                LocalDate dataRestituzione = dialog.getDatePicker().getValue();
 
-                if (libroSelezionato == null || utenteSelezionato == null || dataPrestito == null) {
+                if (libroSelezionato == null || utenteSelezionato == null || dataRestituzione == null) {
                     new ErroreAlert("Devi selezionare Libro, Utente e Data");
                     eventOk.consume();
                     return;
                 }
-
-                Prestito nuovoPrestito = new Prestito(utenteSelezionato.getMatricola(), libroSelezionato.getIsbn(), LocalDate.now(), dataPrestito);
-
-                if (!modelPrestiti.aggiungiElemento(nuovoPrestito)) {
-                    if (!nuovoPrestito.isValid()) {
+                
+                if (!modelBiblioteca.registraPrestito(utenteSelezionato, libroSelezionato, dataRestituzione)) {
+                    if (new Prestito(null, null, null, dataRestituzione).isValid()) {
                         new ErroreAlert("Data restituzione invalida, scegliere una data successiva a quella odierna");
                     } else {
                         new ErroreAlert("L'utente non può richiedere lo stesso libro mentre già lo possiede");
@@ -121,12 +92,7 @@ public class ControllerPrestiti implements ControllerDato {
                     eventOk.consume();
                     return;
                 }
-                
-                // Aggiorna copie disponibili
-                Libro elem = libroSelezionato;
-                elem.prestaCopia();
-                modelLibri.modificaElemento(libroSelezionato, elem);
-                viewBiblioteca.getTabLibri().getTabella().refresh();
+                tabArchivioPrestiti.getTabella().refresh();
             });
 
             dialog.getDialog().showAndWait();
@@ -138,8 +104,8 @@ public class ControllerPrestiti implements ControllerDato {
      */
     private void EventHandlersRegistraRestituzione() {
 
-        viewBiblioteca.getTabPrestiti().getBtnModifica().setOnAction(event -> {
-            Prestito target = viewBiblioteca.getTabPrestiti().getSelectedItem();
+        tabArchivioPrestiti.getBtnModifica().setOnAction(event -> {
+            Prestito target = tabArchivioPrestiti.getSelectedItem();
 
             if (target == null) {
                 new ErroreAlert("Devi prima selezionare un Prestito");
@@ -151,19 +117,8 @@ public class ControllerPrestiti implements ControllerDato {
 
             // Attendi la risposta dell'utente
             if (alert.getEsito()) { // getEsito() deve restituire true se confermato
-                
-                // Aggiorna stato prestito
-                Prestito elemPrestito = target;
-                elemPrestito.registraRestituzione();
-                modelPrestiti.modificaElemento(target, elemPrestito);
-                viewBiblioteca.getTabPrestiti().getTabella().refresh();
-                
-                // Aggiorna numero di copie libro
-                Libro libroInPrestito = modelLibri.ricercaElemento(new Libro("", "", 0, elemPrestito.getIsbnPrestito(), 0));
-                Libro elemLibro = libroInPrestito;
-                elemLibro.restituisciCopia();
-                modelLibri.modificaElemento(libroInPrestito, elemLibro);
-                viewBiblioteca.getTabLibri().getTabella().refresh();
+                modelBiblioteca.registraRestituzione(target);
+                tabArchivioPrestiti.getTabella().refresh();
             }
         });
     }
@@ -174,25 +129,25 @@ public class ControllerPrestiti implements ControllerDato {
      */  
     private void EventHandlersFiltri() {
         //Applica filtri
-        viewBiblioteca.getTabPrestiti().getBtnCerca().setOnAction(event -> {
-            String testoInserito = viewBiblioteca.getTabPrestiti().getTxfFiltroRicerca().getText();
+        tabArchivioPrestiti.getBtnCerca().setOnAction(event -> {
+            String testoInserito = tabArchivioPrestiti.getTxfFiltroRicerca().getText();
             String[] filtri = testoInserito.split(" ");
             List<Predicate<Prestito>> filtriPredicate = new ArrayList<>();
             for (String filtro : filtri) {
                 filtriPredicate.add(prestito -> prestito.toString().toLowerCase().contains(filtro.toLowerCase()));
             }
-            FilteredList<Prestito> cercati = modelPrestiti.getArchivioFiltrato().filtered(
+            FilteredList<Prestito> cercati = modelBiblioteca.getArchivioPrestiti().filtered(
                     filtriPredicate.stream()
                             .reduce(Predicate::and)
                             .orElse(x -> true) //se non ci sonon filtri resituisce tutto
             );
-            viewBiblioteca.getTabPrestiti().getTabella().setItems(cercati);
+            tabArchivioPrestiti.getTabella().setItems(cercati);
         });
 
         //Elimina Filtri
-        viewBiblioteca.getTabPrestiti().getBtnEliminaFiltri().setOnAction(event -> {
-            viewBiblioteca.getTabPrestiti().getTxfFiltroRicerca().clear();
-            viewBiblioteca.getTabPrestiti().getTabella().setItems(modelPrestiti.getArchivioFiltrato());
+        tabArchivioPrestiti.getBtnEliminaFiltri().setOnAction(event -> {
+            tabArchivioPrestiti.getTxfFiltroRicerca().clear();
+            tabArchivioPrestiti.getTabella().setItems(modelBiblioteca.getArchivioPrestiti());
         });
     }
 }

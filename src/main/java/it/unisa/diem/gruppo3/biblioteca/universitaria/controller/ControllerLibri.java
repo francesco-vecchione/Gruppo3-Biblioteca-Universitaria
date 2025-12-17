@@ -1,13 +1,11 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.controller;
 
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Libro;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelArchivio;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.model.StatoPrestito;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelBiblioteca;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ConfermaAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ErroreAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.LibriDialog;
-import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ViewBiblioteca;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.view.TabArchivioLibri;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
@@ -22,31 +20,23 @@ import javafx.scene.control.Button;
  */
 public class ControllerLibri implements ControllerDato {
     /**
-     * @brief Il model che astrae il concetto di archivio libri
+     * @brief Il model che astrae le funzionalità necessarie alla gestione della biblioteca
      */
-    private ModelArchivio<Libro> modelLibri;
+    private ModelBiblioteca modelBiblioteca;
     
     /**
-     * @brief Il model che astrae il concetto di archivio prestiti
+     * @brief La view che astrae la tab per la gestione dei libri
      */
-    private ModelArchivio<Prestito> modelPrestiti;
-    
-    /**
-     * @brief La view che astrae la finestra principale della pagine dove sono
-     * presenti le tab degli archivi dei libri, degli utenti e dei prestiti
-     */
-    private ViewBiblioteca viewBiblioteca;
+    private TabArchivioLibri tabArchivioLibri;
     
     /**
      * @brief Costruttore che imposta le reference ai valori passati per parametro
-     * @param[in] modelLibri        Il modello di archivio dei libri a cui si rifà l'applicazione
-     * @param[in] modelPrestiti     Il modello di archivio dei prestiti a cui si rifà l'applicazione
-     * @param[in] viewBiblioteca    La vista principale dell'applicazione
+     * @param[in] modelBiblioteca           Il modello di biblioteca accessibile al controller
+     * @param[in] tabArchivioLibri          La vista principale sulla tab della gestione dei libri
      */
-    public ControllerLibri(ModelArchivio<Libro> modelLibri, ModelArchivio<Prestito> modelPrestiti, ViewBiblioteca viewBiblioteca) {
-        this.modelLibri = modelLibri;
-        this.modelPrestiti = modelPrestiti;
-        this.viewBiblioteca = viewBiblioteca;
+    public ControllerLibri(ModelBiblioteca modelBiblioteca, TabArchivioLibri tabArchivioLibri) {
+        this.modelBiblioteca = modelBiblioteca;
+        this.tabArchivioLibri = tabArchivioLibri;
     }
     
      /**
@@ -65,7 +55,7 @@ public class ControllerLibri implements ControllerDato {
      */
     private void EventHandlersAggiungiLibro() {
 
-        viewBiblioteca.getTabLibri().getBtnAggiungi().setOnAction(event -> {
+        tabArchivioLibri.getBtnAggiungi().setOnAction(event -> {
             LibriDialog dialog = new LibriDialog();
 
             //Tasto OK : bindings
@@ -88,7 +78,8 @@ public class ControllerLibri implements ControllerDato {
                     return;
                 }
                 Libro nuovoLibro = new Libro(dialog.getTxfTitolo().getText(), dialog.getTxfAutori().getText(), Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText()), dialog.getTxfIsbn().getText(), Integer.parseInt(dialog.getTxfNumCopie().getText()));
-                if (!modelLibri.aggiungiElemento(nuovoLibro)) {
+                
+                if (!modelBiblioteca.aggiungiLibro(nuovoLibro)) {
                     if (!nuovoLibro.isValid()) {
                         new ErroreAlert("Il formato dell'ISBN non è corretto");
                     } else {
@@ -108,8 +99,8 @@ public class ControllerLibri implements ControllerDato {
      */
     private void EventHandlersModificaLibro() {
         
-        viewBiblioteca.getTabLibri().getBtnModifica().setOnAction(event -> {
-            Libro target = viewBiblioteca.getTabLibri().getSelectedItem();
+        tabArchivioLibri.getBtnModifica().setOnAction(event -> {
+            Libro target = tabArchivioLibri.getSelectedItem();
             if (target == null) {
                 new ErroreAlert("Devi prima selezionare un Libro");
                 return;
@@ -136,7 +127,7 @@ public class ControllerLibri implements ControllerDato {
                     return;
                 }
                 Libro nuovoLibro = new Libro(dialog.getTxfTitolo().getText(), dialog.getTxfAutori().getText(), Integer.parseInt(dialog.getTxfAnnoPubblicazione().getText()), dialog.getTxfIsbn().getText(), Integer.parseInt(dialog.getTxfNumCopie().getText()));
-                if (!modelLibri.modificaElemento(target, nuovoLibro)) {
+                if (!modelBiblioteca.modificaLibro(target, nuovoLibro)) {
                     if (!nuovoLibro.isValid()) {
                         new ErroreAlert("Il formato dell'ISBN non è corretto");
                     } else {
@@ -154,9 +145,8 @@ public class ControllerLibri implements ControllerDato {
      * @brief Inizializzaza gli event handlers che si occupano della cancellazione di un libro
      */
     private void EventHandlersCancellaLibro() {
-        
-        viewBiblioteca.getTabLibri().getBtnCancella().setOnAction(event -> {
-            Libro target = viewBiblioteca.getTabLibri().getSelectedItem();
+        tabArchivioLibri.getBtnCancella().setOnAction(event -> {
+            Libro target = tabArchivioLibri.getSelectedItem();
             if (target == null) {
                 new ErroreAlert("Devi prima selezionare un Libro");
                 event.consume();
@@ -165,20 +155,10 @@ public class ControllerLibri implements ControllerDato {
             //Conferma
             ConfermaAlert alert = new ConfermaAlert("Vuoi davvero eliminare " + target.toString());
             if (alert.getEsito()) {
-                if(modelPrestiti.getArchivioFiltrato().filtered(prestito -> {
-                    return prestito.getIsbnPrestito().equals(target.getIsbn()) && (prestito.getStatoPrestito() == StatoPrestito.ATTIVO);
-                    }).size() > 0) {
-                    // Se nella lista dei filtrati tramite isbn c'è un prestito che combacia con l'isbn selezionato dalla tableview
-                    // e che ha stato attivo, allora posso svolgere l'operazione di azzeramento copie senza levare il libro dall'archivio
-                    Libro elem = target;
-                    elem.azzeraCopie();
-                    modelLibri.modificaElemento(target, elem);
-                    viewBiblioteca.getTabLibri().getTabella().refresh();
+                if(!modelBiblioteca.cancellaLibro(target)) {
                     new ErroreAlert("Ho cancellato le copie disponibili in quanto una copia è ancora in presito");
                 }
-                else {
-                    modelLibri.rimuoviElemento(target);
-                }
+                tabArchivioLibri.getTabella().refresh();
             }
         });
     }
@@ -189,25 +169,25 @@ public class ControllerLibri implements ControllerDato {
      */
     private void EventHandlersFiltri() {
         //Applica filtri
-        viewBiblioteca.getTabLibri().getBtnCerca().setOnAction(event -> {
-            String testoInserito = viewBiblioteca.getTabLibri().getTxfFiltroRicerca().getText();
+        tabArchivioLibri.getBtnCerca().setOnAction(event -> {
+            String testoInserito = tabArchivioLibri.getTxfFiltroRicerca().getText();
             String[] filtri = testoInserito.split(" ");
             List<Predicate<Libro>> filtriPredicate = new ArrayList<>();
             for (String filtro : filtri) {
                 filtriPredicate.add(libro -> libro.toString().toLowerCase().contains(filtro.toLowerCase()));
             }
-            FilteredList<Libro> cercati = modelLibri.getArchivioFiltrato().filtered(
+            FilteredList<Libro> cercati = modelBiblioteca.getArchivioLibri().filtered(
                     filtriPredicate.stream()
                             .reduce(Predicate::and)
                             .orElse(x -> true) //se non ci sonon filtri resituisce tutto
             );
-            viewBiblioteca.getTabLibri().getTabella().setItems(cercati);
+            tabArchivioLibri.getTabella().setItems(cercati);
         });
 
         //Elimina Filtri
-        viewBiblioteca.getTabLibri().getBtnEliminaFiltri().setOnAction(event -> {
-            viewBiblioteca.getTabLibri().getTxfFiltroRicerca().clear();
-            viewBiblioteca.getTabLibri().getTabella().setItems(modelLibri.getArchivioFiltrato());
+        tabArchivioLibri.getBtnEliminaFiltri().setOnAction(event -> {
+            tabArchivioLibri.getTxfFiltroRicerca().clear();
+            tabArchivioLibri.getTabella().setItems(modelBiblioteca.getArchivioLibri());
         });
     }
 }

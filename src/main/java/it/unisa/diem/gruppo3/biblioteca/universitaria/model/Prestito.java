@@ -175,6 +175,6 @@ public class Prestito implements Dato {
     */
     @Override
     public String toString() {
-        return matricolaUtente + "->" + isbnPrestito + ": " + dataPrestito + "->" + dataRestituzione;
+        return matricolaUtente + "->" + isbnPrestito + ": " + dataPrestito + "->" + dataRestituzione + ": " + statoPrestito;
     }
 }
