@@ -214,6 +214,7 @@ public class ModelBiblioteca {
         if(libro.getNumeroCopieDisponibili() < 1) return false;
         if(modelPrestiti.getArchivioFiltrato().filtered(prestito -> prestito.getMatricolaUtente().equals(utente.getMatricola()) &&
                 prestito.getStatoPrestito().equals(StatoPrestito.ATTIVO)).size() >= MAX_PRESTITI_UTENTE) return false;
+        if(!dataRestituzione.isAfter(LocalDate.now())) return false;
         
         libro.prestaCopia();
         modelLibri.modificaElemento(libro, libro);
