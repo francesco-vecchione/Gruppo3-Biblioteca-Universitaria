@@ -13,6 +13,10 @@ import javafx.scene.effect.InnerShadow;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.scene.Cursor;
+import javafx.scene.paint.Color;
+import javafx.scene.control.Label;
+import javafx.geometry.Insets;
+import javafx.beans.value.ObservableValue;
 
 
 /**
@@ -65,6 +69,7 @@ public class TabArchivioLibri extends TabArchivio<Libro>{
         
         
                 VBox boxBottoni = new VBox();
+                boxBottoni.setStyle("-fx-background-color: #FFFDF5;");
                 boxBottoni.setPrefWidth(223.0);
                 boxBottoni.setPrefHeight(420.0);
                 boxBottoni.setSpacing(10.0);
@@ -128,6 +133,61 @@ public class TabArchivioLibri extends TabArchivio<Libro>{
         getTab().setText("Libri");
         getTab().setContent(root);
         getTab().setClosable(false);
+        
+        
+        //label tasto tab
+        Label labelTab = new Label("Libri");
+        labelTab.setFont(Font.font("Kodchasan", FontWeight.SEMI_BOLD, 25));
+        labelTab.setTextFill(Color.WHITE);
+        getTab().setGraphic(labelTab);
+        getTab().setText(""); // Nascondi testo di default
+        labelTab.setPadding(new Insets(20, 30, 20, 30)); 
+
+        //stile tasto tab
+        getTab().setStyle("-fx-background-color: #8D4925; " +
+                          "-fx-background-radius: 15 15 0 0; " +
+                          "-fx-border-color: #4BA8D1; " +
+                          "-fx-border-width: 0 0 1 0;");
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        // Colori di esempio (Palette Midnight Library)
+        String coloreAttivo = "-fx-background-color: #2C3E50; -fx-background-radius: 15 15 0 0; -fx-padding: 10 20 10 20;";
+        String coloreInattivo = "-fx-background-color: #B5B5B5; -fx-background-radius: 15 15 0 0; -fx-padding: 10 20 10 20;";
+
+        // Applichiamo lo stile iniziale (se è il primo tab sarà attivo)
+        getTab().setStyle(getTab().isSelected() ? coloreAttivo : coloreInattivo);
+
+        // Ascoltatore per il cambio di stato
+        getTab().selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
+        if (isNowSelected) {
+                    // Stile quando il tab è SELEZIONATO
+                    getTab().setStyle(coloreAttivo);
+        if (getTab().getGraphic() instanceof Label label) {
+                    label.setTextFill(Color.WHITE); // Testo chiaro
+        }
+        } else {
+            // Stile quando il tab NON è selezionato
+            getTab().setStyle(coloreInattivo);
+            if (getTab().getGraphic() instanceof Label label) {
+                label.setTextFill(Color.LIGHTGRAY); // Testo spento
+            }
+        }
+    });
+        
+        
+        
+        
+        
+        
     }
     /**
      * @brief Getter per il bottone per la cancellazione

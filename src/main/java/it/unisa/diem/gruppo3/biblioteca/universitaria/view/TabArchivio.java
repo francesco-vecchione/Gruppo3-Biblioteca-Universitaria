@@ -16,6 +16,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 import javafx.scene.text.FontWeight;
+import javafx.scene.control.TabPane;
 
 /**
  * @file TabArchivio.java
@@ -122,6 +123,7 @@ public abstract class TabArchivio<T extends Dato> {
 
         //creazione hboxcerca
         HBox boxCerca = new HBox();
+        boxCerca.setStyle("-fx-background-color: #FFFDF5;");
         boxCerca.setSpacing(13.0); 
         boxCerca.setAlignment(Pos.CENTER_LEFT); // Allinea tutto a sinistra
         boxCerca.getChildren().addAll(txfFiltroRicerca, btnCerca, btnEliminaFiltri);
@@ -135,9 +137,12 @@ public abstract class TabArchivio<T extends Dato> {
         boxCentro.setPadding(new Insets(33, 0, 0, 8));
     
         boxCentro.getChildren().addAll(boxCerca, tabella);
-    
         //assegnazione alla tab
         tab.setContent(boxCentro);
+        
+        
+        
+        
     }
     
     /**
