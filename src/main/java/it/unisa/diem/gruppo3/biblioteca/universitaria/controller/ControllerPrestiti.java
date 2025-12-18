@@ -3,6 +3,7 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.controller;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Libro;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.ModelBiblioteca;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Prestito;
+import it.unisa.diem.gruppo3.biblioteca.universitaria.model.StatoPrestito;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ConfermaAlert;
 import it.unisa.diem.gruppo3.biblioteca.universitaria.view.ErroreAlert;
@@ -112,6 +113,11 @@ public class ControllerPrestiti implements ControllerDato {
                 return;
             }
 
+            if (target.getStatoPrestito() == StatoPrestito.RESTITUITO){
+                new ErroreAlert("Il prestito è già stato restituito, selezionare un prestito con stato ATTIVO");
+                return;
+            }
+            
             // Conferma
             ConfermaAlert alert = new ConfermaAlert("Vuoi Registrare la Restituzione del Prestito?");
 

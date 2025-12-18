@@ -96,7 +96,6 @@ public class Libro implements Dato {
     
     /**
      * @brief Metodo per decrementare la disponibilità del libro
-     * @return 
      */
     public void prestaCopia() {
         numeroCopieDisponibili--;
@@ -104,7 +103,6 @@ public class Libro implements Dato {
     
     /**
      * @brief Metodo per decrementare la disponibilità del libro
-     * @return 
      */
     public void restituisciCopia() {
         numeroCopieDisponibili++;
@@ -112,7 +110,6 @@ public class Libro implements Dato {
     
     /**
      * @brief Metodo azzerare le copie disponibili
-     * @return 
      */
     public void azzeraCopie() {
         numeroCopieDisponibili = 0;
