@@ -100,7 +100,7 @@ public class LibriDialog {
         //aggiungo tutto alla anchorpane
         root.getChildren().addAll(
             headerText, 
-            txfTitolo, 
+            txfTitolo,
             txfAutori, 
             txfIsbn, 
             txfAnnoPubblicazione, 
