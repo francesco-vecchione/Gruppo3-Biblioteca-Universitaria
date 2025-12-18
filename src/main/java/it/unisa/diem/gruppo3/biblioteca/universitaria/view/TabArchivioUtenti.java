@@ -121,10 +121,6 @@ public class TabArchivioUtenti extends TabArchivio<Utente> {
         getTab().setText("Utenti");
         getTab().setContent(root);
         getTab().setClosable(false);
-        
-        
-        
-        
        
         
         //label tasto tab
@@ -150,20 +146,22 @@ public class TabArchivioUtenti extends TabArchivio<Utente> {
 
         // Ascoltatore per il cambio di stato
         getTab().selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
-        if (isNowSelected) {
-                    // Stile quando il tab è SELEZIONATO
-                    getTab().setStyle(coloreAttivo);
-        if (getTab().getGraphic() instanceof Label label) {
+            if (isNowSelected) {
+                // Stile quando il tab è SELEZIONATO
+                getTab().setStyle(coloreAttivo);
+                if (getTab().getGraphic().getClass() == Label.class) {
+                    Label label = (Label) getTab().getGraphic();
                     label.setTextFill(Color.WHITE); // Testo chiaro
-        }
-        } else {
-            // Stile quando il tab NON è selezionato
-            getTab().setStyle(coloreInattivo);
-            if (getTab().getGraphic() instanceof Label label) {
-                label.setTextFill(Color.LIGHTGRAY); // Testo spento
+                }
+            } else {
+                // Stile quando il tab NON è selezionato
+                getTab().setStyle(coloreInattivo);
+                if (getTab().getGraphic().getClass() == Label.class) {
+                    Label label = (Label) getTab().getGraphic();
+                    label.setTextFill(Color.LIGHTGRAY); // Testo spento
+                }
             }
-        }
-    });
+        });
     }
 
     /**
