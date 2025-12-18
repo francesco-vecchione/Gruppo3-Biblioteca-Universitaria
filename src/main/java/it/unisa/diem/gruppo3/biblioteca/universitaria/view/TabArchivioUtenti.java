@@ -2,6 +2,7 @@ package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Utente;
 import javafx.collections.transformation.FilteredList;
+import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
@@ -57,19 +58,20 @@ public class TabArchivioUtenti extends TabArchivio<Utente> {
         getTabella().setItems(listaOsservabileUtenti);
 
         VBox boxBottoni = new VBox();
-
+        boxBottoni.setStyle("-fx-background-color: #FFFDF5;");
         boxBottoni.setPrefWidth(223.0);
         boxBottoni.setPrefHeight(420.0);
         boxBottoni.setSpacing(10.0);
+        boxBottoni.setAlignment(Pos.CENTER);
 
-        Font fontKodchasan = Font.font("Kodchasan", FontWeight.SEMI_BOLD, FontPosture.ITALIC, 20.0);
+        Font fontKodchasan = Font.font("Kodchasan", FontWeight.SEMI_BOLD, FontPosture.ITALIC, 15.0);
 
         InnerShadow innerShadow = new InnerShadow();
 
         //personalizzazione bottone aggiungi
         getBtnAggiungi().setMnemonicParsing(false);
-        getBtnAggiungi().setPrefWidth(240.0);
-        getBtnAggiungi().setPrefHeight(100.0);
+        getBtnAggiungi().setPrefWidth(200.0);
+        getBtnAggiungi().setPrefHeight(50.0);
         getBtnAggiungi().setStyle("-fx-background-color: #DE9A3A;");
         getBtnAggiungi().setTextAlignment(TextAlignment.CENTER);
         getBtnAggiungi().setWrapText(true);
@@ -82,8 +84,8 @@ public class TabArchivioUtenti extends TabArchivio<Utente> {
 
         //personalizzazione bottone modifica
         getBtnModifica().setMnemonicParsing(false);
-        getBtnModifica().setPrefWidth(240.0);
-        getBtnModifica().setPrefHeight(100.0);
+        getBtnModifica().setPrefWidth(200.0);
+        getBtnModifica().setPrefHeight(50.0);
         getBtnModifica().setStyle("-fx-background-color: #DE9A3A;");
         getBtnModifica().setTextAlignment(TextAlignment.CENTER);
         getBtnModifica().setWrapText(true);
@@ -95,8 +97,8 @@ public class TabArchivioUtenti extends TabArchivio<Utente> {
 
         //personalizzazione bottone cancella
         btnCancella.setMnemonicParsing(false);
-        btnCancella.setPrefWidth(240.0);
-        btnCancella.setPrefHeight(100.0);
+        btnCancella.setPrefWidth(200.0);
+        btnCancella.setPrefHeight(50.0);
         btnCancella.setStyle("-fx-background-color: #DE733A;"); // Colore diverso come da FXML
         btnCancella.setTextAlignment(TextAlignment.CENTER);
         btnCancella.setWrapText(true);
