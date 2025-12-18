@@ -6,6 +6,9 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.model;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Predicate;
 import javafx.collections.transformation.FilteredList;
 
 /**
@@ -87,17 +90,19 @@ public class ModelBiblioteca {
      * @return Ritorna true se è stato possibile cancellare il record del libro dall'archivio, false se il libro era in prestito
      */
     public boolean cancellaLibro(Libro libro) {
-        if(modelPrestiti.getArchivioFiltrato().filtered(prestito -> {
-                    return prestito.getIsbnPrestito().equals(libro.getIsbn()) && (prestito.getStatoPrestito() == StatoPrestito.ATTIVO);}).size() > 0) {
-                    // Se nella lista dei filtrati tramite isbn c'è un prestito che combacia con l'isbn selezionato dalla tableview
-                    // e che ha stato attivo, allora posso svolgere l'operazione di azzeramento copie senza levare il libro dall'archivio
-                    libro.azzeraCopie();
-                    return false;
+        Predicate<Prestito> condizioneAttivo = prestito -> prestito.getIsbnPrestito().equals(libro.getIsbn()) && (prestito.getStatoPrestito() == StatoPrestito.ATTIVO);
+        Predicate<Prestito> condizioneRestituito = prestito -> prestito.getIsbnPrestito().equals(libro.getIsbn()) && (prestito.getStatoPrestito() == StatoPrestito.RESTITUITO);
+        
+        if(modelPrestiti.getArchivioFiltrato().filtered(condizioneAttivo).size() > 0) {
+            // Se nella lista dei filtrati tramite isbn c'è un prestito che combacia con l'isbn selezionato dalla tableview
+            // e che ha stato attivo, allora posso svolgere l'operazione di azzeramento copie senza levare il libro dall'archivio
+            libro.azzeraCopie();
+            return false;
         }
-        //Elimina i prestiti restituiti relativi al libro da eliminare
-        for(Prestito prestito : modelPrestiti.getArchivioFiltrato().filtered(prestito -> prestito.getIsbnPrestito().equals(libro.getIsbn()) && 
-                prestito.getStatoPrestito() == StatoPrestito.RESTITUITO))
-            modelPrestiti.rimuoviElemento(prestito);
+
+        // Cancella i prestiti restituiti
+        cancellaPrestitiSpecifici(condizioneRestituito);
+
         return modelLibri.rimuoviElemento(libro);
     }
 
@@ -155,13 +160,17 @@ public class ModelBiblioteca {
      * @return Ritorna true se l'operazione di cancellazione è andata a buon fine, false altrimenti
      */
     public boolean cancellaUtente(Utente utente) {
-        if(modelPrestiti.getArchivioFiltrato().filtered(prestito -> prestito.getMatricolaUtente().equals(utente.getMatricola())).size() > 0) {
+        Predicate<Prestito> condizioneAttivo = prestito -> prestito.getMatricolaUtente().equals(utente.getMatricola()) && prestito.getStatoPrestito() == StatoPrestito.ATTIVO;
+        Predicate<Prestito> condizioneRestituito = prestito -> prestito.getMatricolaUtente().equals(utente.getMatricola()) && prestito.getStatoPrestito() == StatoPrestito.RESTITUITO;
+        
+        // Se ci sono prestiti attivi, ritorna falso
+        if(modelPrestiti.getArchivioFiltrato().filtered(condizioneAttivo).size() > 0) {
             return false;
         }
-        //Elimina i prestiti relativi all'utente da eliminare
-        for(Prestito prestito : modelPrestiti.getArchivioFiltrato().filtered(prestito -> prestito.getMatricolaUtente().equals(utente.getMatricola()) && 
-                prestito.getStatoPrestito() == StatoPrestito.RESTITUITO))
-            modelPrestiti.rimuoviElemento(prestito);
+        
+        // Cancella i prestiti restituti 
+        cancellaPrestitiSpecifici(condizioneRestituito);
+            
         return modelUtenti.rimuoviElemento(utente);
     }
     
@@ -247,4 +256,20 @@ public class ModelBiblioteca {
     public boolean chiudiModelPrestiti() {
         return modelPrestiti.chiudiArchivio();
     }
+    
+    
+    /**
+     * @brief Cancella un insieme di prestiti specifici data una certa condizione che devono soddisfare
+     * @param condizione    La condizione che i prestiti che devono essere eliminati devono soddisfare 
+     */
+    private void cancellaPrestitiSpecifici(Predicate<Prestito> condizione) {
+        //Crei la lista di elementi da eliminare
+        List<Prestito> listaDaEliminare = new ArrayList();
+        for(Prestito prestito : modelPrestiti.getArchivioFiltrato().filtered(condizione))
+            listaDaEliminare.add(prestito);
+        
+        //Scorri la lista dei prestiti da eliminare e allo stesso tempo cancelli dall'archivio dei prestiti
+        for(Prestito prestito : listaDaEliminare)
+            modelPrestiti.rimuoviElemento(prestito);
+    } 
 }
