@@ -82,8 +82,9 @@ public abstract class TabArchivio<T extends Dato> {
         btnEliminaFiltri = new Button("Elimina Filtri");
         txfFiltroRicerca = new TextField();
         txfFiltroRicerca.setPromptText("Cerca");
-        
         tab = new Tab();
+        
+        tabella.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
      
         //personalizzaione texfield
         txfFiltroRicerca.setPrefWidth(319.0);
@@ -96,10 +97,11 @@ public abstract class TabArchivio<T extends Dato> {
         // Permettiamo alla tabella di espandersi se la finestra viene ingrandita
         VBox.setVgrow(tabella, Priority.ALWAYS); 
 
-        //font per i tasti
+        //font per i tasti e per la tab
         Font fontBottoni = Font.font("Kodchasan", FontWeight.SEMI_BOLD, FontPosture.ITALIC, 17.0);
         
         SepiaTone seppia= new SepiaTone(0.4);
+        
         //bottone cerca
         btnCerca.setPrefWidth(89.0);
         btnCerca.setPrefHeight(36.0);
@@ -120,7 +122,6 @@ public abstract class TabArchivio<T extends Dato> {
         btnEliminaFiltri.setOnMouseEntered(e -> btnEliminaFiltri.setEffect(seppia));
         btnEliminaFiltri.setOnMouseExited(e -> btnEliminaFiltri.setEffect(null));
 
-
         //creazione hboxcerca
         HBox boxCerca = new HBox();
         boxCerca.setStyle("-fx-background-color: #FFFDF5;");
@@ -131,18 +132,12 @@ public abstract class TabArchivio<T extends Dato> {
         //creazione della vbox
         boxCentro = new VBox();
         boxCentro.setStyle("-fx-background-color: #FFFDF5;");
-
         boxCentro.setSpacing(7.0); 
-
         boxCentro.setPadding(new Insets(33, 0, 0, 8));
-    
+ 
         boxCentro.getChildren().addAll(boxCerca, tabella);
         //assegnazione alla tab
         tab.setContent(boxCentro);
-        
-        
-        
-        
     }
     
     /**

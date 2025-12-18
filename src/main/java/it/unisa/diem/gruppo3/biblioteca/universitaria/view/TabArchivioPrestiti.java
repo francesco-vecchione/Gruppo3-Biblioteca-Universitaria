@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -105,15 +106,16 @@ public class TabArchivioPrestiti extends TabArchivio<Prestito> {
         boxBottoni.setPrefWidth(223.0);
         boxBottoni.setPrefHeight(420.0);
         boxBottoni.setSpacing(10.0);
+        boxBottoni.setAlignment(Pos.CENTER);
 
-        Font fontKodchasan = Font.font("Kodchasan", FontWeight.SEMI_BOLD, FontPosture.ITALIC, 20.0);
+        Font fontKodchasan = Font.font("Kodchasan", FontWeight.SEMI_BOLD, FontPosture.ITALIC, 15.0);
 
         InnerShadow innerShadow = new InnerShadow();
 
         //personalizzazione bottone aggiungi
         getBtnAggiungi().setMnemonicParsing(false);
-        getBtnAggiungi().setPrefWidth(240.0);
-        getBtnAggiungi().setPrefHeight(100.0);
+        getBtnAggiungi().setPrefWidth(200.0);
+        getBtnAggiungi().setPrefHeight(50.0);
         getBtnAggiungi().setStyle("-fx-background-color: #DE9A3A;");
         getBtnAggiungi().setTextAlignment(TextAlignment.CENTER);
         getBtnAggiungi().setWrapText(true);
@@ -126,8 +128,8 @@ public class TabArchivioPrestiti extends TabArchivio<Prestito> {
 
         //personalizzazione bottone modifica
         getBtnModifica().setMnemonicParsing(false);
-        getBtnModifica().setPrefWidth(240.0);
-        getBtnModifica().setPrefHeight(100.0);
+        getBtnModifica().setPrefWidth(200.0);
+        getBtnModifica().setPrefHeight(50.0);
         getBtnModifica().setStyle("-fx-background-color: #DE9A3A;");
         getBtnModifica().setTextAlignment(TextAlignment.CENTER);
         getBtnModifica().setWrapText(true);
