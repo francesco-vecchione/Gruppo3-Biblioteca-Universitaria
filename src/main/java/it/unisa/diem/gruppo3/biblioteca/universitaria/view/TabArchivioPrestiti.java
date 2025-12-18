@@ -47,45 +47,43 @@ public class TabArchivioPrestiti extends TabArchivio<Prestito> {
         
         TableColumn<Prestito, LocalDate> statoPrestitoCol = new TableColumn<>("Stato del Prestito");
         statoPrestitoCol.setCellValueFactory(new PropertyValueFactory<>("statoPrestito"));
-
-        getTabella().setRowFactory(tv -> new TableRow<Prestito>() {
+        
+        getTabella().setRowFactory(tv -> new TableRow<>() {
+            // In base alla documentazione updateItem viene chiamato quando:
+            // cambia l'item;
+            // cambia la selezione;
+            // la tabella si aggiorna (con ad esempio refresh())
             @Override
             protected void updateItem(Prestito item, boolean empty) {
                 super.updateItem(item, empty);
+                aggiornaStile();
+            }
+            
+            private void aggiornaStile() {
                 setStyle("");
-                if (!empty && item != null) {
-                    if (!isSelected()) {
-                        LocalDate dataRestituzione = item.getDataRestituzione();
-                        
-                        if (item.getStatoPrestito() == StatoPrestito.RESTITUITO) {
-                            setStyle("-fx-background-color: #C8E6C9;");
-                        } else if (dataRestituzione != null) {
-                            long giorniRimanenti = ChronoUnit.DAYS.between(LocalDate.now(), dataRestituzione);
-                            if (giorniRimanenti < 0) {
-                                setStyle("-fx-background-color: #FFA07A;");
-                            } else if (giorniRimanenti <= 3) {
-                                setStyle("-fx-background-color: #FFECB3;");
-                            }
-                        }
+                
+                Prestito item = getItem();
+                // Se non c'è alcun elemento, i campi sono vuoti o è selezionato, lo stile non
+                // deve essere aggiornato
+                if(item == null || isEmpty() || isSelected()) return;
+                
+                // Se il prestito è stato restituito, allora colora la riga di un verde chiaro
+                if(item.getStatoPrestito() == StatoPrestito.RESTITUITO) {
+                    setStyle("-fx-background-color: #C8E6C9;");
+                    return;
+                }
+                
+                // Se il prestito esiste e non è già stato restituito, allora imposta il colore
+                // in base ai giorni rimasti alla scadenza
+                LocalDate dataRestituzione = item.getDataRestituzione();
+                if (dataRestituzione != null) {
+                    long giorniAllaScadenza = ChronoUnit.DAYS.between(LocalDate.now(), dataRestituzione);
+                    
+                    if (giorniAllaScadenza <= 0) {
+                        setStyle("-fx-background-color: #F08080;");
+                    } else if (giorniAllaScadenza <= 3) {
+                        setStyle("-fx-background-color: #FFECB3;");
                     }
-                    selectedProperty().addListener((obs, wasSelected, isNowSelected) -> {
-                        if (isNowSelected) {
-                            setStyle("");
-                        } else {
-                            LocalDate dataRestituzione = getItem().getDataRestituzione();
-                            
-                            if(getItem().getStatoPrestito() == StatoPrestito.RESTITUITO) {
-                                setStyle("-fx-background-color: #C8E6C9;");
-                            } else if (dataRestituzione != null) {
-                                long giorniRimanenti = ChronoUnit.DAYS.between(LocalDate.now(), dataRestituzione);
-                                if (giorniRimanenti < 0) {
-                                    setStyle("-fx-background-color: #FFA07A;");
-                                } else if (giorniRimanenti <= 3) {
-                                    setStyle("-fx-background-color: #FFECB3;");
-                                }
-                            }
-                        }
-                    });
                 }
             }
         });
