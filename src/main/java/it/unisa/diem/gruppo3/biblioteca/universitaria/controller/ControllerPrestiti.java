@@ -84,7 +84,7 @@ public class ControllerPrestiti implements ControllerDato {
                 }
                 
                 if (!modelBiblioteca.registraPrestito(utenteSelezionato, libroSelezionato, dataRestituzione)) {
-                    if (new Prestito(null, null, null, dataRestituzione).isValid()) {
+                    if (!(new Prestito(null, null, LocalDate.now(), dataRestituzione).isValid())) {
                         new ErroreAlert("Data restituzione invalida, scegliere una data successiva a quella odierna");
                     } else {
                         new ErroreAlert("L'utente non può richiedere lo stesso libro mentre già lo possiede");

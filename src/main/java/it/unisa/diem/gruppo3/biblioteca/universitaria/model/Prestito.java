@@ -105,23 +105,19 @@ public class Prestito implements Dato {
     public StatoPrestito getStatoPrestito() {
         return statoPrestito;
     }
-
-    /**
-        * @brief È fornito dall'interfaccia Dato, e permette di registrare correttamente un prestito
-        * solo se dataRestituzione è "maggiore" di dataPrestito
-        * @return ritorna true se i dati rispettano lo standard 
-    */
     
     /**
-        * @brief Getter di matricolaUtente
-        * 
-        * @return Ritorna la MatricolaUtente dell'utente che ha registrato il prestito
+        * @brief Registra la restituzione matricolaUtente
     */
     public void registraRestituzione() {
         statoPrestito = StatoPrestito.RESTITUITO;
     }
     
-    
+        /**
+        * @brief È fornito dall'interfaccia Dato, e permette di registrare correttamente un prestito
+        * solo se dataRestituzione è "maggiore" di dataPrestito
+        * @return ritorna true se i dati rispettano lo standard 
+    */
     @Override
     public boolean isValid() {
         return getDataRestituzione().isAfter(dataPrestito);
