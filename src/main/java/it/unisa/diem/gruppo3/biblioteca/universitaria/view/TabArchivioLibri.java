@@ -7,6 +7,13 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.effect.InnerShadow;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.TextAlignment;
+import javafx.scene.Cursor;
+
 
 /**
  * @file TabArchivioLibri.java
@@ -54,7 +61,64 @@ public class TabArchivioLibri extends TabArchivio<Libro>{
         getTabella().getColumns().addAll(isbnCol, titoloCol, autoriCol, annoCol, copieCol);
         getTabella().setItems(listaOsservabileLibri);
         
-        VBox boxBottoni = new VBox();
+        
+        
+        
+                VBox boxBottoni = new VBox();
+                boxBottoni.setPrefWidth(223.0);
+                boxBottoni.setPrefHeight(420.0);
+                boxBottoni.setSpacing(10.0);
+             
+                Font fontKodchasan = Font.font("Kodchasan", FontWeight.SEMI_BOLD, FontPosture.ITALIC, 20.0);
+
+                
+                InnerShadow innerShadow = new InnerShadow();
+
+                
+                //personalizzazione bottone aggiungi
+                getBtnAggiungi().setMnemonicParsing(false);
+                getBtnAggiungi().setPrefWidth(240.0);
+                getBtnAggiungi().setPrefHeight(100.0);
+                getBtnAggiungi().setStyle("-fx-background-color: #DE9A3A;");
+                getBtnAggiungi().setTextAlignment(TextAlignment.CENTER);
+                getBtnAggiungi().setWrapText(true);
+                getBtnAggiungi().setFont(fontKodchasan);
+                getBtnAggiungi().setCursor(Cursor.HAND); // Specifico solo per il primo bottone nel tuo FXML
+                getBtnAggiungi().setEffect(innerShadow);
+                getBtnAggiungi().setEffect(null);
+                getBtnAggiungi().setOnMouseEntered(e -> getBtnAggiungi().setEffect(innerShadow));
+                getBtnAggiungi().setOnMouseExited(e -> getBtnAggiungi().setEffect(null));
+
+                
+                //personalizzazione bottone modifica
+                getBtnModifica().setMnemonicParsing(false);
+                getBtnModifica().setPrefWidth(240.0);
+                getBtnModifica().setPrefHeight(100.0);
+                getBtnModifica().setStyle("-fx-background-color: #DE9A3A;");
+                getBtnModifica().setTextAlignment(TextAlignment.CENTER);
+                getBtnModifica().setWrapText(true);
+                getBtnModifica().setFont(fontKodchasan);
+                getBtnModifica().setCursor(Cursor.HAND);
+                getBtnModifica().setEffect(null);
+                getBtnModifica().setOnMouseEntered(e -> getBtnModifica().setEffect(innerShadow));
+                getBtnModifica().setOnMouseExited(e -> getBtnModifica().setEffect(null));
+     
+
+                
+               //personalizzazione bottone cancella
+                btnCancella.setMnemonicParsing(false);
+                btnCancella.setPrefWidth(240.0);
+                btnCancella.setPrefHeight(100.0);
+                btnCancella.setStyle("-fx-background-color: #DE733A;"); // Colore diverso come da FXML
+                btnCancella.setTextAlignment(TextAlignment.CENTER);
+                btnCancella.setWrapText(true);
+                btnCancella.setFont(fontKodchasan);
+                btnCancella.setCursor(Cursor.HAND);
+                btnCancella.setEffect(null);
+                btnCancella.setOnMouseEntered(e -> btnCancella.setEffect(innerShadow));
+                btnCancella.setOnMouseExited(e -> btnCancella.setEffect(null));
+              
+
         boxBottoni.getChildren().addAll(getBtnAggiungi(), getBtnModifica(), btnCancella);
         
         BorderPane root = new BorderPane();

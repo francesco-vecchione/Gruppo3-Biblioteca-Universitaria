@@ -1,13 +1,21 @@
 package it.unisa.diem.gruppo3.biblioteca.universitaria.view;
 
 import it.unisa.diem.gruppo3.biblioteca.universitaria.model.Dato;
+import javafx.scene.layout.Priority;
+import javafx.scene.effect.SepiaTone;
+import javafx.scene.Cursor;
+import javafx.scene.layout.HBox;
+import javafx.geometry.Pos;
+import javafx.geometry.Insets;
+import javafx.scene.layout.VBox;
 import javafx.collections.transformation.FilteredList;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 
 /**
  * @file TabArchivio.java
@@ -75,12 +83,61 @@ public abstract class TabArchivio<T extends Dato> {
         txfFiltroRicerca.setPromptText("Cerca");
         
         tab = new Tab();
+     
+        //personalizzaione texfield
+        txfFiltroRicerca.setPrefWidth(319.0);
+        txfFiltroRicerca.setPrefHeight(36.0);
+        txfFiltroRicerca.setStyle("-fx-background-radius: 20;");
+
+        //resize della tableview
+        tabella.setPrefWidth(451.0);
+        tabella.setPrefHeight(315.0);
+        // Permettiamo alla tabella di espandersi se la finestra viene ingrandita
+        VBox.setVgrow(tabella, Priority.ALWAYS); 
+
+        //font per i tasti
+        Font fontBottoni = Font.font("Kodchasan", FontWeight.SEMI_BOLD, FontPosture.ITALIC, 17.0);
         
+        SepiaTone seppia= new SepiaTone(0.4);
+        //bottone cerca
+        btnCerca.setPrefWidth(89.0);
+        btnCerca.setPrefHeight(36.0);
+        btnCerca.setStyle("-fx-background-radius: 40; -fx-background-color: #5AC3F2;");
+        btnCerca.setFont(fontBottoni);
+        btnCerca.setCursor(Cursor.HAND);
+        btnCerca.setEffect(null);
+        btnCerca.setOnMouseEntered(e -> btnCerca.setEffect(seppia));
+        btnCerca.setOnMouseExited(e -> btnCerca.setEffect(null));
+
+        //bottone eliminafiltri
+        btnEliminaFiltri.setPrefWidth(145.0);
+        btnEliminaFiltri.setPrefHeight(36.0);
+        btnEliminaFiltri.setStyle("-fx-background-radius: 40; -fx-background-color: #F2885A;");
+        btnEliminaFiltri.setFont(fontBottoni);
+        btnEliminaFiltri.setCursor(Cursor.HAND);
+        btnEliminaFiltri.setEffect(null);
+        btnEliminaFiltri.setOnMouseEntered(e -> btnEliminaFiltri.setEffect(seppia));
+        btnEliminaFiltri.setOnMouseExited(e -> btnEliminaFiltri.setEffect(null));
+
+
+        //creazione hboxcerca
         HBox boxCerca = new HBox();
+        boxCerca.setSpacing(13.0); 
+        boxCerca.setAlignment(Pos.CENTER_LEFT); // Allinea tutto a sinistra
         boxCerca.getChildren().addAll(txfFiltroRicerca, btnCerca, btnEliminaFiltri);
-        
+    
+        //creazione della vbox
         boxCentro = new VBox();
+        boxCentro.setStyle("-fx-background-color: #FFFDF5;");
+
+        boxCentro.setSpacing(7.0); 
+
+        boxCentro.setPadding(new Insets(33, 0, 0, 8));
+    
         boxCentro.getChildren().addAll(boxCerca, tabella);
+    
+        //assegnazione alla tab
+        tab.setContent(boxCentro);
     }
     
     /**
