@@ -66,4 +66,6 @@ class AppendableObjectOutputStream extends ObjectOutputStream {
     public void writeStreamHeader() throws IOException {
         reset();    
     }
-}
+}/** 
+ * Salva file su cache
+ */
